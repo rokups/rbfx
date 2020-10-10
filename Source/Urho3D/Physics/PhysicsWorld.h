@@ -40,6 +40,7 @@ class btDiscreteDynamicsWorld;
 class btDispatcher;
 class btDynamicsWorld;
 class btPersistentManifold;
+class btGhostPairCallback;
 
 namespace Urho3D
 {
@@ -361,6 +362,8 @@ private:
     DebugRenderer* debugRenderer_{};
     /// Debug draw flags.
     int debugMode_{};
+    /// GhostPair Callback
+    btGhostPairCallback* ghostPairCallback{nullptr};
 };
 
 /// Register Physics library objects.

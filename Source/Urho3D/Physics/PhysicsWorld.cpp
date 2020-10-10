@@ -31,6 +31,7 @@
 #include "../Graphics/Model.h"
 #include "../IO/Log.h"
 #include "../Math/Ray.h"
+#include "../Physics/KinematicCharacterController.h"
 #include "../Physics/CollisionShape.h"
 #include "../Physics/Constraint.h"
 #include "../Physics/PhysicsEvents.h"
@@ -49,7 +50,7 @@
 #include <Bullet/BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h>
 #include <Bullet/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <Bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 extern ContactAddedCallback gContactAddedCallback;
 
@@ -173,6 +174,10 @@ PhysicsWorld::PhysicsWorld(Context* context) :
     world_->setInternalTickCallback(InternalPreTickCallback, static_cast<void*>(this), true);
     world_->setInternalTickCallback(InternalTickCallback, static_cast<void*>(this), false);
     world_->setSynchronizeAllMotionStates(true);
+
+    // Add ghost pair callback
+    ghostPairCallback = new btGhostPairCallback();
+    world_->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(ghostPairCallback);
 }
 
 PhysicsWorld::~PhysicsWorld()
@@ -199,6 +204,14 @@ PhysicsWorld::~PhysicsWorld()
     if (!PhysicsWorld::config.collisionConfig_)
         delete collisionConfiguration_;
     collisionConfiguration_ = nullptr;
+
+
+    // Delete GhostPair callback
+    if (ghostPairCallback)
+    {
+        delete ghostPairCallback;
+        ghostPairCallback = nullptr;
+    }
 }
 
 void PhysicsWorld::RegisterObject(Context* context)
@@ -859,8 +872,8 @@ void PhysicsWorld::SendCollisionEvents()
             if (!bodyA || !bodyB)
                 continue;
 
-            // Skip collision event signaling if both objects are static, or if collision event mode does not match
-            if (bodyA->GetMass() == 0.0f && bodyB->GetMass() == 0.0f)
+            // Skip collision event signaling if both objects are static, or if collision event mode does not match but allow when two triggers collide
+            if ((bodyA->GetMass() == 0.0f && bodyB->GetMass() == 0.0f) && (!bodyA->IsTrigger() || !bodyB->IsTrigger()))
                 continue;
             if (bodyA->GetCollisionEventMode() == COLLISION_NEVER || bodyB->GetCollisionEventMode() == COLLISION_NEVER)
                 continue;
@@ -1029,8 +1042,8 @@ void PhysicsWorld::SendCollisionEvents()
 
                 bool trigger = bodyA->IsTrigger() || bodyB->IsTrigger();
 
-                // Skip collision event signaling if both objects are static, or if collision event mode does not match
-                if (bodyA->GetMass() == 0.0f && bodyB->GetMass() == 0.0f)
+                // Skip collision event signaling if both objects are static, or if collision event mode does not match but allow when two triggers collide
+                if ((bodyA->GetMass() == 0.0f && bodyB->GetMass() == 0.0f) && (!bodyA->IsTrigger() || !bodyB->IsTrigger()))
                     continue;
                 if (bodyA->GetCollisionEventMode() == COLLISION_NEVER || bodyB->GetCollisionEventMode() == COLLISION_NEVER)
                     continue;
@@ -1082,6 +1095,7 @@ void RegisterPhysicsLibrary(Context* context)
     Constraint::RegisterObject(context);
     PhysicsWorld::RegisterObject(context);
     RaycastVehicle::RegisterObject(context);
+    KinematicCharacterController::RegisterObject(context);
 }
 
 }

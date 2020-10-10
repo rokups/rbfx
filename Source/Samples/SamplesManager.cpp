@@ -123,6 +123,9 @@
 #if URHO3D_NAVIGATION
 #include "106_BakedLighting/BakedLighting.h"
 #endif
+#if URHO3D_PHYSICS
+#include "107_KinematicPlatform/KinematicCharacterDemo.h"
+#endif
 #include "Rotator.h"
 
 #include "SamplesManager.h"
@@ -223,6 +226,7 @@ void SamplesManager::Start()
     RegisterSample<Physics>();
     RegisterSample<PhysicsStressTest>();
     RegisterSample<Ragdolls>();
+    RegisterSample<KinematicCharacterDemo>();
 #endif
     RegisterSample<SoundEffects>();
 #if URHO3D_NAVIGATION

@@ -92,6 +92,7 @@ URHO3D_REFCOUNTED(Urho3D::GImpactMeshData);
 URHO3D_REFCOUNTED(Urho3D::ConvexData);
 URHO3D_REFCOUNTED(Urho3D::HeightfieldData);
 URHO3D_REFCOUNTED(Urho3D::CollisionShape);
+URHO3D_REFCOUNTED(Urho3D::KinematicCharacterController);
 URHO3D_REFCOUNTED(Urho3D::Constraint);
 URHO3D_REFCOUNTED(Urho3D::PhysicsWorld);
 URHO3D_REFCOUNTED(Urho3D::RaycastVehicle);

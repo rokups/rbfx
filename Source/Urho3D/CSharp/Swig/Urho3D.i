@@ -658,18 +658,19 @@ public:
 
 //// --------------------------------------- Physics ---------------------------------------
 #if defined(URHO3D_PHYSICS)
-//%include "_properties_physics.i"
-//%ignore Urho3D::TriangleMeshData::meshInterface_;
-//%ignore Urho3D::TriangleMeshData::shape_;
-//%ignore Urho3D::TriangleMeshData::infoMap_;
-//%ignore Urho3D::GImpactMeshData::meshInterface_;
-//
-//%include "Urho3D/Physics/CollisionShape.h"
-//%include "Urho3D/Physics/Constraint.h"
-//%include "Urho3D/Physics/PhysicsWorld.h"
-//%include "Urho3D/Physics/RaycastVehicle.h"
-//%include "Urho3D/Physics/RigidBody.h"
-//
+%include "_properties_physics.i"
+%ignore Urho3D::TriangleMeshData::meshInterface_;
+%ignore Urho3D::TriangleMeshData::shape_;
+%ignore Urho3D::TriangleMeshData::infoMap_;
+%ignore Urho3D::GImpactMeshData::meshInterface_;
+
+%include "Urho3D/Physics/CollisionShape.h"
+%include "Urho3D/Physics/KinematicCharacterController.h"
+%include "Urho3D/Physics/Constraint.h"
+%include "Urho3D/Physics/PhysicsWorld.h"
+%include "Urho3D/Physics/RaycastVehicle.h"
+%include "Urho3D/Physics/RigidBody.h"
+
 #endif
 // --------------------------------------- SystemUI ---------------------------------------
 #if defined(URHO3D_SYSTEMUI)
