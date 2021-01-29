@@ -719,7 +719,7 @@ bool Material::Save(XMLElement& dest) const
         parameterElem.SetString("name", j->second.name_);
         if (!parameterElem.SetVectorVariant("value", j->second.value_))
         {
-            if (j->second.value_.GetType() != VAR_BUFFER && j->second.value_.GetType() != VAR_VOIDPTR)
+            if (j->second.value_.GetType() != VariantType::Buffer && j->second.value_.GetType() != VariantType::VoidPtr)
             {
                 parameterElem.SetAttribute("type", j->second.value_.GetTypeName());
                 parameterElem.SetAttribute("value", j->second.value_.ToString());
@@ -822,7 +822,7 @@ bool Material::Save(JSONValue& dest) const
     for (auto j = shaderParameters_.begin();
          j != shaderParameters_.end(); ++j)
     {
-        if (j->second.value_.GetType() != VAR_BUFFER && j->second.value_.GetType() != VAR_INT && j->second.value_.GetType() != VAR_BOOL)
+        if (j->second.value_.GetType() != VariantType::Buffer && j->second.value_.GetType() != VariantType::Int && j->second.value_.GetType() != VariantType::Bool)
             shaderParamsVal.Set(j->second.name_, j->second.value_.ToString());
         else
         {
@@ -927,12 +927,12 @@ void Material::SetShaderParameter(const ea::string& name, const Variant& value)
     if (nameHash == PSP_MATSPECCOLOR)
     {
         VariantType type = value.GetType();
-        if (type == VAR_VECTOR3)
+        if (type == VariantType::Vector3)
         {
             const Vector3& vec = value.GetVector3();
             specular_ = vec.x_ > 0.0f || vec.y_ > 0.0f || vec.z_ > 0.0f;
         }
-        else if (type == VAR_VECTOR4)
+        else if (type == VariantType::Vector4)
         {
             const Vector4& vec = value.GetVector4();
             specular_ = vec.x_ > 0.0f || vec.y_ > 0.0f || vec.z_ > 0.0f;

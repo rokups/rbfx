@@ -50,15 +50,15 @@ void ModelImporter::RegisterObject(Context* context)
 {
     context->RegisterFactory<ModelImporter>();
     URHO3D_COPY_BASE_ATTRIBUTES(AssetImporter);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_ANIM, bool, outputAnimations_, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_MAT, bool, outputMaterials_, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_MAT_TEX, bool, outputMaterialTextures_, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_USE_MAT_DIFFUSE, bool, useMaterialDiffuse_, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_FIX_INFACING_NORMALS, bool, fixInFacingNormals_, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_MAX_BONES, int, maxBones_, 64, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_ANIM_TICK, int, animationTick_, 4800, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_EMISSIVE_AO, bool, emissiveIsAmbientOcclusion_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE(MODEL_IMPORTER_FBX_PIVOT, bool, noFbxPivot_, false, AM_DEFAULT);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_ANIM, bool, outputAnimations_, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_MAT, bool, outputMaterials_, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_OUTPUT_MAT_TEX, bool, outputMaterialTextures_, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_USE_MAT_DIFFUSE, bool, useMaterialDiffuse_, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_FIX_INFACING_NORMALS, bool, fixInFacingNormals_, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_MAX_BONES, int, maxBones_, 64, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_ANIM_TICK, int, animationTick_, 4800, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_EMISSIVE_AO, bool, emissiveIsAmbientOcclusion_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE(MODEL_IMPORTER_FBX_PIVOT, bool, noFbxPivot_, false, AttributeMode::Default);
 }
 
 bool ModelImporter::Execute(Urho3D::Asset* input, const ea::string& outputPath)

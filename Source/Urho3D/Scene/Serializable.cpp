@@ -100,7 +100,7 @@ static bool LoadAttribute(Archive& archive, const AttributeInfo& attr, Variant& 
     else
     {
         // Reset value to default so it could use custom serialization
-        if (attr.type_ == VAR_CUSTOM)
+        if (attr.type_ == VariantType::Custom)
             value = attr.defaultValue_;
 
         return SerializeVariantValue(archive, attr.type_, "attribute", value);
@@ -135,7 +135,7 @@ void Serializable::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
 
     switch (attr.type_)
     {
-    case VAR_INT:
+    case VariantType::Int:
         // If enum type, use the low 8 bits only
         if (attr.enumNames_)
             *(reinterpret_cast<unsigned char*>(dest)) = src.GetInt();
@@ -143,79 +143,79 @@ void Serializable::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
             *(reinterpret_cast<int*>(dest)) = src.GetInt();
         break;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         *(reinterpret_cast<long long*>(dest)) = src.GetInt64();
         break;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         *(reinterpret_cast<bool*>(dest)) = src.GetBool();
         break;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         *(reinterpret_cast<float*>(dest)) = src.GetFloat();
         break;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         *(reinterpret_cast<Vector2*>(dest)) = src.GetVector2();
         break;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         *(reinterpret_cast<Vector3*>(dest)) = src.GetVector3();
         break;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         *(reinterpret_cast<Vector4*>(dest)) = src.GetVector4();
         break;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         *(reinterpret_cast<Quaternion*>(dest)) = src.GetQuaternion();
         break;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         *(reinterpret_cast<Color*>(dest)) = src.GetColor();
         break;
 
-    case VAR_STRING:
+    case VariantType::String:
         *(reinterpret_cast<ea::string*>(dest)) = src.GetString();
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         *(reinterpret_cast<ea::vector<unsigned char>*>(dest)) = src.GetBuffer();
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         *(reinterpret_cast<ResourceRef*>(dest)) = src.GetResourceRef();
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         *(reinterpret_cast<ResourceRefList*>(dest)) = src.GetResourceRefList();
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         *(reinterpret_cast<VariantVector*>(dest)) = src.GetVariantVector();
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         *(reinterpret_cast<StringVector*>(dest)) = src.GetStringVector();
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         *(reinterpret_cast<VariantMap*>(dest)) = src.GetVariantMap();
         break;
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         *(reinterpret_cast<IntRect*>(dest)) = src.GetIntRect();
         break;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         *(reinterpret_cast<IntVector2*>(dest)) = src.GetIntVector2();
         break;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         *(reinterpret_cast<IntVector3*>(dest)) = src.GetIntVector3();
         break;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         *(reinterpret_cast<double*>(dest)) = src.GetDouble();
         break;
 
@@ -225,7 +225,7 @@ void Serializable::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
     }
 
     // If it is a network attribute then mark it for next network update
-    if (attr.mode_ & AM_NET)
+    if (attr.mode_ & AttributeMode::Net)
         MarkNetworkUpdate();
 }
 
@@ -244,7 +244,7 @@ void Serializable::OnGetAttribute(const AttributeInfo& attr, Variant& dest) cons
 
     switch (attr.type_)
     {
-    case VAR_INT:
+    case VariantType::Int:
         // If enum type, use the low 8 bits only
         if (attr.enumNames_)
             dest = *(reinterpret_cast<const unsigned char*>(src));
@@ -252,79 +252,79 @@ void Serializable::OnGetAttribute(const AttributeInfo& attr, Variant& dest) cons
             dest = *(reinterpret_cast<const int*>(src));
         break;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         dest = *(reinterpret_cast<const long long*>(src));
         break;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         dest = *(reinterpret_cast<const bool*>(src));
         break;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         dest = *(reinterpret_cast<const float*>(src));
         break;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         dest = *(reinterpret_cast<const Vector2*>(src));
         break;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         dest = *(reinterpret_cast<const Vector3*>(src));
         break;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         dest = *(reinterpret_cast<const Vector4*>(src));
         break;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         dest = *(reinterpret_cast<const Quaternion*>(src));
         break;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         dest = *(reinterpret_cast<const Color*>(src));
         break;
 
-    case VAR_STRING:
+    case VariantType::String:
         dest = *(reinterpret_cast<const ea::string*>(src));
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         dest = *(reinterpret_cast<const ea::vector<unsigned char>*>(src));
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         dest = *(reinterpret_cast<const ResourceRef*>(src));
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         dest = *(reinterpret_cast<const ResourceRefList*>(src));
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         dest = *(reinterpret_cast<const VariantVector*>(src));
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         dest = *(reinterpret_cast<const StringVector*>(src));
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         dest = *(reinterpret_cast<const VariantMap*>(src));
         break;
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         dest = *(reinterpret_cast<const IntRect*>(src));
         break;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         dest = *(reinterpret_cast<const IntVector2*>(src));
         break;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         dest = *(reinterpret_cast<const IntVector3*>(src));
         break;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         dest = *(reinterpret_cast<const double*>(src));
         break;
 
@@ -424,7 +424,7 @@ bool Serializable::LoadXML(const XMLElement& source)
                 Variant varValue;
 
                 // If enums specified, do enum lookup and int assignment. Otherwise assign the variant directly
-                if (attr.enumNames_ && attr.type_ == VAR_INT)
+                if (attr.enumNames_ && attr.type_ == VariantType::Int)
                 {
                     ea::string value = attrElem.GetAttribute("value");
                     bool enumFound = false;
@@ -505,7 +505,7 @@ bool Serializable::LoadJSON(const JSONValue& source)
 
             Variant varValue;
             // If enums specified, do enum lookup ad int assignment. Otherwise assign variant directly
-            if (attr.enumNames_ && attr.type_ == VAR_INT)
+            if (attr.enumNames_ && attr.type_ == VariantType::Int)
             {
                 const ea::string& valueStr = value.GetString();
                 bool enumFound = false;
@@ -577,7 +577,7 @@ bool Serializable::SaveXML(XMLElement& dest) const
         XMLElement attrElem = dest.CreateChild("attribute");
         attrElem.SetAttribute("name", attr.name_);
         // If enums specified, set as an enum string. Otherwise set directly as a Variant
-        if (attr.enumNames_ && attr.type_ == VAR_INT)
+        if (attr.enumNames_ && attr.type_ == VariantType::Int)
         {
             int enumValue = value.GetInt();
             attrElem.SetAttribute("value", attr.enumNames_[enumValue]);
@@ -613,7 +613,7 @@ bool Serializable::SaveJSON(JSONValue& dest) const
 
         JSONValue attrVal;
         // If enums specified, set as an enum string. Otherwise set directly as a Variant
-        if (attr.enumNames_ && attr.type_ == VAR_INT)
+        if (attr.enumNames_ && attr.type_ == VariantType::Int)
         {
             int enumValue = value.GetInt();
             attrVal = attr.enumNames_[enumValue];
@@ -772,7 +772,7 @@ bool Serializable::Serialize(Archive& archive, ArchiveBlock& block)
                 const unsigned attributeIndex = attributeNames.index_of(attrNameHash);
 
                 // Skip if not found or invalid
-                if (attributeIndex >= numAttributes || !((*attributes)[attributeIndex].mode_ & AM_FILE))
+                if (attributeIndex >= numAttributes || !((*attributes)[attributeIndex].mode_ & AttributeMode::File))
                 {
                     ++numSkippedAttributes;
                     continue;
@@ -923,7 +923,7 @@ void Serializable::ResetToDefault()
     for (unsigned i = 0; i < attributes->size(); ++i)
     {
         const AttributeInfo& attr = attributes->at(i);
-        if (attr.mode_ & (AM_NOEDIT | AM_NODEID | AM_COMPONENTID | AM_NODEIDVECTOR))
+        if (attr.mode_ & (AttributeMode::NoEdit | AttributeMode::NodeID | AttributeMode::ComponentID | AttributeMode::NodeIDVector))
             continue;
 
         Variant defaultValue = GetInstanceDefault(attr.name_);
@@ -1079,7 +1079,7 @@ void Serializable::WriteLatestDataUpdate(Serializer& dest, unsigned char timeSta
 
     for (unsigned i = 0; i < numAttributes; ++i)
     {
-        if (attributes->at(i).mode_ & AM_LATESTDATA)
+        if (attributes->at(i).mode_ & AttributeMode::LatestData)
             dest.WriteVariantData(networkState_->currentValues_[i]);
     }
 }
@@ -1141,7 +1141,7 @@ bool Serializable::ReadLatestDataUpdate(Deserializer& source)
     for (unsigned i = 0; i < numAttributes && !source.IsEof(); ++i)
     {
         const AttributeInfo& attr = attributes->at(i);
-        if (attr.mode_ & AM_LATESTDATA)
+        if (attr.mode_ & AttributeMode::LatestData)
         {
             if (!(interceptMask & (1ULL << i)))
             {

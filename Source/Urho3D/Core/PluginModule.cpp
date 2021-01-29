@@ -151,11 +151,11 @@ bool PluginModule::Load(const ea::string& path)
     }
 
     moduleType_ = ReadModuleInformation(context_, path);
-    if (moduleType_ == MODULE_INVALID)
+    if (moduleType_ == ModuleType::Invalid)
         return false;
 
 #if URHO3D_CSHARP
-    if (moduleType_ == MODULE_MANAGED)
+    if (moduleType_ == ModuleType::Managed)
         handle_ = Script::GetRuntimeApi()->LoadAssembly(path.data());
     else
 #endif  // URHO3D_CSHARP
@@ -176,7 +176,7 @@ bool PluginModule::Load(const ea::string& path)
     else
     {
         path_.clear();
-        moduleType_ = MODULE_INVALID;
+        moduleType_ = ModuleType::Invalid;
 #if __linux__ || __APPLE__
         URHO3D_LOGERROR("dlerror: {}", dlerror());
 #endif
@@ -192,7 +192,7 @@ bool PluginModule::Unload()
         return false;
 
 #if URHO3D_CSHARP
-    if (moduleType_ == MODULE_MANAGED)
+    if (moduleType_ == ModuleType::Managed)
     {
         Script::GetRuntimeApi()->FreeGCHandle((void*)handle_);
     }
@@ -211,7 +211,7 @@ bool PluginModule::Unload()
 
     handle_ = 0;
     path_.clear();
-    moduleType_ = MODULE_INVALID;
+    moduleType_ = ModuleType::Invalid;
     return true;
 #else
     return false;
@@ -222,7 +222,7 @@ void* PluginModule::GetSymbol(const ea::string& symbol)
 {
 #if URHO3D_PLUGINS
 #if URHO3D_CSHARP
-    if (moduleType_ != MODULE_NATIVE)
+    if (moduleType_ != ModuleType::Native)
     {
         URHO3D_LOGERROR("Symbol retrieval is not supported for this type of module.");
         return nullptr;
@@ -256,27 +256,27 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
     {
         File file(context);
         if (!file.Open(path, FILE_READ))
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         data.resize(file.GetSize());
         if (file.Read(data.data(), data.size()) != data.size())
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         // Elf header parsing code based on elfdump by Owen Klan.
         auto* hdr = reinterpret_cast<Elf_Ehdr*>(data.data());
         if (!IsValidPtr(data, hdr) || strncmp(reinterpret_cast<const char*>(hdr->e_ident), ELFMAG, SELFMAG) != 0)
             // Not elf.
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         if (hdr->e_type != ET_DYN)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         // Find symbol name table
         unsigned symNameTableOffset = 0;
         {
             auto* shdr = reinterpret_cast<Elf_Shdr*>(data.data() + hdr->e_shoff + sizeof(Elf_Shdr) * hdr->e_shstrndx);
             if (!IsValidPtr(data, shdr))
-                return MODULE_INVALID;
+                return ModuleType::Invalid;
 
             auto nameTableOffset = shdr->sh_offset;
             shdr = reinterpret_cast<Elf_Shdr*>(data.data() + hdr->e_shoff);
@@ -284,13 +284,13 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
             for (auto i = 0; i < hdr->e_shnum; i++)
             {
                 if (!IsValidPtr(data, shdr))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 const char* tabNamePtr = reinterpret_cast<const char*>(data.data() + nameTableOffset + shdr->sh_name);
                 const char strTabName[] = ".strtab";
 
                 if (!IsValidPtr(data, tabNamePtr, sizeof(strTabName)))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 if (strncmp(tabNamePtr, strTabName, sizeof(strTabName)) == 0)
                 {
@@ -303,7 +303,7 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
         }
 
         if (symNameTableOffset == 0)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         // Find PluginApplicationMain symbol
         {
@@ -313,7 +313,7 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
             {
                 sectab = reinterpret_cast<Elf_Shdr*>(data.data() + shoff);
                 if (!IsValidPtr(data, sectab))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
                 shoff += sizeof(Elf_Shdr);
             } while (sectab->sh_type != SHT_SYMTAB);
 
@@ -324,15 +324,15 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
             {
                 auto* symbol = reinterpret_cast<Elf_Sym*>(data.data() + shoff);
                 if (!IsValidPtr(data, symbol))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
                 shoff += sizeof(Elf_Sym);
 
                 const char* funcNamePtr = reinterpret_cast<const char*>(data.data() + symNameTableOffset + symbol->st_name);
                 if (!IsValidPtr(data, funcNamePtr, sizeof(pluginEntryPoint)))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 if (strncmp(funcNamePtr, pluginEntryPoint, sizeof(pluginEntryPoint)) == 0)
-                    return MODULE_NATIVE;
+                    return ModuleType::Native;
             }
         }
     }
@@ -343,20 +343,20 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
     {
         File file(context);
         if (!file.Open(path.data(), FILE_READ))
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         data.resize(file.GetSize());
         if (file.Read(data.data(), data.size()) != data.size())
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         auto* dos = reinterpret_cast<PIMAGE_DOS_HEADER>(data.data());
 
         if (!IsValidPtr(data, dos) || dos->e_magic != IMAGE_DOS_SIGNATURE)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         auto* nt = reinterpret_cast<PIMAGE_NT_HEADERS>(data.data() + dos->e_lfanew);
         if (!IsValidPtr(data, dos) || nt->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         const auto& eatDir = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
         const auto& netDir = nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR];
@@ -405,11 +405,11 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
                                     else
                                     {
                                         URHO3D_LOGERROR("Unsupported CodeView version.");
-                                        return MODULE_INVALID;
+                                        return ModuleType::Invalid;
                                     }
                                 }
                                 else
-                                    return MODULE_INVALID;
+                                    return ModuleType::Invalid;
                                 break;
                             }
                         }
@@ -424,7 +424,7 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
 #if URHO3D_CSHARP
             // Verify that plugin has a class that inherits from PluginApplication.
             if (Script::GetRuntimeApi()->VerifyAssembly(path.data()))
-                return MODULE_MANAGED;
+                return ModuleType::Managed;
 #endif
         }
 #if _WIN32
@@ -439,7 +439,7 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
             {
                 auto* section = reinterpret_cast<PIMAGE_SECTION_HEADER>(data.data() + firstSectionOffset + i * sizeof(IMAGE_SECTION_HEADER));
                 if (!IsValidPtr(data, section))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 if (eatDir.VirtualAddress >= section->VirtualAddress && eatDir.VirtualAddress < (section->VirtualAddress + section->SizeOfRawData))
                 {
@@ -450,21 +450,21 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
 
             auto* eat = reinterpret_cast<PIMAGE_EXPORT_DIRECTORY>(data.data() + eatDir.VirtualAddress - eatModifier);
             if (!IsValidPtr(data, eat))
-                return MODULE_INVALID;
+                return ModuleType::Invalid;
 
             unsigned namesOffset = eat->AddressOfNames - eatModifier;
             for (auto i = 0; i < eat->NumberOfFunctions; i++)
             {
                 uint32_t* nameOffset = reinterpret_cast<unsigned*>(data.data() + namesOffset + i * sizeof(uint32_t));
                 if (!IsValidPtr(data, nameOffset))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 const char* funcNamePtr = reinterpret_cast<const char*>(data.data() + *nameOffset - eatModifier);
                 if (!IsValidPtr(data, funcNamePtr, sizeof(pluginEntryPoint)))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
 
                 if (strncmp(funcNamePtr, pluginEntryPoint, sizeof(pluginEntryPoint)) == 0)
-                    return MODULE_NATIVE;
+                    return ModuleType::Native;
             }
         }
 #endif  // _WIN32
@@ -475,16 +475,16 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
     {
         File file(context);
         if (!file.Open(path.data(), FILE_READ))
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         data.resize(file.GetSize());
         if (file.Read(data.data(), data.size()) != data.size())
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         auto* hdr = reinterpret_cast<mach_header*>(data.data());
 
         if (!IsValidPtr(data, hdr) || hdr->magic != MACHO_MAGIC || hdr->filetype != 6 /*dylib*/)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         symtab_command* symtab = nullptr;
         dysymtab_command* dysymtab = nullptr;
@@ -493,19 +493,19 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
         {
             auto* cmd = reinterpret_cast<load_command*>(data.data() + offset);
             if (!IsValidPtr(data, cmd))
-                return MODULE_INVALID;
+                return ModuleType::Invalid;
 
             if (cmd->cmd == 0x2)            // SYMTAB
             {
                 symtab = reinterpret_cast<symtab_command*>(cmd);
                 if (!IsValidPtr(data, symtab))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
             }
             else if (cmd->cmd == 0xB)   // DYSYMTAB
             {
                 dysymtab = reinterpret_cast<dysymtab_command*>(cmd);
                 if (!IsValidPtr(data, dysymtab))
-                    return MODULE_INVALID;
+                    return ModuleType::Invalid;
             }
 
             if (symtab && dysymtab)
@@ -515,38 +515,38 @@ ModuleType PluginModule::ReadModuleInformation(Context* context, const ea::strin
         }
 
         if (!symtab || !dysymtab)
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         const char* strtab = reinterpret_cast<const char*>(data.data() + symtab->stroff);
         const nlist* lists = reinterpret_cast<nlist*>(data.data() + symtab->symoff);
 
         if (!IsValidPtr(data, lists, sizeof(nlist) * symtab->nsyms))
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         if (!IsValidPtr(data, strtab, symtab->strsize))
-            return MODULE_INVALID;
+            return ModuleType::Invalid;
 
         for (unsigned i = dysymtab->ilocalsym; i < dysymtab->ilocalsym + dysymtab->nlocalsym; i++)
         {
             const char* name = strtab + lists[i].n_strx;
             if (strncmp(name, pluginEntryPoint, sizeof(pluginEntryPoint)) == 0)
-                return MODULE_NATIVE;
+                return ModuleType::Native;
         }
     }
 #endif  // __APPLE__
 #endif  // URHO3D_PLUGINS
-    return MODULE_INVALID;
+    return ModuleType::Invalid;
 }
 
 PluginApplication* PluginModule::InstantiatePlugin()
 {
-    if (moduleType_ == MODULE_NATIVE)
+    if (moduleType_ == ModuleType::Native)
     {
         if (void* main = GetSymbol("PluginApplicationMain"))
             return reinterpret_cast<PluginApplication*(*)(Context*)>(main)(context_);
     }
 #if URHO3D_CSHARP
-    else if (moduleType_ == MODULE_MANAGED)
+    else if (moduleType_ == ModuleType::Managed)
         return Script::GetRuntimeApi()->CreatePluginApplication(handle_);
 #endif
     return nullptr;

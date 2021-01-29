@@ -80,19 +80,19 @@ void Node::RegisterObject(Context* context)
 {
     context->RegisterFactory<Node>();
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Tags", GetTags, SetTags, StringVector, Variant::emptyStringVector, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector3, Vector3::ZERO, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Rotation", GetRotation, SetRotation, Quaternion, Quaternion::IDENTITY, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Scale", GetScale, SetScale, Vector3, Vector3::ONE, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_FILE); // Network replication of vars uses custom data
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Tags", GetTags, SetTags, StringVector, Variant::emptyStringVector, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector3, Vector3::ZERO, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Rotation", GetRotation, SetRotation, Quaternion, Quaternion::IDENTITY, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Scale", GetScale, SetScale, Vector3, Vector3::ONE, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AttributeMode::File); // Network replication of vars uses custom data
     URHO3D_ACCESSOR_ATTRIBUTE("Network Position", GetNetPositionAttr, SetNetPositionAttr, Vector3, Vector3::ZERO,
-        AM_NET | AM_LATESTDATA | AM_NOEDIT);
+        AttributeMode::Net | AttributeMode::LatestData | AttributeMode::NoEdit);
     URHO3D_ACCESSOR_ATTRIBUTE("Network Rotation", GetNetRotationAttr, SetNetRotationAttr, ea::vector<unsigned char>, Variant::emptyBuffer,
-        AM_NET | AM_LATESTDATA | AM_NOEDIT);
+        AttributeMode::Net | AttributeMode::LatestData | AttributeMode::NoEdit);
     URHO3D_ACCESSOR_ATTRIBUTE("Network Parent Node", GetNetParentAttr, SetNetParentAttr, ea::vector<unsigned char>, Variant::emptyBuffer,
-        AM_NET | AM_NOEDIT);
+        AttributeMode::Net | AttributeMode::NoEdit);
 }
 
 bool Node::Serialize(Archive& archive)
@@ -504,7 +504,7 @@ void Node::AddTag(const ea::string& tag)
     if (scene_)
     {
         scene_->NodeTagAdded(this, tag);
-    
+
         // Send event
         using namespace NodeTagAdded;
         VariantMap& eventData = GetEventDataMap();
@@ -1120,7 +1120,7 @@ Component* Node::CloneComponent(Component* component, CreateMode mode, unsigned 
         {
             const AttributeInfo& attr = compAttributes->at(i);
             const AttributeInfo& cloneAttr = cloneAttributes->at(i);
-            if (attr.mode_ & AM_FILE)
+            if (attr.mode_ & AttributeMode::File)
             {
                 Variant value;
                 component->OnGetAttribute(attr, value);
@@ -2341,7 +2341,7 @@ Node* Node::CloneRecursive(Node* parent, SceneResolver& resolver, CreateMode mod
     {
         const AttributeInfo& attr = attributes->at(j);
         // Do not copy network-only attributes, as they may have unintended side effects
-        if (attr.mode_ & AM_FILE)
+        if (attr.mode_ & AttributeMode::File)
         {
             Variant value;
             OnGetAttribute(attr, value);

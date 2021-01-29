@@ -43,7 +43,7 @@ bool ModulePlugin::Load()
     if (pluginPath.empty())
         return false;
 
-    lastModuleType_ = MODULE_INVALID;
+    lastModuleType_ = ModuleType::Invalid;
     if (module_.Load(pluginPath))
     {
         application_ = module_.InstantiatePlugin();
@@ -73,7 +73,7 @@ bool ModulePlugin::PerformUnload()
     WeakPtr<PluginApplication> application(application_);
     application_->UninitializeReloadablePlugin();
 #if URHO3D_CSHARP
-    if (moduleType == MODULE_MANAGED)
+    if (moduleType == ModuleType::Managed)
          Script::GetRuntimeApi()->Dispose(application_.Detach());
 #endif
     application_ = nullptr;
@@ -150,7 +150,7 @@ ea::string ModulePlugin::VersionModule(const ea::string& path)
 #if _MSC_VER
     bool hashPdb = true;
 #else
-    bool hashPdb = type == MODULE_MANAGED;
+    bool hashPdb = type == ModuleType::Managed;
 #endif
     if (hashPdb)
     {
@@ -186,7 +186,7 @@ ea::string ModulePlugin::VersionModule(const ea::string& path)
         }
     }
 #if URHO3D_CSHARP
-    if (type == MODULE_MANAGED)
+    if (type == ModuleType::Managed)
     {
         // Managed runtime will modify file version in specified file.
         Script::GetRuntimeApi()->SetAssemblyVersion(versionedPath, version_ + 1);

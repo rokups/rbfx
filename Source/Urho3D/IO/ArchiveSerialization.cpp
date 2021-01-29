@@ -27,80 +27,80 @@ namespace Urho3D
 
 bool SerializeVariantValue(Archive& archive, VariantType variantType, const char* name, Variant& value)
 {
-    static_assert(MAX_VAR_TYPES == 28, "Update me");
+    static_assert(MaxVarTypes == 28, "Update me");
     switch (variantType)
     {
-    case VAR_NONE:
+    case VariantType::None:
         return true;
-    case VAR_INT:
+    case VariantType::Int:
         return Detail::SerializeVariantValueType<int>(archive, name, value);
-    case VAR_BOOL:
+    case VariantType::Bool:
         return Detail::SerializeVariantValueType<bool>(archive, name, value);
-    case VAR_FLOAT:
+    case VariantType::Float:
         return Detail::SerializeVariantValueType<float>(archive, name, value);
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return Detail::SerializeVariantValueType<Vector2>(archive, name, value);
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return Detail::SerializeVariantValueType<Vector3>(archive, name, value);
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return Detail::SerializeVariantValueType<Vector4>(archive, name, value);
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return Detail::SerializeVariantValueType<Quaternion>(archive, name, value);
-    case VAR_COLOR:
+    case VariantType::Color:
         return Detail::SerializeVariantValueType<Color>(archive, name, value);
-    case VAR_STRING:
+    case VariantType::String:
         return Detail::SerializeVariantValueType<ea::string>(archive, name, value);
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         if (archive.IsInput() && !value.GetBufferPtr())
             value = VariantBuffer{};
         if (auto ptr = value.GetBufferPtr())
             return SerializeVectorAsBytes(archive, name, "elem", *ptr);
         return false;
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return Detail::SerializeVariantValueType<ResourceRef>(archive, name, value);
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         return Detail::SerializeVariantValueType<ResourceRefList>(archive, name, value);
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         if (archive.IsInput() && !value.GetVariantVectorPtr())
             value = VariantVector{};
         if (auto ptr = value.GetVariantVectorPtr())
             return SerializeVectorAsObjects(archive, name, nullptr, *ptr);
         return false;
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         if (archive.IsInput() && !value.GetVariantMapPtr())
             value = VariantMap{};
         if (auto ptr = value.GetVariantMapPtr())
             return SerializeStringHashMap(archive, name, nullptr, *ptr);
         return false;
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return Detail::SerializeVariantValueType<IntRect>(archive, name, value);
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return Detail::SerializeVariantValueType<IntVector2>(archive, name, value);
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return Detail::SerializeVariantValueType<Matrix3>(archive, name, value);
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return Detail::SerializeVariantValueType<Matrix3x4>(archive, name, value);
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return Detail::SerializeVariantValueType<Matrix4>(archive, name, value);
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return Detail::SerializeVariantValueType<double>(archive, name, value);
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         if (archive.IsInput() && !value.GetStringVectorPtr())
             value = StringVector{};
         if (auto ptr = value.GetStringVectorPtr())
             return SerializeVectorAsObjects(archive, name, nullptr, *ptr);
         return false;
-    case VAR_RECT:
+    case VariantType::Rect:
         return Detail::SerializeVariantValueType<Rect>(archive, name, value);
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return Detail::SerializeVariantValueType<IntVector3>(archive, name, value);
-    case VAR_INT64:
+    case VariantType::Int64:
         return Detail::SerializeVariantValueType<long long>(archive, name, value);
-    case VAR_VOIDPTR:
-    case VAR_PTR:
+    case VariantType::VoidPtr:
+    case VariantType::Ptr:
         archive.SetError(Format("Unsupported Variant type of element '{0}'", name));
         return false;
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         // Even if loading, value should be initialized to default value.
         // It's the only way to know type.
         if (CustomVariantValue* ptr = value.GetCustomVariantValuePtr())
@@ -108,7 +108,7 @@ bool SerializeVariantValue(Archive& archive, VariantType variantType, const char
 
         archive.SetError(Format("Custom Variant is not initialized for element '{0}'", name));
         return false;
-    case MAX_VAR_TYPES:
+    case MaxVarTypes:
     default:
         assert(0);
         return false;

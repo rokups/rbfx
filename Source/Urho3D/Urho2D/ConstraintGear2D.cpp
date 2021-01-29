@@ -45,8 +45,8 @@ void ConstraintGear2D::RegisterObject(Context* context)
 {
     context->RegisterFactory<ConstraintGear2D>(URHO2D_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Ratio", GetRatio, SetRatio, float, 0.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Ratio", GetRatio, SetRatio, float, 0.0f, AttributeMode::Default);
     URHO3D_COPY_BASE_ATTRIBUTES(Constraint2D);
 }
 

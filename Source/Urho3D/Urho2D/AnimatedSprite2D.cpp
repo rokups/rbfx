@@ -75,12 +75,12 @@ void AnimatedSprite2D::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(StaticSprite2D);
     URHO3D_REMOVE_ATTRIBUTE("Sprite");
-    URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 1.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Entity", GetEntity, SetEntity, ea::string, EMPTY_STRING, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 1.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Entity", GetEntity, SetEntity, ea::string, EMPTY_STRING, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Animation Set", GetAnimationSetAttr, SetAnimationSetAttr, ResourceRef,
-        ResourceRef(AnimatedSprite2D::GetTypeStatic()), AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Animation", GetAnimation, SetAnimationAttr, ea::string, EMPTY_STRING, AM_DEFAULT);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Loop Mode", GetLoopMode, SetLoopMode, LoopMode2D, loopModeNames, LM_DEFAULT, AM_DEFAULT);
+        ResourceRef(AnimatedSprite2D::GetTypeStatic()), AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Animation", GetAnimation, SetAnimationAttr, ea::string, EMPTY_STRING, AttributeMode::Default);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Loop Mode", GetLoopMode, SetLoopMode, LoopMode2D, loopModeNames, LM_DEFAULT, AttributeMode::Default);
 }
 
 void AnimatedSprite2D::OnSetEnabled()

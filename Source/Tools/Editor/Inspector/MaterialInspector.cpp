@@ -516,9 +516,9 @@ void MaterialInspector::RenderInspector(InspectArgs& args)
             Variant colorVariant;
             if (parameterName.ends_with("Color"))
             {
-                if (pair.second.value_.GetType() == VAR_VECTOR3)
+                if (pair.second.value_.GetType() == VariantType::Vector3)
                     colorVariant = Color(value.current_.GetVector3());
-                else if (pair.second.value_.GetType() == VAR_VECTOR4)
+                else if (pair.second.value_.GetType() == VariantType::Vector4)
                     colorVariant = Color(value.current_.GetVector4());
             }
 
@@ -526,9 +526,9 @@ void MaterialInspector::RenderInspector(InspectArgs& args)
             {
                 if (!colorVariant.IsEmpty())
                 {
-                    if (pair.second.value_.GetType() == VAR_VECTOR3)
+                    if (pair.second.value_.GetType() == VariantType::Vector3)
                         value.current_ = colorVariant.GetColor().ToVector3();
-                    else if (pair.second.value_.GetType() == VAR_VECTOR4)
+                    else if (pair.second.value_.GetType() == VariantType::Vector4)
                         value.current_ = colorVariant.GetColor().ToVector4();
                 }
                 material->SetShaderParameter(parameterName, value.current_);
@@ -548,10 +548,10 @@ void MaterialInspector::RenderInspector(InspectArgs& args)
         // Add a new parameter
         {
             static const VariantType shaderParameterVariantTypes[] = {
-                VAR_FLOAT,
-                VAR_VECTOR2,
-                VAR_VECTOR3,
-                VAR_VECTOR4,
+                VariantType::Float,
+                VariantType::Vector2,
+                VariantType::Vector3,
+                VariantType::Vector4,
             };
 
             static const char* shaderParameterVariantNames[] = {
@@ -576,7 +576,7 @@ void MaterialInspector::RenderInspector(InspectArgs& args)
             addNew |= ui::Button(ICON_FA_CHECK);
             if (addNew)
             {
-                if (!paramState->fieldName_.empty() && material->GetShaderParameter(paramState->fieldName_.c_str()).GetType() == VAR_NONE)   // TODO: Show warning about duplicate name
+                if (!paramState->fieldName_.empty() && material->GetShaderParameter(paramState->fieldName_.c_str()).GetType() == VariantType::None)   // TODO: Show warning about duplicate name
                 {
                     Variant value{shaderParameterVariantTypes[paramState->variantTypeIndex_]};
                     undo->Add<UndoShaderParameterChanged>(material, paramState->fieldName_.c_str(), Variant{}, value);

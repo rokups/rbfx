@@ -105,8 +105,8 @@ void Cursor::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(BorderImage);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Priority", M_MAX_INT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Use System Shapes", GetUseSystemShapes, SetUseSystemShapes, bool, false, AM_FILE);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Shapes", GetShapesAttr, SetShapesAttr, VariantVector, Variant::emptyVariantVector, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Use System Shapes", GetUseSystemShapes, SetUseSystemShapes, bool, false, AttributeMode::File);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Shapes", GetShapesAttr, SetShapesAttr, VariantVector, Variant::emptyVariantVector, AttributeMode::File);
 }
 
 void Cursor::GetBatches(ea::vector<UIBatch>& batches, ea::vector<float>& vertexData, const IntRect& currentScissor)

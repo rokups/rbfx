@@ -48,12 +48,12 @@ EditorSceneSettings::EditorSceneSettings(Context* context)
 void EditorSceneSettings::RegisterObject(Context* context)
 {
     context->RegisterFactory<EditorSceneSettings>();
-    URHO3D_ACCESSOR_ATTRIBUTE("Viewport RenderPath", GetEditorViewportRenderPath, SetEditorViewportRenderPath, ResourceRef, defaultRenderPath, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Camera Position", GetCameraPosition, SetCameraPosition, Vector3, Vector3::ZERO, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Camera Orthographic Size", GetCameraOrthoSize, SetCameraOrthoSize, float, DEFAULT_ORTHOSIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Camera Zoom", GetCameraZoom, SetCameraZoom, float, 1.f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Camera Rotation", GetCameraRotation, SetCameraRotation, Quaternion, Quaternion::IDENTITY, AM_FILE | AM_NOEDIT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Camera View 2D", GetCamera2D, SetCamera2D, bool, false, AM_FILE | AM_NOEDIT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Viewport RenderPath", GetEditorViewportRenderPath, SetEditorViewportRenderPath, ResourceRef, defaultRenderPath, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Position", GetCameraPosition, SetCameraPosition, Vector3, Vector3::ZERO, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Orthographic Size", GetCameraOrthoSize, SetCameraOrthoSize, float, DEFAULT_ORTHOSIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Zoom", GetCameraZoom, SetCameraZoom, float, 1.f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Rotation", GetCameraRotation, SetCameraRotation, Quaternion, Quaternion::IDENTITY, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera View 2D", GetCamera2D, SetCamera2D, bool, false, AttributeMode::File | AttributeMode::NoEdit);
 }
 
 Vector3 EditorSceneSettings::GetCameraPosition() const

@@ -31,29 +31,43 @@
 namespace Urho3D
 {
 
-enum AttributeMode
+enum class AttributeMode
 {
     /// Attribute shown only in the editor, but not serialized.
-    AM_EDIT = 0x0,
+    Edit = 0x0,
     /// Attribute used for file serialization.
-    AM_FILE = 0x1,
+    File = 0x1,
     /// Attribute used for network replication.
-    AM_NET = 0x2,
+    Net = 0x2,
     /// Attribute used for both file serialization and network replication (default).
-    AM_DEFAULT = 0x3,
+    Default = 0x3,
     /// Attribute should use latest data grouping instead of delta update in network replication.
-    AM_LATESTDATA = 0x4,
+    LatestData = 0x4,
     /// Attribute should not be shown in the editor.
-    AM_NOEDIT = 0x8,
+    NoEdit = 0x8,
     /// Attribute is a node ID and may need rewriting.
-    AM_NODEID = 0x10,
+    NodeID = 0x10,
     /// Attribute is a component ID and may need rewriting.
-    AM_COMPONENTID = 0x20,
+    ComponentID = 0x20,
     /// Attribute is a node ID vector where first element is the amount of nodes.
-    AM_NODEIDVECTOR = 0x40,
+    NodeIDVector = 0x40,
     /// Attribute is readonly. Can't be used with binary serialized objects.
-    AM_READONLY = 0x80,
+    ReadOnly = 0x80,
 };
+
+#ifdef URHO3D_LEGACY_ENUMS
+static const AttributeMode AM_EDIT = AttributeMode::Edit;
+static const AttributeMode AM_FILE = AttributeMode::File;
+static const AttributeMode AM_NET = AttributeMode::Net;
+static const AttributeMode AM_DEFAULT = AttributeMode::Default;
+static const AttributeMode AM_LATESTDATA = AttributeMode::LatestData;
+static const AttributeMode AM_NOEDIT = AttributeMode::NoEdit;
+static const AttributeMode AM_NODEID = AttributeMode::NodeID;
+static const AttributeMode AM_COMPONENTID = AttributeMode::ComponentID;
+static const AttributeMode AM_NODEIDVECTOR = AttributeMode::NodeIDVector;
+static const AttributeMode AM_READONLY = AttributeMode::ReadOnly;
+#endif
+
 URHO3D_FLAGSET(AttributeMode, AttributeModeFlags);
 
 class Serializable;
@@ -134,10 +148,10 @@ struct AttributeInfo
     }
 
     /// Return whether the attribute should be saved.
-    bool ShouldSave() const { return (mode_ & AM_FILE) && !(mode_ & AM_READONLY); }
+    bool ShouldSave() const { return (mode_ & AttributeMode::File) && !(mode_ & AttributeMode::ReadOnly); }
 
     /// Return whether the attribute should be loaded.
-    bool ShouldLoad() const { return !!(mode_ & AM_FILE); }
+    bool ShouldLoad() const { return !!(mode_ & AttributeMode::File); }
 
     /// Instance equality operator.
     bool operator ==(const AttributeInfo& rhs) const
@@ -152,7 +166,7 @@ struct AttributeInfo
     }
 
     /// Attribute type.
-    VariantType type_ = VAR_NONE;
+    VariantType type_ = VariantType::None;
     /// Name.
     ea::string name_;
     /// Name hash.
@@ -164,7 +178,7 @@ struct AttributeInfo
     /// Default value for network replication.
     Variant defaultValue_;
     /// Attribute mode: whether to use for serialization, network replication, or both.
-    AttributeModeFlags mode_ = AM_DEFAULT;
+    AttributeModeFlags mode_ = AttributeMode::Default;
     /// Attribute metadata.
     VariantMap metadata_;
     /// Attribute data pointer if elsewhere than in the Serializable.

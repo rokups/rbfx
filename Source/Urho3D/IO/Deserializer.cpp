@@ -312,85 +312,85 @@ Variant Deserializer::ReadVariant(VariantType type, Context* context)
 {
     switch (type)
     {
-    case VAR_INT:
+    case VariantType::Int:
         return Variant(ReadInt());
 
-    case VAR_INT64:
+    case VariantType::Int64:
         return Variant(ReadInt64());
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         return Variant(ReadBool());
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         return Variant(ReadFloat());
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return Variant(ReadVector2());
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return Variant(ReadVector3());
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return Variant(ReadVector4());
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return Variant(ReadQuaternion());
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return Variant(ReadColor());
 
-    case VAR_STRING:
+    case VariantType::String:
         return Variant(ReadString());
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         return Variant(ReadBuffer());
 
         // Deserializing pointers is not supported. Return null
-    case VAR_VOIDPTR:
-    case VAR_PTR:
+    case VariantType::VoidPtr:
+    case VariantType::Ptr:
         ReadUInt();
         return Variant((void*)nullptr);
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return Variant(ReadResourceRef());
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         return Variant(ReadResourceRefList());
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         return Variant(ReadVariantVector());
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         return Variant(ReadStringVector());
 
-    case VAR_RECT:
+    case VariantType::Rect:
         return Variant(ReadRect());
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         return Variant(ReadVariantMap());
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return Variant(ReadIntRect());
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return Variant(ReadIntVector2());
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return Variant(ReadIntVector3());
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return Variant(ReadMatrix3());
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return Variant(ReadMatrix3x4());
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return Variant(ReadMatrix4());
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return Variant(ReadDouble());
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
     {
         StringHash typeName(ReadUInt());
         if (!typeName)

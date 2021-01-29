@@ -186,48 +186,48 @@ void Graphics::SetShaderParameter(StringHash param, const Variant& value)
 {
     switch (value.GetType())
     {
-    case VAR_BOOL:
+    case VariantType::Bool:
         SetShaderParameter(param, value.GetBool());
         break;
 
-    case VAR_INT:
+    case VariantType::Int:
         SetShaderParameter(param, value.GetInt());
         break;
 
-    case VAR_FLOAT:
-    case VAR_DOUBLE:
+    case VariantType::Float:
+    case VariantType::Double:
         SetShaderParameter(param, value.GetFloat());
         break;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         SetShaderParameter(param, value.GetVector2());
         break;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         SetShaderParameter(param, value.GetVector3());
         break;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         SetShaderParameter(param, value.GetVector4());
         break;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         SetShaderParameter(param, value.GetColor());
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         SetShaderParameter(param, value.GetMatrix3());
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         SetShaderParameter(param, value.GetMatrix3x4());
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         SetShaderParameter(param, value.GetMatrix4());
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         {
             const ea::vector<unsigned char>& buffer = value.GetBuffer();
             if (buffer.size() >= sizeof(float))

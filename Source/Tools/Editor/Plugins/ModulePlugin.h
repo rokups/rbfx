@@ -38,7 +38,7 @@ public:
     /// Loads plugin into application memory space and initializes it.
     bool Load() override;
     /// Returns true if plugin is loaded and functional.
-    bool IsLoaded() const override { return module_.GetModuleType() != MODULE_INVALID && !unloading_ && application_.NotNull(); }
+    bool IsLoaded() const override { return module_.GetModuleType() != ModuleType::Invalid && !unloading_ && application_.NotNull(); }
     /// Returns true if plugin was modified on the disk and should be reloaded.
     bool IsOutOfDate() const override;
     /// This function will block until plugin file is complete and ready to be loaded. Returns false if timeout exceeded, but file is still incomplete.
@@ -61,7 +61,7 @@ protected:
     /// Last modification time.
     unsigned mtime_ = 0;
     /// Last loaded module type.
-    ModuleType lastModuleType_ = MODULE_INVALID;
+    ModuleType lastModuleType_ = ModuleType::Invalid;
 };
 
 

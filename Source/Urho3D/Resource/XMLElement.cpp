@@ -436,22 +436,22 @@ bool XMLElement::SetVariantValue(const Variant& value)
 {
     switch (value.GetType())
     {
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return SetResourceRef(value.GetResourceRef());
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         return SetResourceRefList(value.GetResourceRefList());
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         return SetVariantVector(value.GetVariantVector());
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         return SetStringVector(value.GetStringVector());
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         return SetVariantMap(value.GetVariantMap());
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
     {
         if (const Serializable* object = value.GetCustom<SharedPtr<Serializable>>())
         {
@@ -571,8 +571,8 @@ bool XMLElement::SetVector4(const ea::string& name, const Vector4& value)
 bool XMLElement::SetVectorVariant(const ea::string& name, const Variant& value)
 {
     VariantType type = value.GetType();
-    if (type == VAR_FLOAT || type == VAR_VECTOR2 || type == VAR_VECTOR3 || type == VAR_VECTOR4 || type == VAR_MATRIX3 ||
-        type == VAR_MATRIX3X4 || type == VAR_MATRIX4)
+    if (type == VariantType::Float || type == VariantType::Vector2 || type == VariantType::Vector3 || type == VariantType::Vector4 || type == VariantType::Matrix3 ||
+        type == VariantType::Matrix3X4 || type == VariantType::Matrix4)
         return SetAttribute(name, value.ToString());
     else
         return false;
@@ -887,17 +887,17 @@ Variant XMLElement::GetVariantValue(VariantType type, Context* context) const
 {
     Variant ret;
 
-    if (type == VAR_RESOURCEREF)
+    if (type == VariantType::ResourceRef)
         ret = GetResourceRef();
-    else if (type == VAR_RESOURCEREFLIST)
+    else if (type == VariantType::ResourceRefList)
         ret = GetResourceRefList();
-    else if (type == VAR_VARIANTVECTOR)
+    else if (type == VariantType::VariantVector)
         ret = GetVariantVector();
-    else if (type == VAR_STRINGVECTOR)
+    else if (type == VariantType::StringVector)
         ret = GetStringVector();
-    else if (type == VAR_VARIANTMAP)
+    else if (type == VariantType::VariantMap)
         ret = GetVariantMap();
-    else if (type == VAR_CUSTOM)
+    else if (type == VariantType::Custom)
     {
         if (!context)
         {

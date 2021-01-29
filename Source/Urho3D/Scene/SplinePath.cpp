@@ -41,7 +41,7 @@ static const StringVector controlPointsStructureElementNames =
 
 SplinePath::SplinePath(Context* context) :
     Component(context),
-    spline_(BEZIER_CURVE),
+    spline_(InterpolationMode::BezierCurve),
     speed_(1.f),
     elapsedTime_(0.f),
     traveled_(0.f),
@@ -57,13 +57,13 @@ void SplinePath::RegisterObject(Context* context)
     context->RegisterFactory<SplinePath>(LOGIC_CATEGORY);
 
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Interpolation Mode", GetInterpolationMode, SetInterpolationMode, InterpolationMode,
-        interpolationModeNames, BEZIER_CURVE, AM_FILE);
-    URHO3D_ATTRIBUTE("Speed", float, speed_, 1.f, AM_FILE);
-    URHO3D_ATTRIBUTE("Traveled", float, traveled_, 0.f, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Elapsed Time", float, elapsedTime_, 0.f, AM_FILE | AM_NOEDIT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Controlled", GetControlledIdAttr, SetControlledIdAttr, unsigned, 0, AM_FILE | AM_NODEID);
+        interpolationModeNames, InterpolationMode::BezierCurve, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Speed", float, speed_, 1.f, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Traveled", float, traveled_, 0.f, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Elapsed Time", float, elapsedTime_, 0.f, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ACCESSOR_ATTRIBUTE("Controlled", GetControlledIdAttr, SetControlledIdAttr, unsigned, 0, AttributeMode::File | AttributeMode::NodeID);
     URHO3D_ACCESSOR_ATTRIBUTE("Control Points", GetControlPointIdsAttr, SetControlPointIdsAttr,
-        VariantVector, Variant::emptyVariantVector, AM_FILE | AM_NODEIDVECTOR)
+        VariantVector, Variant::emptyVariantVector, AttributeMode::File | AttributeMode::NodeIDVector)
         .SetMetadata(AttributeMetadata::P_VECTOR_STRUCT_ELEMENTS, controlPointsStructureElementNames);
 }
 

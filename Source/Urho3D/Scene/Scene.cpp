@@ -102,19 +102,19 @@ void Scene::RegisterObject(Context* context)
 {
     context->RegisterFactory<Scene>();
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Time Scale", GetTimeScale, SetTimeScale, float, 1.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Time Scale", GetTimeScale, SetTimeScale, float, 1.0f, AttributeMode::Default);
     URHO3D_ACCESSOR_ATTRIBUTE("Smoothing Constant", GetSmoothingConstant, SetSmoothingConstant, float, DEFAULT_SMOOTHING_CONSTANT,
-        AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Snap Threshold", GetSnapThreshold, SetSnapThreshold, float, DEFAULT_SNAP_THRESHOLD, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Elapsed Time", GetElapsedTime, SetElapsedTime, float, 0.0f, AM_FILE);
-    URHO3D_ATTRIBUTE("Next Replicated Node ID", unsigned, replicatedNodeID_, FIRST_REPLICATED_ID, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Next Replicated Component ID", unsigned, replicatedComponentID_, FIRST_REPLICATED_ID, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Next Local Node ID", unsigned, localNodeID_, FIRST_LOCAL_ID, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Next Local Component ID", unsigned, localComponentID_, FIRST_LOCAL_ID, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_FILE); // Network replication of vars uses custom data
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Variable Names", GetVarNamesAttr, SetVarNamesAttr, ea::string, EMPTY_STRING, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE_EX("Lightmaps", ResourceRefList, lightmaps_, MarkLightmapTexturesDirty, ResourceRefList(Texture2D::GetTypeStatic()), AM_DEFAULT);
+        AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Snap Threshold", GetSnapThreshold, SetSnapThreshold, float, DEFAULT_SNAP_THRESHOLD, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Elapsed Time", GetElapsedTime, SetElapsedTime, float, 0.0f, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Next Replicated Node ID", unsigned, replicatedNodeID_, FIRST_REPLICATED_ID, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Next Replicated Component ID", unsigned, replicatedComponentID_, FIRST_REPLICATED_ID, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Next Local Node ID", unsigned, localNodeID_, FIRST_LOCAL_ID, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Next Local Component ID", unsigned, localComponentID_, FIRST_LOCAL_ID, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AttributeMode::File); // Network replication of vars uses custom data
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Variable Names", GetVarNamesAttr, SetVarNamesAttr, ea::string, EMPTY_STRING, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE_EX("Lightmaps", ResourceRefList, lightmaps_, MarkLightmapTexturesDirty, ResourceRefList(Texture2D::GetTypeStatic()), AttributeMode::Default);
 }
 
 bool Scene::CreateComponentIndex(StringHash componentType)
@@ -1388,7 +1388,7 @@ void Scene::PreloadResources(File* file, bool isSceneFile)
     for (unsigned i = 0; i < attributes->size(); ++i)
     {
         const AttributeInfo& attr = attributes->at(i);
-        if (!(attr.mode_ & AM_FILE))
+        if (!(attr.mode_ & AttributeMode::File))
             continue;
         /*Variant varValue = */file->ReadVariant(attr.type_);
     }
@@ -1408,10 +1408,10 @@ void Scene::PreloadResources(File* file, bool isSceneFile)
             for (unsigned j = 0; j < attributes->size(); ++j)
             {
                 const AttributeInfo& attr = attributes->at(j);
-                if (!(attr.mode_ & AM_FILE))
+                if (!(attr.mode_ & AttributeMode::File))
                     continue;
                 Variant varValue = compBuffer.ReadVariant(attr.type_);
-                if (attr.type_ == VAR_RESOURCEREF)
+                if (attr.type_ == VariantType::ResourceRef)
                 {
                     const ResourceRef& ref = varValue.GetResourceRef();
                     // Sanitate resource name beforehand so that when we get the background load event, the name matches exactly
@@ -1423,7 +1423,7 @@ void Scene::PreloadResources(File* file, bool isSceneFile)
                         asyncProgress_.resources_.insert(StringHash(name));
                     }
                 }
-                else if (attr.type_ == VAR_RESOURCEREFLIST)
+                else if (attr.type_ == VariantType::ResourceRefList)
                 {
                     const ResourceRefList& refList = varValue.GetResourceRefList();
                     for (unsigned k = 0; k < refList.names_.size(); ++k)
@@ -1474,9 +1474,9 @@ void Scene::PreloadResourcesXML(const XMLElement& element)
                 while (attempts)
                 {
                     const AttributeInfo& attr = attributes->at(i);
-                    if ((attr.mode_ & AM_FILE) && !attr.name_.compare(name))
+                    if ((attr.mode_ & AttributeMode::File) && !attr.name_.compare(name))
                     {
-                        if (attr.type_ == VAR_RESOURCEREF)
+                        if (attr.type_ == VariantType::ResourceRef)
                         {
                             ResourceRef ref = attrElem.GetVariantValue(attr.type_).GetResourceRef();
                             ea::string name = cache->SanitateResourceName(ref.name_);
@@ -1487,7 +1487,7 @@ void Scene::PreloadResourcesXML(const XMLElement& element)
                                 asyncProgress_.resources_.insert(StringHash(name));
                             }
                         }
-                        else if (attr.type_ == VAR_RESOURCEREFLIST)
+                        else if (attr.type_ == VariantType::ResourceRefList)
                         {
                             ResourceRefList refList = attrElem.GetVariantValue(attr.type_).GetResourceRefList();
                             for (unsigned k = 0; k < refList.names_.size(); ++k)
@@ -1559,9 +1559,9 @@ void Scene::PreloadResourcesJSON(const JSONValue& value)
                 while (attempts)
                 {
                     const AttributeInfo& attr = attributes->at(i);
-                    if ((attr.mode_ & AM_FILE) && !attr.name_.compare(name))
+                    if ((attr.mode_ & AttributeMode::File) && !attr.name_.compare(name))
                     {
-                        if (attr.type_ == VAR_RESOURCEREF)
+                        if (attr.type_ == VariantType::ResourceRef)
                         {
                             ResourceRef ref = attrVal.Get("value").GetVariantValue(attr.type_).GetResourceRef();
                             ea::string name = cache->SanitateResourceName(ref.name_);
@@ -1572,7 +1572,7 @@ void Scene::PreloadResourcesJSON(const JSONValue& value)
                                 asyncProgress_.resources_.insert(StringHash(name));
                             }
                         }
-                        else if (attr.type_ == VAR_RESOURCEREFLIST)
+                        else if (attr.type_ == VariantType::ResourceRefList)
                         {
                             ResourceRefList refList = attrVal.Get("value").GetVariantValue(attr.type_).GetResourceRefList();
                             for (unsigned k = 0; k < refList.names_.size(); ++k)

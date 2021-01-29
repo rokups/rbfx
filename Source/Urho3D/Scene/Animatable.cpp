@@ -73,7 +73,7 @@ Animatable::~Animatable() = default;
 void Animatable::RegisterObject(Context* context)
 {
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Object Animation", GetObjectAnimationAttr, SetObjectAnimationAttr, ResourceRef,
-        ResourceRef(ObjectAnimation::GetTypeStatic()), AM_DEFAULT);
+        ResourceRef(ObjectAnimation::GetTypeStatic()), AttributeMode::Default);
 }
 
 bool Animatable::Serialize(Archive& archive)
@@ -446,7 +446,7 @@ void Animatable::SetAttributeAnimation(const ea::string& name, ValueAnimation* a
         }
 
         // Add network attribute to set
-        if (attributeInfo->mode_ & AM_NET)
+        if (attributeInfo->mode_ & AttributeMode::Net)
             animatedNetworkAttributes_.insert(attributeInfo);
 
         attributeAnimationInfos_[name] = new AttributeAnimationInfo(this, *attributeInfo, attributeAnimation, wrapMode, speed);
@@ -460,7 +460,7 @@ void Animatable::SetAttributeAnimation(const ea::string& name, ValueAnimation* a
             return;
 
         // Remove network attribute from set
-        if (info->GetAttributeInfo().mode_ & AM_NET)
+        if (info->GetAttributeInfo().mode_ & AttributeMode::Net)
             animatedNetworkAttributes_.erase(&info->GetAttributeInfo());
 
         attributeAnimationInfos_.erase(name);

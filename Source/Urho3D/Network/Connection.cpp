@@ -1342,7 +1342,7 @@ void Connection::ProcessExistingNode(Node* node, NodeReplicationState& nodeState
 
         for (unsigned i = 0; i < numAttributes; ++i)
         {
-            if (nodeState.dirtyAttributes_.IsSet(i) && (attributes->at(i).mode_ & AM_LATESTDATA))
+            if (nodeState.dirtyAttributes_.IsSet(i) && (attributes->at(i).mode_ & AttributeMode::LatestData))
             {
                 hasLatestData = true;
                 nodeState.dirtyAttributes_.Clear(i);
@@ -1420,7 +1420,7 @@ void Connection::ProcessExistingNode(Node* node, NodeReplicationState& nodeState
 
                 for (unsigned i = 0; i < numAttributes; ++i)
                 {
-                    if (componentState.dirtyAttributes_.IsSet(i) && (attributes->at(i).mode_ & AM_LATESTDATA))
+                    if (componentState.dirtyAttributes_.IsSet(i) && (attributes->at(i).mode_ & AttributeMode::LatestData))
                     {
                         hasLatestData = true;
                         componentState.dirtyAttributes_.Clear(i);
@@ -1676,7 +1676,7 @@ ea::string Connection::GetAddress() const {
 }
 
 void Connection::SetAddressOrGUID(const SLNet::AddressOrGUID& addr)
-{ 
+{
     delete address_;
     address_ = nullptr;
     address_ = new SLNet::AddressOrGUID(addr);

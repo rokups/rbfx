@@ -63,15 +63,15 @@ void IKEffector::RegisterObject(Context* context)
 {
     context->RegisterFactory<IKEffector>(IK_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Target Node", GetTargetName, SetTargetName, ea::string, EMPTY_STRING, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Chain Length", GetChainLength, SetChainLength, unsigned, 0, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Target Position", GetTargetPosition, SetTargetPosition, Vector3, Vector3::ZERO, AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Target Rotation", GetTargetRotationEuler, SetTargetRotationEuler, Vector3, Vector3::ZERO, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Weight", GetWeight, SetWeight, float, 1.0, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Rotation Weight", GetRotationWeight, SetRotationWeight, float, 1.0, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Rotation Decay", GetRotationDecay, SetRotationDecay, float, 0.25, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Nlerp Weight", GetWEIGHT_NLERP, SetWEIGHT_NLERP, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Inherit Parent Rotation", GetINHERIT_PARENT_ROTATION, SetINHERIT_PARENT_ROTATION, bool, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Target Node", GetTargetName, SetTargetName, ea::string, EMPTY_STRING, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Chain Length", GetChainLength, SetChainLength, unsigned, 0, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Target Position", GetTargetPosition, SetTargetPosition, Vector3, Vector3::ZERO, AttributeMode::Default);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Target Rotation", GetTargetRotationEuler, SetTargetRotationEuler, Vector3, Vector3::ZERO, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Weight", GetWeight, SetWeight, float, 1.0, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Rotation Weight", GetRotationWeight, SetRotationWeight, float, 1.0, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Rotation Decay", GetRotationDecay, SetRotationDecay, float, 0.25, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Nlerp Weight", GetWEIGHT_NLERP, SetWEIGHT_NLERP, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Inherit Parent Rotation", GetINHERIT_PARENT_ROTATION, SetINHERIT_PARENT_ROTATION, bool, false, AttributeMode::Default);
 }
 
 // ----------------------------------------------------------------------------

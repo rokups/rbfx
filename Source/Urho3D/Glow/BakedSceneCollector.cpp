@@ -222,7 +222,7 @@ ea::vector<LightProbeGroup*> DefaultBakedSceneCollector::GetLightProbeGroupsInBo
 {
     auto isAppropriate = [&](const LightProbeGroup* group)
     {
-        return group->IsEnabledEffective() && group->GetWorldBoundingBox().IsInside(boundingBox) != OUTSIDE;
+        return group->IsEnabledEffective() && group->GetWorldBoundingBox().IsInside(boundingBox) != Intersection::Outside;
     };
     ea::vector<LightProbeGroup*> groups;
     ea::copy_if(lightProbeGroups_.begin(), lightProbeGroups_.end(), ea::back_inserter(groups), isAppropriate);

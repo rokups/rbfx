@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "../Core/EnumIndex.h"
 #include "../Math/BoundingBox.h"
 #include "../Math/Matrix3x4.h"
 #include "../Math/Plane.h"
@@ -34,15 +35,26 @@ namespace Urho3D
 {
 
 /// Frustum planes.
-enum FrustumPlane
+enum class FrustumPlane
 {
-    PLANE_NEAR = 0,
-    PLANE_LEFT,
-    PLANE_RIGHT,
-    PLANE_UP,
-    PLANE_DOWN,
-    PLANE_FAR,
+    Near = 0,
+    Left,
+    Right,
+    Up,
+    Down,
+    Far,
 };
+
+URHO3D_ENUM_INDEX(FrustumPlane);
+
+#ifdef URHO3D_LEGACY_ENUMS
+static const FrustumPlane PLANE_NEAR = FrustumPlane::Near;
+static const FrustumPlane PLANE_LEFT = FrustumPlane::Left;
+static const FrustumPlane PLANE_RIGHT = FrustumPlane::Right;
+static const FrustumPlane PLANE_UP = FrustumPlane::Up;
+static const FrustumPlane PLANE_DOWN = FrustumPlane::Down;
+static const FrustumPlane PLANE_FAR = FrustumPlane::Far;
+#endif
 
 static const unsigned NUM_FRUSTUM_PLANES = 6;
 static const unsigned NUM_FRUSTUM_VERTICES = 8;
@@ -85,10 +97,10 @@ public:
         for (const auto& plane : planes_)
         {
             if (plane.Distance(point) < 0.0f)
-                return OUTSIDE;
+                return Intersection::Outside;
         }
 
-        return INSIDE;
+        return Intersection::Inside;
     }
 
     /// Test if a sphere is inside, outside or intersects.
@@ -99,12 +111,12 @@ public:
         {
             float dist = plane.Distance(sphere.center_);
             if (dist < -sphere.radius_)
-                return OUTSIDE;
+                return Intersection::Outside;
             else if (dist < sphere.radius_)
                 allInside = false;
         }
 
-        return allInside ? INSIDE : INTERSECTS;
+        return allInside ? Intersection::Inside : Intersection::Intersects;
     }
 
     /// Test if a sphere if (partially) inside or outside.
@@ -113,10 +125,10 @@ public:
         for (const auto& plane : planes_)
         {
             if (plane.Distance(sphere.center_) < -sphere.radius_)
-                return OUTSIDE;
+                return Intersection::Outside;
         }
 
-        return INSIDE;
+        return Intersection::Inside;
     }
 
     /// Test if a bounding box is inside, outside or intersects.
@@ -132,12 +144,12 @@ public:
             float absDist = plane.absNormal_.DotProduct(edge);
 
             if (dist < -absDist)
-                return OUTSIDE;
+                return Intersection::Outside;
             else if (dist < absDist)
                 allInside = false;
         }
 
-        return allInside ? INSIDE : INTERSECTS;
+        return allInside ? Intersection::Inside : Intersection::Intersects;
     }
 
     /// Test if a bounding box is (partially) inside or outside.
@@ -152,10 +164,10 @@ public:
             float absDist = plane.absNormal_.DotProduct(edge);
 
             if (dist < -absDist)
-                return OUTSIDE;
+                return Intersection::Outside;
         }
 
-        return INSIDE;
+        return Intersection::Inside;
     }
 
     /// Return distance of a point to the frustum, or 0 if inside.

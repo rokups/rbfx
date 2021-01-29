@@ -224,15 +224,15 @@ Rect Frustum::Projected(const Matrix4& projection) const
 
 void Frustum::UpdatePlanes()
 {
-    planes_[PLANE_NEAR].Define(vertices_[2], vertices_[1], vertices_[0]);
-    planes_[PLANE_LEFT].Define(vertices_[3], vertices_[7], vertices_[6]);
-    planes_[PLANE_RIGHT].Define(vertices_[1], vertices_[5], vertices_[4]);
-    planes_[PLANE_UP].Define(vertices_[0], vertices_[4], vertices_[7]);
-    planes_[PLANE_DOWN].Define(vertices_[6], vertices_[5], vertices_[1]);
-    planes_[PLANE_FAR].Define(vertices_[5], vertices_[6], vertices_[7]);
+    planes_[+FrustumPlane::Near].Define(vertices_[2], vertices_[1], vertices_[0]);
+    planes_[+FrustumPlane::Left].Define(vertices_[3], vertices_[7], vertices_[6]);
+    planes_[+FrustumPlane::Right].Define(vertices_[1], vertices_[5], vertices_[4]);
+    planes_[+FrustumPlane::Up].Define(vertices_[0], vertices_[4], vertices_[7]);
+    planes_[+FrustumPlane::Down].Define(vertices_[6], vertices_[5], vertices_[1]);
+    planes_[+FrustumPlane::Far].Define(vertices_[5], vertices_[6], vertices_[7]);
 
     // Check if we ended up with inverted planes (reflected transform) and flip in that case
-    if (planes_[PLANE_NEAR].Distance(vertices_[5]) < 0.0f)
+    if (planes_[+FrustumPlane::Near].Distance(vertices_[5]) < 0.0f)
     {
         for (auto& plane : planes_)
         {

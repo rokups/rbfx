@@ -463,35 +463,35 @@ void JSONValue::SetVariantValue(const Variant& variant, Context* context)
 
     switch (variant.GetType())
     {
-    case VAR_BOOL:
+    case VariantType::Bool:
         *this = variant.GetBool();
         return;
 
-    case VAR_INT:
+    case VariantType::Int:
         *this = variant.GetInt();
         return;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         *this = variant.GetFloat();
         return;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         *this = variant.GetDouble();
         return;
 
-    case VAR_STRING:
+    case VariantType::String:
         *this = variant.GetString();
         return;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         SetVariantVector(variant.GetVariantVector(), context);
         return;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         SetVariantMap(variant.GetVariantMap(), context);
         return;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         {
             if (!context)
             {
@@ -504,7 +504,7 @@ void JSONValue::SetVariantValue(const Variant& variant, Context* context)
         }
         return;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         {
             if (!context)
             {
@@ -523,7 +523,7 @@ void JSONValue::SetVariantValue(const Variant& variant, Context* context)
         }
         return;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         {
             const StringVector& vector = variant.GetStringVector();
             Resize(vector.size());
@@ -532,7 +532,7 @@ void JSONValue::SetVariantValue(const Variant& variant, Context* context)
         }
         return;
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         {
             if (const Serializable* object = variant.GetCustom<SharedPtr<Serializable>>())
             {
@@ -563,35 +563,35 @@ Variant JSONValue::GetVariantValue(VariantType type, Context* context) const
     Variant variant;
     switch (type)
     {
-    case VAR_BOOL:
+    case VariantType::Bool:
         variant = GetBool();
         break;
 
-    case VAR_INT:
+    case VariantType::Int:
         variant = GetInt();
         break;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         variant = GetFloat();
         break;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         variant = GetDouble();
         break;
 
-    case VAR_STRING:
+    case VariantType::String:
         variant = GetString();
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         variant = GetVariantVector();
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         variant = GetVariantMap();
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         {
             ResourceRef ref;
             ea::vector<ea::string> values = GetString().split(';');
@@ -604,7 +604,7 @@ Variant JSONValue::GetVariantValue(VariantType type, Context* context) const
         }
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         {
             ResourceRefList refList;
             ea::vector<ea::string> values = GetString().split(';', true);
@@ -619,7 +619,7 @@ Variant JSONValue::GetVariantValue(VariantType type, Context* context) const
         }
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         {
             StringVector vector;
             for (unsigned i = 0; i < Size(); ++i)
@@ -628,7 +628,7 @@ Variant JSONValue::GetVariantValue(VariantType type, Context* context) const
         }
         break;
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         {
             if (!context)
             {

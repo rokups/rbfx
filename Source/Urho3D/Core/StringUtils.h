@@ -187,4 +187,11 @@ template<typename... Args> inline ea::string Format(ea::string_view formatString
     return ret;
 }
 
+/// Return an index to a string list corresponding to the given string, or a default value if not found. The string list must be empty-terminated.
+template <class T, class U, std::enable_if_t<std::is_enum_v<T>, int> = 0>
+T GetStringListIndex(const U& value, const U* strings, T defaultIndex, bool caseSensitive = false)
+{
+    return static_cast<T>(GetStringListIndex(value, strings, static_cast<std::underlying_type_t<T>>(defaultIndex), caseSensitive));
+}
+
 }

@@ -158,9 +158,9 @@ public:
     {
         float distSquared = (point - center_).LengthSquared();
         if (distSquared < radius_ * radius_)
-            return INSIDE;
+            return Intersection::Inside;
         else
-            return OUTSIDE;
+            return Intersection::Outside;
     }
 
     /// Test if another sphere is inside, outside or intersects.
@@ -168,11 +168,11 @@ public:
     {
         float dist = (sphere.center_ - center_).Length();
         if (dist >= sphere.radius_ + radius_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else if (dist + sphere.radius_ < radius_)
-            return INSIDE;
+            return Intersection::Inside;
         else
-            return INTERSECTS;
+            return Intersection::Intersects;
     }
 
     /// Test if another sphere is (partially) inside or outside.
@@ -182,9 +182,9 @@ public:
         float combined = sphere.radius_ + radius_;
 
         if (distSquared >= combined * combined)
-            return OUTSIDE;
+            return Intersection::Outside;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if a bounding box is inside, outside or intersects.

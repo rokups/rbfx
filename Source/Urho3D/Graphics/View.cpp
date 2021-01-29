@@ -97,7 +97,7 @@ public:
             if (drawable->GetCastShadows() && (drawable->GetDrawableFlags() & drawableFlags_) &&
                 (drawable->GetViewMask() & viewMask_))
             {
-                if (inside || frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
+                if (inside || !!frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
                     result_.push_back(drawable);
             }
         }
@@ -126,7 +126,7 @@ public:
             if ((flags == DRAWABLE_ZONE || (flags == DRAWABLE_GEOMETRY && drawable->IsOccluder())) &&
                 (drawable->GetViewMask() & viewMask_))
             {
-                if (inside || frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
+                if (inside || !!frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
                     result_.push_back(drawable);
             }
         }
@@ -149,12 +149,12 @@ public:
     Intersection TestOctant(const BoundingBox& box, bool inside) override
     {
         if (inside)
-            return buffer_->IsVisible(box) ? INSIDE : OUTSIDE;
+            return buffer_->IsVisible(box) ? Intersection::Inside : Intersection::Outside;
         else
         {
             Intersection result = frustum_.IsInside(box);
-            if (result != OUTSIDE && !buffer_->IsVisible(box))
-                result = OUTSIDE;
+            if (result != Intersection::Outside && !buffer_->IsVisible(box))
+                result = Intersection::Outside;
             return result;
         }
     }
@@ -168,7 +168,7 @@ public:
 
             if ((drawable->GetDrawableFlags() & drawableFlags_) && (drawable->GetViewMask() & viewMask_))
             {
-                if (inside || frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
+                if (inside || !!frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
                     result_.push_back(drawable);
             }
         }
@@ -2235,7 +2235,7 @@ void View::UpdateOccluders(ea::vector<Drawable*>& occluders, Camera* camera)
 
                 // Give higher priority to occluders which the camera is inside their AABB
                 const Vector3& cameraPos = camera->GetNode() ? camera->GetNode()->GetWorldPosition() : Vector3::ZERO;
-                if (box.IsInside(cameraPos))
+                if (!!box.IsInside(cameraPos))
                     compare *= diagonal;    // size^2
             }
             else
@@ -2387,7 +2387,7 @@ void View::ProcessLight(LightQueryResult& query, unsigned threadIndex)
         query.shadowCasterBegin_[i] = query.shadowCasterEnd_[i] = query.shadowCasters_.size();
 
         // For point light check that the face is visible: if not, can skip the split
-        if (type == LIGHT_POINT && frustum.IsInsideFast(BoundingBox(shadowCameraFrustum)) == OUTSIDE)
+        if (type == LIGHT_POINT && frustum.IsInsideFast(BoundingBox(shadowCameraFrustum)) == Intersection::Outside)
             continue;
 
         // For directional light check that the split is inside the visible scene: if not, can skip the split
@@ -2456,7 +2456,7 @@ void View::ProcessShadowCasters(LightQueryResult& query, const ea::vector<Drawab
         if (!(GetShadowMask(drawable) & lightMask))
             continue;
         // For point light, check that this drawable is inside the split shadow camera frustum
-        if (type == LIGHT_POINT && shadowCameraFrustum.IsInsideFast(drawable->GetWorldBoundingBox()) == OUTSIDE)
+        if (type == LIGHT_POINT && shadowCameraFrustum.IsInsideFast(drawable->GetWorldBoundingBox()) == Intersection::Outside)
             continue;
 
         // Check shadow distance
@@ -2496,7 +2496,7 @@ bool View::IsShadowCasterVisible(Drawable* drawable, BoundingBox lightViewBox, C
     {
         // Extrude the light space bounding box up to the far edge of the frustum's light space bounding box
         lightViewBox.max_.z_ = Max(lightViewBox.max_.z_, lightViewFrustumBox.max_.z_);
-        return lightViewFrustum.IsInsideFast(lightViewBox) != OUTSIDE;
+        return lightViewFrustum.IsInsideFast(lightViewBox) != Intersection::Outside;
     }
     else
     {
@@ -2521,7 +2521,7 @@ bool View::IsShadowCasterVisible(Drawable* drawable, BoundingBox lightViewBox, C
         BoundingBox extrudedBox(newCenter - newHalfSize, newCenter + newHalfSize);
         lightViewBox.Merge(extrudedBox);
 
-        return lightViewFrustum.IsInsideFast(lightViewBox) != OUTSIDE;
+        return lightViewFrustum.IsInsideFast(lightViewBox) != Intersection::Outside;
     }
 }
 

@@ -32,7 +32,7 @@ namespace Urho3D
 Intersection PointOctreeQuery::TestOctant(const BoundingBox& box, bool inside)
 {
     if (inside)
-        return INSIDE;
+        return Intersection::Inside;
     else
         return box.IsInside(point_);
 }
@@ -45,7 +45,7 @@ void PointOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool insi
 
         if ((drawable->GetDrawableFlags() & drawableFlags_) && (drawable->GetViewMask() & viewMask_))
         {
-            if (inside || drawable->GetWorldBoundingBox().IsInside(point_))
+            if (inside || !!drawable->GetWorldBoundingBox().IsInside(point_))
                 result_.push_back(drawable);
         }
     }
@@ -54,7 +54,7 @@ void PointOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool insi
 Intersection SphereOctreeQuery::TestOctant(const BoundingBox& box, bool inside)
 {
     if (inside)
-        return INSIDE;
+        return Intersection::Inside;
     else
         return sphere_.IsInside(box);
 }
@@ -67,7 +67,7 @@ void SphereOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool ins
 
         if ((drawable->GetDrawableFlags() & drawableFlags_) && (drawable->GetViewMask() & viewMask_))
         {
-            if (inside || sphere_.IsInsideFast(drawable->GetWorldBoundingBox()))
+            if (inside || !!sphere_.IsInsideFast(drawable->GetWorldBoundingBox()))
                 result_.push_back(drawable);
         }
     }
@@ -76,7 +76,7 @@ void SphereOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool ins
 Intersection BoxOctreeQuery::TestOctant(const BoundingBox& box, bool inside)
 {
     if (inside)
-        return INSIDE;
+        return Intersection::Inside;
     else
         return box_.IsInside(box);
 }
@@ -89,7 +89,7 @@ void BoxOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool inside
 
         if ((drawable->GetDrawableFlags() & drawableFlags_) && (drawable->GetViewMask() & viewMask_))
         {
-            if (inside || box_.IsInsideFast(drawable->GetWorldBoundingBox()))
+            if (inside || !!box_.IsInsideFast(drawable->GetWorldBoundingBox()))
                 result_.push_back(drawable);
         }
     }
@@ -98,7 +98,7 @@ void BoxOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool inside
 Intersection FrustumOctreeQuery::TestOctant(const BoundingBox& box, bool inside)
 {
     if (inside)
-        return INSIDE;
+        return Intersection::Inside;
     else
         return frustum_.IsInside(box);
 }
@@ -111,7 +111,7 @@ void FrustumOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool in
 
         if ((drawable->GetDrawableFlags() & drawableFlags_) && (drawable->GetViewMask() & viewMask_))
         {
-            if (inside || frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
+            if (inside || !!frustum_.IsInsideFast(drawable->GetWorldBoundingBox()))
                 result_.push_back(drawable);
         }
     }
@@ -120,7 +120,7 @@ void FrustumOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool in
 
 Intersection AllContentOctreeQuery::TestOctant(const BoundingBox& box, bool inside)
 {
-    return INSIDE;
+    return Intersection::Inside;
 }
 
 void AllContentOctreeQuery::TestDrawables(Drawable** start, Drawable** end, bool inside)

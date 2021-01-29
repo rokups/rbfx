@@ -92,16 +92,16 @@ void IKSolver::RegisterObject(Context* context)
         nullptr
     };
 
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Algorithm", GetAlgorithm, SetAlgorithm, Algorithm, algorithmNames, FABRIK, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Iterations", GetMaximumIterations, SetMaximumIterations, unsigned, 20, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Convergence Tolerance", GetTolerance, SetTolerance, float, 0.001, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Joint Rotations", GetJOINT_ROTATIONS, SetJOINT_ROTATIONS, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Target Rotations", GetTARGET_ROTATIONS, SetTARGET_ROTATIONS, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Update Original Pose", GetUPDATE_ORIGINAL_POSE, SetUPDATE_ORIGINAL_POSE, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Update Active Pose", GetUPDATE_ACTIVE_POSE, SetUPDATE_ACTIVE_POSE, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Use Original Pose", GetUSE_ORIGINAL_POSE, SetUSE_ORIGINAL_POSE, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Enable Constraints", GetCONSTRAINTS, SetCONSTRAINTS, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Solve", GetAUTO_SOLVE, SetAUTO_SOLVE, bool, true, AM_DEFAULT);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Algorithm", GetAlgorithm, SetAlgorithm, Algorithm, algorithmNames, FABRIK, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Iterations", GetMaximumIterations, SetMaximumIterations, unsigned, 20, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Convergence Tolerance", GetTolerance, SetTolerance, float, 0.001, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Joint Rotations", GetJOINT_ROTATIONS, SetJOINT_ROTATIONS, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Target Rotations", GetTARGET_ROTATIONS, SetTARGET_ROTATIONS, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Update Original Pose", GetUPDATE_ORIGINAL_POSE, SetUPDATE_ORIGINAL_POSE, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Update Active Pose", GetUPDATE_ACTIVE_POSE, SetUPDATE_ACTIVE_POSE, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Use Original Pose", GetUSE_ORIGINAL_POSE, SetUSE_ORIGINAL_POSE, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Enable Constraints", GetCONSTRAINTS, SetCONSTRAINTS, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Solve", GetAUTO_SOLVE, SetAUTO_SOLVE, bool, true, AttributeMode::Default);
 }
 
 // ----------------------------------------------------------------------------

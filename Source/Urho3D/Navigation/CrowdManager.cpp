@@ -99,14 +99,14 @@ void CrowdManager::RegisterObject(Context* context)
 {
     context->RegisterFactory<CrowdManager>(NAVIGATION_CATEGORY);
 
-    URHO3D_ATTRIBUTE("Max Agents", unsigned, maxAgents_, DEFAULT_MAX_AGENTS, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Max Agent Radius", float, maxAgentRadius_, DEFAULT_MAX_AGENT_RADIUS, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Navigation Mesh", unsigned, navigationMeshId_, 0, AM_DEFAULT | AM_COMPONENTID);
+    URHO3D_ATTRIBUTE("Max Agents", unsigned, maxAgents_, DEFAULT_MAX_AGENTS, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Max Agent Radius", float, maxAgentRadius_, DEFAULT_MAX_AGENT_RADIUS, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Navigation Mesh", unsigned, navigationMeshId_, 0, AttributeMode::Default | AttributeMode::ComponentID);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Filter Types", GetQueryFilterTypesAttr, SetQueryFilterTypesAttr,
-        VariantVector, Variant::emptyVariantVector, AM_DEFAULT)
+        VariantVector, Variant::emptyVariantVector, AttributeMode::Default)
         .SetMetadata(AttributeMetadata::P_VECTOR_STRUCT_ELEMENTS, filterTypesStructureElementNames);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Obstacle Avoidance Types", GetObstacleAvoidanceTypesAttr, SetObstacleAvoidanceTypesAttr,
-        VariantVector, Variant::emptyVariantVector, AM_DEFAULT)
+        VariantVector, Variant::emptyVariantVector, AttributeMode::Default)
         .SetMetadata(AttributeMetadata::P_VECTOR_STRUCT_ELEMENTS, obstacleAvoidanceTypesStructureElementNames);
 }
 

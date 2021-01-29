@@ -71,12 +71,12 @@ static const char* typeNames[] =
     nullptr
 };
 
-static_assert(sizeof(typeNames) / sizeof(const char*) == (size_t)MAX_VAR_TYPES + 1, "Variant type name array is out-of-date");
+static_assert(sizeof(typeNames) / sizeof(const char*) == (size_t)MaxVarTypes + 1, "Variant type name array is out-of-date");
 
 Variant& Variant::operator =(const Variant& rhs)
 {
     // Handle custom types separately
-    if (rhs.GetType() == VAR_CUSTOM)
+    if (rhs.GetType() == VariantType::Custom)
     {
         SetCustomVariantValue(*rhs.GetCustomVariantValuePtr());
         return *this;
@@ -87,47 +87,47 @@ Variant& Variant::operator =(const Variant& rhs)
 
     switch (type_)
     {
-    case VAR_STRING:
+    case VariantType::String:
         value_.string_ = rhs.value_.string_;
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         value_.buffer_ = rhs.value_.buffer_;
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         value_.resourceRef_ = rhs.value_.resourceRef_;
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         value_.resourceRefList_ = rhs.value_.resourceRefList_;
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         value_.variantVector_ = rhs.value_.variantVector_;
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         value_.stringVector_ = rhs.value_.stringVector_;
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         *value_.variantMap_ = *rhs.value_.variantMap_;
         break;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         value_.weakPtr_ = rhs.value_.weakPtr_;
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         *value_.matrix3_ = *rhs.value_.matrix3_;
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         *value_.matrix3x4_ = *rhs.value_.matrix3x4_;
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         *value_.matrix4_ = *rhs.value_.matrix4_;
         break;
 
@@ -141,92 +141,92 @@ Variant& Variant::operator =(const Variant& rhs)
 
 Variant& Variant::operator =(const VectorBuffer& rhs)
 {
-    SetType(VAR_BUFFER);
+    SetType(VariantType::Buffer);
     value_.buffer_ = rhs.GetBuffer();
     return *this;
 }
 
 bool Variant::operator ==(const Variant& rhs) const
 {
-    if (type_ == VAR_VOIDPTR || type_ == VAR_PTR)
+    if (type_ == VariantType::VoidPtr || type_ == VariantType::Ptr)
         return GetVoidPtr() == rhs.GetVoidPtr();
-    else if (type_ == VAR_CUSTOM && rhs.type_ == VAR_CUSTOM)
+    else if (type_ == VariantType::Custom && rhs.type_ == VariantType::Custom)
         return GetCustomVariantValuePtr()->Compare(*rhs.GetCustomVariantValuePtr());
     else if (type_ != rhs.type_)
         return false;
 
     switch (type_)
     {
-    case VAR_INT:
+    case VariantType::Int:
         return value_.int_ == rhs.value_.int_;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         return value_.int64_ == rhs.value_.int64_;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         return value_.bool_ == rhs.value_.bool_;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         return value_.float_ == rhs.value_.float_;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return value_.vector2_ == rhs.value_.vector2_;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return value_.vector3_ == rhs.value_.vector3_;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return value_.vector4_ == rhs.value_.vector4_;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return value_.quaternion_ == rhs.value_.quaternion_;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return value_.color_ == rhs.value_.color_;
 
-    case VAR_STRING:
+    case VariantType::String:
         return value_.string_ == rhs.value_.string_;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         return value_.buffer_ == rhs.value_.buffer_;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return value_.resourceRef_ == rhs.value_.resourceRef_;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         return value_.resourceRefList_ == rhs.value_.resourceRefList_;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         return value_.variantVector_ == rhs.value_.variantVector_;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         return value_.stringVector_ == rhs.value_.stringVector_;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         return *value_.variantMap_ == *rhs.value_.variantMap_;
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return value_.intRect_ == rhs.value_.intRect_;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return value_.intVector2_ == rhs.value_.intVector2_;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return value_.intVector3_ == rhs.value_.intVector3_;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return *value_.matrix3_ == *rhs.value_.matrix3_;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return *value_.matrix3x4_ == *rhs.value_.matrix3x4_;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return *value_.matrix4_ == *rhs.value_.matrix4_;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return value_.double_ == rhs.value_.double_;
 
-    case VAR_RECT:
+    case VariantType::Rect:
         return value_.rect_ == rhs.value_.rect_;
 
     default:
@@ -238,7 +238,7 @@ bool Variant::operator ==(const VariantBuffer& rhs) const
 {
     // Use strncmp() instead of VariantBuffer::operator ==()
     const VariantBuffer& buffer = value_.buffer_;
-    return type_ == VAR_BUFFER && buffer.size() == rhs.size() ?
+    return type_ == VariantType::Buffer && buffer.size() == rhs.size() ?
         strncmp(reinterpret_cast<const char*>(&buffer[0]), reinterpret_cast<const char*>(&rhs[0]), buffer.size()) == 0 :
         false;
 }
@@ -246,7 +246,7 @@ bool Variant::operator ==(const VariantBuffer& rhs) const
 bool Variant::operator ==(const VectorBuffer& rhs) const
 {
     const VariantBuffer& buffer = value_.buffer_;
-    return type_ == VAR_BUFFER && buffer.size() == rhs.GetSize() ?
+    return type_ == VariantType::Buffer && buffer.size() == rhs.GetSize() ?
         strncmp(reinterpret_cast<const char*>(&buffer[0]), reinterpret_cast<const char*>(rhs.GetData()), buffer.size()) == 0 :
         false;
 }
@@ -256,97 +256,97 @@ Variant::Variant(VariantType type)
     SetType(type);
     switch (type)
     {
-    case VAR_INT:
+    case VariantType::Int:
         *this = 0;
         break;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         *this = 0LL;
         break;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         *this = false;
         break;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         *this = 0.0f;
         break;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         *this = Vector2::ZERO;
         break;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         *this = Vector3::ZERO;
         break;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         *this = Vector4::ZERO;
         break;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         *this = Quaternion::IDENTITY;
         break;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         *this = Color::BLACK;
         break;
 
-    case VAR_STRING:
+    case VariantType::String:
         *this = EMPTY_STRING;
         break;
 
-    case VAR_VOIDPTR:
+    case VariantType::VoidPtr:
         *this = (void*)nullptr;
         break;
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         *this = IntRect::ZERO;
         break;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         *this = IntVector2::ZERO;
         break;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         *this = IntVector3::ZERO;
         break;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         *this = (RefCounted*)nullptr;
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         *this = Matrix3::ZERO;
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         *this = Matrix3x4::ZERO;
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         *this = Matrix4::ZERO;
         break;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         *this = 0.0;
         break;
 
-    case VAR_RECT:
+    case VariantType::Rect:
         *this = Rect::ZERO;
         break;
 
-    case VAR_BUFFER:
-    case VAR_RESOURCEREF:
-    case VAR_RESOURCEREFLIST:
-    case VAR_VARIANTVECTOR:
-    case VAR_VARIANTMAP:
-    case VAR_STRINGVECTOR:
+    case VariantType::Buffer:
+    case VariantType::ResourceRef:
+    case VariantType::ResourceRefList:
+    case VariantType::VariantVector:
+    case VariantType::VariantMap:
+    case VariantType::StringVector:
         SetType(type);
         break;
 
     default:
-        SetType(VAR_NONE);
+        SetType(VariantType::None);
     }
 }
 
@@ -369,74 +369,74 @@ void Variant::FromString(VariantType type, const char* value)
 {
     switch (type)
     {
-    case VAR_INT:
+    case VariantType::Int:
         *this = ToInt(value);
         break;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         *this = ToInt64(value);
         break;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         *this = ToBool(value);
         break;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         *this = ToFloat(value);
         break;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         *this = ToVector2(value);
         break;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         *this = ToVector3(value);
         break;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         *this = ToVector4(value);
         break;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         *this = ToQuaternion(value);
         break;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         *this = ToColor(value);
         break;
 
-    case VAR_STRING:
+    case VariantType::String:
         *this = value;
         break;
 
-    case VAR_BUFFER:
-        SetType(VAR_BUFFER);
+    case VariantType::Buffer:
+        SetType(VariantType::Buffer);
         StringToBuffer(value_.buffer_, value);
         break;
 
-    case VAR_VOIDPTR:
+    case VariantType::VoidPtr:
         // From string to void pointer not supported, set to null
         *this = (void*)nullptr;
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
     {
         StringVector values = ea::string::split(value, ';');
         if (values.size() == 2)
         {
-            SetType(VAR_RESOURCEREF);
+            SetType(VariantType::ResourceRef);
             value_.resourceRef_.type_ = values[0];
             value_.resourceRef_.name_ = values[1];
         }
         break;
     }
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
     {
         StringVector values = ea::string::split(value, ';', true);
         if (values.size() >= 1)
         {
-            SetType(VAR_RESOURCEREFLIST);
+            SetType(VariantType::ResourceRefList);
             value_.resourceRefList_.type_ = values[0];
             value_.resourceRefList_.names_.resize(values.size() - 1);
             for (unsigned i = 1; i < values.size(); ++i)
@@ -445,45 +445,45 @@ void Variant::FromString(VariantType type, const char* value)
         break;
     }
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         *this = ToIntRect(value);
         break;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         *this = ToIntVector2(value);
         break;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         *this = ToIntVector3(value);
         break;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         // From string to RefCounted pointer not supported, set to null
         *this = (RefCounted*)nullptr;
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         *this = ToMatrix3(value);
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         *this = ToMatrix3x4(value);
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         *this = ToMatrix4(value);
         break;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         *this = ToDouble(value);
         break;
 
-    case VAR_RECT:
+    case VariantType::Rect:
         *this = ToRect(value);
         break;
 
     default:
-        SetType(VAR_NONE);
+        SetType(VariantType::None);
     }
 }
 
@@ -492,7 +492,7 @@ void Variant::SetBuffer(const void* data, unsigned size)
     if (size && !data)
         size = 0;
 
-    SetType(VAR_BUFFER);
+    SetType(VariantType::Buffer);
     VariantBuffer& buffer = value_.buffer_;
     buffer.resize(size);
     if (size)
@@ -510,14 +510,14 @@ void Variant::SetCustomVariantValue(const CustomVariantValue& value)
             return;
     }
 
-    SetType(VAR_CUSTOM);
+    SetType(VariantType::Custom);
     value_.AsCustomValue().~CustomVariantValue();
     value.CloneTo(value_.storage_);
 }
 
 VectorBuffer Variant::GetVectorBuffer() const
 {
-    return VectorBuffer(type_ == VAR_BUFFER ? value_.buffer_ : emptyBuffer);
+    return VectorBuffer(type_ == VariantType::Buffer ? value_.buffer_ : emptyBuffer);
 }
 
 const char* const* Variant::GetTypeNameList()
@@ -527,44 +527,44 @@ const char* const* Variant::GetTypeNameList()
 
 ea::string Variant::GetTypeName() const
 {
-    return typeNames[type_];
+    return typeNames[+type_];
 }
 
 ea::string Variant::ToString() const
 {
     switch (type_)
     {
-    case VAR_INT:
+    case VariantType::Int:
         return ea::to_string(value_.int_);
 
-    case VAR_INT64:
+    case VariantType::Int64:
         return ea::to_string(value_.int64_);
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         return ToStringBool(value_.bool_);
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         return ea::to_string(value_.float_);
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return value_.vector2_.ToString();
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return value_.vector3_.ToString();
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return value_.vector4_.ToString();
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return value_.quaternion_.ToString();
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return value_.color_.ToString();
 
-    case VAR_STRING:
+    case VariantType::String:
         return value_.string_;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         {
             const VariantBuffer& buffer = value_.buffer_;
             ea::string ret;
@@ -572,40 +572,40 @@ ea::string Variant::ToString() const
             return ret;
         }
 
-    case VAR_VOIDPTR:
-    case VAR_PTR:
+    case VariantType::VoidPtr:
+    case VariantType::Ptr:
         // Pointer serialization not supported (convert to null)
         return ea::string();
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return value_.intRect_.ToString();
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return value_.intVector2_.ToString();
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return value_.intVector3_.ToString();
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return value_.matrix3_->ToString();
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return value_.matrix3x4_->ToString();
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return value_.matrix4_->ToString();
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return ea::to_string(value_.double_);
 
-    case VAR_RECT:
+    case VariantType::Rect:
         return value_.rect_.ToString();
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         return GetCustomVariantValuePtr()->ToString();
 
     default:
-        // VAR_RESOURCEREF, VAR_RESOURCEREFLIST, VAR_VARIANTVECTOR, VAR_STRINGVECTOR, VAR_VARIANTMAP
+        // VariantType::ResourceRef, VariantType::ResourceRefList, VariantType::VariantVector, VariantType::StringVector, VariantType::VariantMap
         // Reference string serialization requires typehash-to-name mapping from the context. Can not support here
         // Also variant map or vector string serialization is not supported. XML or binary save should be used instead
         return EMPTY_STRING;
@@ -616,47 +616,47 @@ bool Variant::IsZero() const
 {
     switch (type_)
     {
-    case VAR_INT:
+    case VariantType::Int:
         return value_.int_ == 0;
 
-    case VAR_INT64:
+    case VariantType::Int64:
         return value_.int64_ == 0;
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         return value_.bool_ == false;
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         return value_.float_ == 0.0f;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return value_.vector2_ == Vector2::ZERO;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return value_.vector3_ == Vector3::ZERO;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return value_.vector4_ == Vector4::ZERO;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return value_.quaternion_ == Quaternion::IDENTITY;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         // WHITE is considered empty (i.e. default) color in the Color class definition
         return value_.color_ == Color::WHITE;
 
-    case VAR_STRING:
+    case VariantType::String:
         return value_.string_.empty();
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         return value_.buffer_.empty();
 
-    case VAR_VOIDPTR:
+    case VariantType::VoidPtr:
         return value_.voidPtr_ == nullptr;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return value_.resourceRef_.name_.empty();
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
     {
         const StringVector& names = value_.resourceRefList_.names_;
         for (auto i = names.begin(); i != names.end(); ++i)
@@ -667,43 +667,43 @@ bool Variant::IsZero() const
         return true;
     }
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         return value_.variantVector_.empty();
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         return value_.stringVector_.empty();
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         return value_.variantMap_->empty();
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return value_.intRect_ == IntRect::ZERO;
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return value_.intVector2_ == IntVector2::ZERO;
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return value_.intVector3_ == IntVector3::ZERO;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         return value_.weakPtr_ == nullptr;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return *value_.matrix3_ == Matrix3::IDENTITY;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return *value_.matrix3x4_ == Matrix3x4::IDENTITY;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return *value_.matrix4_ == Matrix4::IDENTITY;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return value_.double_ == 0.0;
 
-    case VAR_RECT:
+    case VariantType::Rect:
         return value_.rect_ == Rect::ZERO;
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         return GetCustomVariantValuePtr()->IsZero();
 
     default:
@@ -718,51 +718,51 @@ void Variant::SetType(VariantType newType)
 
     switch (type_)
     {
-    case VAR_STRING:
+    case VariantType::String:
         value_.string_.~basic_string<char>();
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         value_.buffer_.~vector<unsigned char>();
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         value_.resourceRef_.~ResourceRef();
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         value_.resourceRefList_.~ResourceRefList();
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         value_.variantVector_.~VariantVector();
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         value_.stringVector_.~StringVector();
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         delete value_.variantMap_;
         break;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         value_.weakPtr_.~WeakPtr<RefCounted>();
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         delete value_.matrix3_;
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         delete value_.matrix3x4_;
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         delete value_.matrix4_;
         break;
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         value_.AsCustomValue().~CustomVariantValue();
         break;
 
@@ -774,51 +774,51 @@ void Variant::SetType(VariantType newType)
 
     switch (type_)
     {
-    case VAR_STRING:
+    case VariantType::String:
         new(&value_.string_) ea::string();
         break;
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         new(&value_.buffer_) VariantBuffer();
         break;
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         new(&value_.resourceRef_) ResourceRef();
         break;
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         new(&value_.resourceRefList_) ResourceRefList();
         break;
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         new(&value_.variantVector_) VariantVector();
         break;
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         new(&value_.stringVector_) StringVector();
         break;
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         value_.variantMap_ = new VariantMap();
         break;
 
-    case VAR_PTR:
+    case VariantType::Ptr:
         new(&value_.weakPtr_) WeakPtr<RefCounted>();
         break;
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         value_.matrix3_ = new Matrix3();
         break;
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         value_.matrix3x4_ = new Matrix3x4();
         break;
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         value_.matrix4_ = new Matrix4();
         break;
 
-    case VAR_CUSTOM:
+    case VariantType::Custom:
         // Initialize virtual table with void dummy custom object
         new (&value_.storage_) CustomVariantValue();
         break;
@@ -1045,7 +1045,7 @@ template <> Matrix4 Variant::Get<Matrix4>() const
 
 ea::string Variant::GetTypeName(VariantType type)
 {
-    return typeNames[type];
+    return typeNames[+type];
 }
 
 VariantType Variant::GetTypeFromName(const ea::string& typeName)
@@ -1055,68 +1055,68 @@ VariantType Variant::GetTypeFromName(const ea::string& typeName)
 
 VariantType Variant::GetTypeFromName(const char* typeName)
 {
-    return (VariantType)GetStringListIndex(typeName, typeNames, VAR_NONE);
+    return GetStringListIndex(typeName, typeNames, VariantType::None);
 }
 
 unsigned Variant::ToHash() const
 {
     switch (GetType())
     {
-    case Urho3D::VAR_NONE:
+    case Urho3D::VariantType::None:
         return 0;
-    case Urho3D::VAR_INT:
+    case Urho3D::VariantType::Int:
         return ea::hash<int>()(Get<int>());
-    case Urho3D::VAR_BOOL:
+    case Urho3D::VariantType::Bool:
         return ea::hash<bool>()(Get<bool>());
-    case Urho3D::VAR_FLOAT:
+    case Urho3D::VariantType::Float:
         return ea::hash<float>()(Get<float>());
-    case Urho3D::VAR_VECTOR2:
+    case Urho3D::VariantType::Vector2:
         return ea::hash<Urho3D::Vector2>()(Get<Urho3D::Vector2>());
-    case Urho3D::VAR_VECTOR3:
+    case Urho3D::VariantType::Vector3:
         return ea::hash<Urho3D::Vector3>()(Get<Urho3D::Vector3>());
-    case Urho3D::VAR_VECTOR4:
+    case Urho3D::VariantType::Vector4:
         return ea::hash<Urho3D::Vector4>()(Get<Urho3D::Vector4>());
-    case Urho3D::VAR_QUATERNION:
+    case Urho3D::VariantType::Quaternion:
         return ea::hash<Urho3D::Quaternion>()(Get<Urho3D::Quaternion>());
-    case Urho3D::VAR_COLOR:
+    case Urho3D::VariantType::Color:
         return ea::hash<Urho3D::Color>()(Get<Urho3D::Color>());
-    case Urho3D::VAR_STRING:
+    case Urho3D::VariantType::String:
         return ea::hash<ea::string>()(Get<ea::string>());
-    case Urho3D::VAR_BUFFER:
+    case Urho3D::VariantType::Buffer:
         return ea::hash<ea::vector<unsigned char>>()(Get<ea::vector<unsigned char>>());
-    case Urho3D::VAR_VOIDPTR:
+    case Urho3D::VariantType::VoidPtr:
         return ea::hash<void*>()(Get<void*>());
-    case Urho3D::VAR_RESOURCEREF:
+    case Urho3D::VariantType::ResourceRef:
         return ea::hash<Urho3D::ResourceRef>()(Get<Urho3D::ResourceRef>());
-    case Urho3D::VAR_RESOURCEREFLIST:
+    case Urho3D::VariantType::ResourceRefList:
         return ea::hash<Urho3D::ResourceRefList>()(Get<Urho3D::ResourceRefList>());
-    case Urho3D::VAR_VARIANTVECTOR:
+    case Urho3D::VariantType::VariantVector:
         return ea::hash<Urho3D::VariantVector>()(Get<Urho3D::VariantVector>());
-    case Urho3D::VAR_VARIANTMAP:
+    case Urho3D::VariantType::VariantMap:
         return ea::hash<Urho3D::VariantMap>()(Get<Urho3D::VariantMap>());
-    case Urho3D::VAR_INTRECT:
+    case Urho3D::VariantType::IntRect:
         return ea::hash<Urho3D::IntRect>()(Get<Urho3D::IntRect>());
-    case Urho3D::VAR_INTVECTOR2:
+    case Urho3D::VariantType::IntVector2:
         return ea::hash<Urho3D::IntVector2>()(Get<Urho3D::IntVector2>());
-    case Urho3D::VAR_PTR:
+    case Urho3D::VariantType::Ptr:
         return ea::hash<Urho3D::RefCounted*>()(Get<Urho3D::RefCounted*>());
-    case Urho3D::VAR_MATRIX3:
+    case Urho3D::VariantType::Matrix3:
         return ea::hash<Urho3D::Matrix3>()(Get<Urho3D::Matrix3>());
-    case Urho3D::VAR_MATRIX3X4:
+    case Urho3D::VariantType::Matrix3X4:
         return ea::hash<Urho3D::Matrix3x4>()(Get<Urho3D::Matrix3x4>());
-    case Urho3D::VAR_MATRIX4:
+    case Urho3D::VariantType::Matrix4:
         return ea::hash<Urho3D::Matrix4>()(Get<Urho3D::Matrix4>());
-    case Urho3D::VAR_DOUBLE:
+    case Urho3D::VariantType::Double:
         return ea::hash<double>()(Get<double>());
-    case Urho3D::VAR_STRINGVECTOR:
+    case Urho3D::VariantType::StringVector:
         return ea::hash<Urho3D::StringVector>()(Get<Urho3D::StringVector>());
-    case Urho3D::VAR_RECT:
+    case Urho3D::VariantType::Rect:
         return ea::hash<Urho3D::Rect>()(Get<Urho3D::Rect>());
-    case Urho3D::VAR_INTVECTOR3:
+    case Urho3D::VariantType::IntVector3:
         return ea::hash<Urho3D::IntVector3>()(Get<Urho3D::IntVector3>());
-    case Urho3D::VAR_INT64:
+    case Urho3D::VariantType::Int64:
         return ea::hash<long long>()(Get<long long>());
-    case Urho3D::VAR_CUSTOM:
+    case Urho3D::VariantType::Custom:
     default:
         assert(false);
         return 0;

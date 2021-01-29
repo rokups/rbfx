@@ -176,37 +176,37 @@ Intersection Sphere::IsInside(const BoundingBox& box) const
     }
 
     if (distSquared >= radiusSquared)
-        return OUTSIDE;
+        return Intersection::Outside;
 
     min -= center_;
     max -= center_;
 
     Vector3 tempVec = min; // - - -
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.x_ = max.x_; // + - -
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.y_ = max.y_; // + + -
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.x_ = min.x_; // - + -
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.z_ = max.z_; // - + +
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.y_ = min.y_; // - - +
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.x_ = max.x_; // + - +
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
     tempVec.y_ = max.y_; // + + +
     if (tempVec.LengthSquared() >= radiusSquared)
-        return INTERSECTS;
+        return Intersection::Intersects;
 
-    return INSIDE;
+    return Intersection::Inside;
 }
 
 Intersection Sphere::IsInsideFast(const BoundingBox& box) const
@@ -249,9 +249,9 @@ Intersection Sphere::IsInsideFast(const BoundingBox& box) const
     }
 
     if (distSquared >= radiusSquared)
-        return OUTSIDE;
+        return Intersection::Outside;
     else
-        return INSIDE;
+        return Intersection::Inside;
 }
 
 Vector3 Sphere::GetLocalPoint(float theta, float phi) const

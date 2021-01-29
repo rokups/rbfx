@@ -135,28 +135,28 @@ void NavigationMesh::RegisterObject(Context* context)
 {
     context->RegisterFactory<NavigationMesh>(NAVIGATION_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Tile Size", GetTileSize, SetTileSize, int, DEFAULT_TILE_SIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Cell Size", GetCellSize, SetCellSize, float, DEFAULT_CELL_SIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Cell Height", GetCellHeight, SetCellHeight, float, DEFAULT_CELL_HEIGHT, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Agent Height", GetAgentHeight, SetAgentHeight, float, DEFAULT_AGENT_HEIGHT, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Agent Radius", GetAgentRadius, SetAgentRadius, float, DEFAULT_AGENT_RADIUS, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Agent Max Climb", GetAgentMaxClimb, SetAgentMaxClimb, float, DEFAULT_AGENT_MAX_CLIMB, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Agent Max Slope", GetAgentMaxSlope, SetAgentMaxSlope, float, DEFAULT_AGENT_MAX_SLOPE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Region Min Size", GetRegionMinSize, SetRegionMinSize, float, DEFAULT_REGION_MIN_SIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Region Merge Size", GetRegionMergeSize, SetRegionMergeSize, float, DEFAULT_REGION_MERGE_SIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Edge Max Length", GetEdgeMaxLength, SetEdgeMaxLength, float, DEFAULT_EDGE_MAX_LENGTH, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Edge Max Error", GetEdgeMaxError, SetEdgeMaxError, float, DEFAULT_EDGE_MAX_ERROR, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Tile Size", GetTileSize, SetTileSize, int, DEFAULT_TILE_SIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Cell Size", GetCellSize, SetCellSize, float, DEFAULT_CELL_SIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Cell Height", GetCellHeight, SetCellHeight, float, DEFAULT_CELL_HEIGHT, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Agent Height", GetAgentHeight, SetAgentHeight, float, DEFAULT_AGENT_HEIGHT, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Agent Radius", GetAgentRadius, SetAgentRadius, float, DEFAULT_AGENT_RADIUS, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Agent Max Climb", GetAgentMaxClimb, SetAgentMaxClimb, float, DEFAULT_AGENT_MAX_CLIMB, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Agent Max Slope", GetAgentMaxSlope, SetAgentMaxSlope, float, DEFAULT_AGENT_MAX_SLOPE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Region Min Size", GetRegionMinSize, SetRegionMinSize, float, DEFAULT_REGION_MIN_SIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Region Merge Size", GetRegionMergeSize, SetRegionMergeSize, float, DEFAULT_REGION_MERGE_SIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Edge Max Length", GetEdgeMaxLength, SetEdgeMaxLength, float, DEFAULT_EDGE_MAX_LENGTH, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Edge Max Error", GetEdgeMaxError, SetEdgeMaxError, float, DEFAULT_EDGE_MAX_ERROR, AttributeMode::Default);
     URHO3D_ACCESSOR_ATTRIBUTE("Detail Sample Distance", GetDetailSampleDistance, SetDetailSampleDistance, float,
-        DEFAULT_DETAIL_SAMPLE_DISTANCE, AM_DEFAULT);
+        DEFAULT_DETAIL_SAMPLE_DISTANCE, AttributeMode::Default);
     URHO3D_ACCESSOR_ATTRIBUTE("Detail Sample Max Error", GetDetailSampleMaxError, SetDetailSampleMaxError, float,
-        DEFAULT_DETAIL_SAMPLE_MAX_ERROR, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Bounding Box Padding", GetPadding, SetPadding, Vector3, Vector3::ONE, AM_DEFAULT);
+        DEFAULT_DETAIL_SAMPLE_MAX_ERROR, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Bounding Box Padding", GetPadding, SetPadding, Vector3, Vector3::ONE, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Navigation Data", GetNavigationDataAttr, SetNavigationDataAttr, ea::vector<unsigned char>,
-        Variant::emptyBuffer, AM_FILE | AM_NOEDIT);
+        Variant::emptyBuffer, AttributeMode::File | AttributeMode::NoEdit);
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Partition Type", GetPartitionType, SetPartitionType, NavmeshPartitionType, navmeshPartitionTypeNames,
-        NAVMESH_PARTITION_WATERSHED, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw OffMeshConnections", GetDrawOffMeshConnections, SetDrawOffMeshConnections, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw NavAreas", GetDrawNavAreas, SetDrawNavAreas, bool, false, AM_DEFAULT);
+        NAVMESH_PARTITION_WATERSHED, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw OffMeshConnections", GetDrawOffMeshConnections, SetDrawOffMeshConnections, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw NavAreas", GetDrawNavAreas, SetDrawNavAreas, bool, false, AttributeMode::Default);
 }
 
 void NavigationMesh::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -719,7 +719,7 @@ void NavigationMesh::FindPath(ea::vector<NavigationPathPoint>& dest, const Vecto
             if (area && area->IsEnabledEffective())
             {
                 BoundingBox bb = area->GetWorldBoundingBox();
-                if (bb.IsInside(pt.position_) == INSIDE)
+                if (bb.IsInside(pt.position_) == Intersection::Inside)
                 {
                     Vector3 areaWorldCenter = area->GetNode()->GetWorldPosition();
                     float distance = (areaWorldCenter - pt.position_).LengthSquared();
@@ -1088,7 +1088,7 @@ void NavigationMesh::GetTileGeometry(NavBuildData* build, ea::vector<NavigationG
 
     for (unsigned i = 0; i < geometryList.size(); ++i)
     {
-        if (box.IsInsideFast(geometryList[i].boundingBox_) != OUTSIDE)
+        if (box.IsInsideFast(geometryList[i].boundingBox_) != Intersection::Outside)
         {
             const Matrix3x4& transform = geometryList[i].transform_;
 

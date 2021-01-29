@@ -272,7 +272,7 @@ bool Renderer2D::CheckVisibility(Drawable2D* drawable) const
         return false;
 
     const BoundingBox& box = drawable->GetWorldBoundingBox();
-    return frustum_.IsInsideFast(box) != OUTSIDE;
+    return frustum_.IsInsideFast(box) != Intersection::Outside;
 }
 
 void Renderer2D::OnWorldBoundingBoxUpdate()

@@ -216,20 +216,20 @@ public:
     Intersection IsInside(const Vector2& point) const
     {
         if (point.x_ < min_.x_ || point.y_ < min_.y_ || point.x_ > max_.x_ || point.y_ > max_.y_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if another rect is inside, outside or intersects.
     Intersection IsInside(const Rect& rect) const
     {
         if (rect.max_.x_ < min_.x_ || rect.min_.x_ > max_.x_ || rect.max_.y_ < min_.y_ || rect.min_.y_ > max_.y_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else if (rect.min_.x_ < min_.x_ || rect.max_.x_ > max_.x_ || rect.min_.y_ < min_.y_ || rect.max_.y_ > max_.y_)
-            return INTERSECTS;
+            return Intersection::Intersects;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Return float data.
@@ -426,20 +426,20 @@ public:
     Intersection IsInside(const IntVector2& point) const
     {
         if (point.x_ < left_ || point.y_ < top_ || point.x_ >= right_ || point.y_ >= bottom_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if another rect is inside, outside or intersects.
     Intersection IsInside(const IntRect& rect) const
     {
         if (rect.right_ < left_ || rect.left_ >= right_ || rect.bottom_ < top_ || rect.top_ >= bottom_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else if (rect.left_ < left_ || rect.right_ > right_ || rect.top_ < top_ || rect.bottom_ > bottom_)
-            return INTERSECTS;
+            return Intersection::Intersects;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Clip with another rect.  Since IntRect does not have an undefined state

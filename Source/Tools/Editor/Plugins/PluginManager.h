@@ -68,7 +68,7 @@ protected:
         /// Last modification time.
         unsigned mtime_ = 0;
         /// Type of plugin.
-        ModuleType pluginType_ = MODULE_INVALID;
+        ModuleType pluginType_ = ModuleType::Invalid;
     };
 
     /// Loaded plugins.

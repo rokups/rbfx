@@ -33,17 +33,24 @@
 namespace Urho3D
 {
 
-enum InterpolationMode
+enum class InterpolationMode
 {
     /// Bezier interpolation.
-    BEZIER_CURVE = 0,
+    BezierCurve = 0,
     /// Catmull-Rom interpolation. The first and last knots control velocity and are not included on the path.
-    CATMULL_ROM_CURVE,
+    CatmullRomCurve,
     /// Linear interpolation.
-    LINEAR_CURVE,
+    LinearCurve,
     /// Catmull-Rom full path interpolation. Start and end knots are duplicated or looped as necessary to move through the full path.
-    CATMULL_ROM_FULL_CURVE
+    CatmullRomFullCurve
 };
+
+#ifdef URHO3D_LEGACY_ENUMS
+static const InterpolationMode BEZIER_CURVE = InterpolationMode::BezierCurve;
+static const InterpolationMode CATMULL_ROM_CURVE = InterpolationMode::CatmullRomCurve;
+static const InterpolationMode LINEAR_CURVE = InterpolationMode::LinearCurve;
+static const InterpolationMode CATMULL_ROM_FULL_CURVE = InterpolationMode::CatmullRomFullCurve;
+#endif
 
 /// Spline class to get a point on it based off the interpolation mode.
 class URHO3D_API Spline
@@ -54,7 +61,7 @@ public:
     /// Constructor setting interpolation mode.
     explicit Spline(InterpolationMode mode);
     /// Constructor setting knots and interpolation mode.
-    explicit Spline(const ea::vector<Variant>& knots, InterpolationMode mode = BEZIER_CURVE);
+    explicit Spline(const ea::vector<Variant>& knots, InterpolationMode mode = InterpolationMode::BezierCurve);
     /// Copy constructor.
     Spline(const Spline& rhs) = default;
 

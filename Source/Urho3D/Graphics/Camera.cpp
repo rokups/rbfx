@@ -81,26 +81,26 @@ void Camera::RegisterObject(Context* context)
 {
     context->RegisterFactory<Camera>(SCENE_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Near Clip", GetNearClip, SetNearClip, float, DEFAULT_NEARCLIP, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Far Clip", GetFarClip, SetFarClip, float, DEFAULT_FARCLIP, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("FOV", GetFov, SetFov, float, DEFAULT_CAMERA_FOV, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Aspect Ratio", GetAspectRatio, SetAspectRatioInternal, float, 1.0f, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Fill Mode", fillMode_, fillModeNames, FILL_SOLID, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Auto Aspect Ratio", bool, autoAspectRatio_, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Orthographic", IsOrthographic, SetOrthographic, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Orthographic Size", GetOrthoSize, SetOrthoSizeAttr, float, DEFAULT_ORTHOSIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Zoom", GetZoom, SetZoom, float, 1.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("View Mask", int, viewMask_, DEFAULT_VIEWMASK, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("View Override Flags", unsigned, viewOverrideFlags_.AsInteger(), VO_NONE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Projection Offset", GetProjectionOffset, SetProjectionOffset, Vector2, Vector2::ZERO, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Near Clip", GetNearClip, SetNearClip, float, DEFAULT_NEARCLIP, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Far Clip", GetFarClip, SetFarClip, float, DEFAULT_FARCLIP, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("FOV", GetFov, SetFov, float, DEFAULT_CAMERA_FOV, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Aspect Ratio", GetAspectRatio, SetAspectRatioInternal, float, 1.0f, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Fill Mode", fillMode_, fillModeNames, FILL_SOLID, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Auto Aspect Ratio", bool, autoAspectRatio_, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Orthographic", IsOrthographic, SetOrthographic, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Orthographic Size", GetOrthoSize, SetOrthoSizeAttr, float, DEFAULT_ORTHOSIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Zoom", GetZoom, SetZoom, float, 1.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("View Mask", int, viewMask_, DEFAULT_VIEWMASK, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("View Override Flags", unsigned, viewOverrideFlags_.AsInteger(), VO_NONE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Projection Offset", GetProjectionOffset, SetProjectionOffset, Vector2, Vector2::ZERO, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Reflection Plane", GetReflectionPlaneAttr, SetReflectionPlaneAttr, Vector4,
-        Vector4(0.0f, 1.0f, 0.0f, 0.0f), AM_DEFAULT);
+        Vector4(0.0f, 1.0f, 0.0f, 0.0f), AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Clip Plane", GetClipPlaneAttr, SetClipPlaneAttr, Vector4, Vector4(0.0f, 1.0f, 0.0f, 0.0f),
-        AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Use Reflection", GetUseReflection, SetUseReflection, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Use Clipping", GetUseClipping, SetUseClipping, bool, false, AM_DEFAULT);
+        AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Use Reflection", GetUseReflection, SetUseReflection, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Use Clipping", GetUseClipping, SetUseClipping, bool, false, AttributeMode::Default);
 }
 
 void Camera::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)

@@ -84,13 +84,13 @@ void LightProbeGroup::RegisterObject(Context* context)
 {
     context->RegisterFactory<LightProbeGroup>(SCENE_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Placement", GetAutoPlacementEnabled, SetAutoPlacementEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Placement Step", GetAutoPlacementStep, SetAutoPlacementStep, float, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Local Bounding Box Min", Vector3, localBoundingBox_.min_, Vector3::ZERO, AM_DEFAULT | AM_NOEDIT);
-    URHO3D_ATTRIBUTE("Local Bounding Box Max", Vector3, localBoundingBox_.max_, Vector3::ZERO, AM_DEFAULT | AM_NOEDIT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Serialized Light Probes", GetSerializedLightProbes, SetSerializedLightProbes, ea::string, EMPTY_STRING, AM_DEFAULT | AM_NOEDIT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Baked Data File", GetBakedDataFileRef, SetBakedDataFileRef, ResourceRef, ResourceRef{ BinaryFile::GetTypeStatic() }, AM_DEFAULT | AM_NOEDIT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Placement", GetAutoPlacementEnabled, SetAutoPlacementEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Placement Step", GetAutoPlacementStep, SetAutoPlacementStep, float, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Local Bounding Box Min", Vector3, localBoundingBox_.min_, Vector3::ZERO, AttributeMode::Default | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE("Local Bounding Box Max", Vector3, localBoundingBox_.max_, Vector3::ZERO, AttributeMode::Default | AttributeMode::NoEdit);
+    URHO3D_ACCESSOR_ATTRIBUTE("Serialized Light Probes", GetSerializedLightProbes, SetSerializedLightProbes, ea::string, EMPTY_STRING, AttributeMode::Default | AttributeMode::NoEdit);
+    URHO3D_ACCESSOR_ATTRIBUTE("Baked Data File", GetBakedDataFileRef, SetBakedDataFileRef, ResourceRef, ResourceRef{ BinaryFile::GetTypeStatic() }, AttributeMode::Default | AttributeMode::NoEdit);
 }
 
 void LightProbeGroup::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)

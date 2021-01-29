@@ -246,7 +246,7 @@ const StringVector& PluginManager::GetPluginNames()
                 info.pluginType_ = PluginModule::ReadModuleInformation(context_, fullPath);
             }
 
-            if (info.pluginType_ == MODULE_INVALID)
+            if (info.pluginType_ == ModuleType::Invalid)
                 continue;
 
             pluginNames->push_back(baseName);

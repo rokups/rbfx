@@ -54,30 +54,30 @@ void Sprite::RegisterObject(Context* context)
 {
     context->RegisterFactory<Sprite>(UI_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector2, Vector2::ZERO, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Size", GetSize, SetSize, IntVector2, IntVector2::ZERO, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Hotspot", GetHotSpot, SetHotSpot, IntVector2, IntVector2::ZERO, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Scale", GetScale, SetScale, Vector2, Vector2::ONE, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Rotation", GetRotation, SetRotation, float, 0.0f, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Name", GetName, SetName, ea::string, EMPTY_STRING, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector2, Vector2::ZERO, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Size", GetSize, SetSize, IntVector2, IntVector2::ZERO, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Hotspot", GetHotSpot, SetHotSpot, IntVector2, IntVector2::ZERO, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Scale", GetScale, SetScale, Vector2, Vector2::ONE, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Rotation", GetRotation, SetRotation, float, 0.0f, AttributeMode::File);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Texture", GetTextureAttr, SetTextureAttr, ResourceRef, ResourceRef(Texture2D::GetTypeStatic()),
-        AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Image Rect", GetImageRect, SetImageRect, IntRect, IntRect::ZERO, AM_FILE);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Blend Mode", GetBlendMode, SetBlendMode, BlendMode, blendModeNames, 0, AM_FILE);
+        AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Image Rect", GetImageRect, SetImageRect, IntRect, IntRect::ZERO, AttributeMode::File);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Blend Mode", GetBlendMode, SetBlendMode, BlendMode, blendModeNames, 0, AttributeMode::File);
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Horiz Alignment", GetHorizontalAlignment, SetHorizontalAlignment, HorizontalAlignment,
-        horizontalAlignments, HA_LEFT, AM_FILE);
+        horizontalAlignments, HA_LEFT, AttributeMode::File);
     URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Vert Alignment", GetVerticalAlignment, SetVerticalAlignment, VerticalAlignment, verticalAlignments,
-        VA_TOP, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Priority", GetPriority, SetPriority, int, 0, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Opacity", GetOpacity, SetOpacity, float, 1.0f, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Color", GetColorAttr, SetColor, Color, Color::WHITE, AM_FILE);
-    URHO3D_ATTRIBUTE("Top Left Color", Color, colors_[0], Color::WHITE, AM_FILE);
-    URHO3D_ATTRIBUTE("Top Right Color", Color, colors_[1], Color::WHITE, AM_FILE);
-    URHO3D_ATTRIBUTE("Bottom Left Color", Color, colors_[2], Color::WHITE, AM_FILE);
-    URHO3D_ATTRIBUTE("Bottom Right Color", Color, colors_[3], Color::WHITE, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Visible", IsVisible, SetVisible, bool, true, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Use Derived Opacity", GetUseDerivedOpacity, SetUseDerivedOpacity, bool, true, AM_FILE);
-    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_FILE);
+        VA_TOP, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Priority", GetPriority, SetPriority, int, 0, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Opacity", GetOpacity, SetOpacity, float, 1.0f, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Color", GetColorAttr, SetColor, Color, Color::WHITE, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Top Left Color", Color, colors_[0], Color::WHITE, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Top Right Color", Color, colors_[1], Color::WHITE, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Bottom Left Color", Color, colors_[2], Color::WHITE, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Bottom Right Color", Color, colors_[3], Color::WHITE, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Visible", IsVisible, SetVisible, bool, true, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Use Derived Opacity", GetUseDerivedOpacity, SetUseDerivedOpacity, bool, true, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AttributeMode::File);
 }
 
 bool Sprite::IsWithinScissor(const IntRect& currentScissor)

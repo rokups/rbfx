@@ -64,8 +64,8 @@ EditorIconCache::EditorIconCache(Context* context)
         }
 
         IconData data;
-        data.textureRef_ = texture.FirstResult().GetVariantValue(VAR_RESOURCEREF).GetResourceRef();
-        data.rect_ = rect.FirstResult().GetVariantValue(VAR_INTRECT).GetIntRect();
+        data.textureRef_ = texture.FirstResult().GetVariantValue(VariantType::ResourceRef).GetResourceRef();
+        data.rect_ = rect.FirstResult().GetVariantValue(VariantType::IntRect).GetIntRect();
         iconCache_[type] = data;
     }
 }

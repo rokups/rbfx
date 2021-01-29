@@ -62,18 +62,18 @@ void CustomGeometry::RegisterObject(Context* context)
 {
     context->RegisterFactory<CustomGeometry>(GEOMETRY_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Dynamic Vertex Buffer", bool, dynamic_, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Dynamic Vertex Buffer", bool, dynamic_, false, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Geometry Data", GetGeometryDataAttr, SetGeometryDataAttr, ea::vector<unsigned char>,
-                                    Variant::emptyBuffer, AM_FILE | AM_NOEDIT);
+                                    Variant::emptyBuffer, AttributeMode::File | AttributeMode::NoEdit);
     URHO3D_ACCESSOR_ATTRIBUTE("Materials", GetMaterialsAttr, SetMaterialsAttr, ResourceRefList,
-                              ResourceRefList(Material::GetTypeStatic()), AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Is Occluder", bool, occluder_, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Cast Shadows", bool, castShadows_, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AM_DEFAULT);
+                              ResourceRefList(Material::GetTypeStatic()), AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Is Occluder", bool, occluder_, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Cast Shadows", bool, castShadows_, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AttributeMode::Default);
     URHO3D_COPY_BASE_ATTRIBUTES(Drawable);
 }
 

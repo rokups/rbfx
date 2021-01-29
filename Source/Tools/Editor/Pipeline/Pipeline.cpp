@@ -680,13 +680,13 @@ bool Pipeline::CookCacheInfo() const
 }
 
 static const VariantType variantTypes[] = {
-    VAR_BOOL,
-    VAR_INT,
-    VAR_INT64,
-    VAR_FLOAT,
-    VAR_DOUBLE,
-    VAR_COLOR,
-    VAR_STRING,
+    VariantType::Bool,
+    VariantType::Int,
+    VariantType::Int64,
+    VariantType::Float,
+    VariantType::Double,
+    VariantType::Color,
+    VariantType::String,
 };
 
 static const char* variantNames[] = {
@@ -754,57 +754,57 @@ static const char* predefinedNames[] = {
 };
 
 static VariantType predefinedTypes[] = {
-    VAR_NONE,   // Select Option Name
-    VAR_NONE,   // Enter Custom
-    VAR_STRING, // EP_AUTOLOAD_PATHS
-    VAR_BOOL,   // EP_BORDERLESS
-    VAR_BOOL,   // EP_DUMP_SHADERS
-    VAR_BOOL,   // EP_FLUSH_GPU
-    VAR_BOOL,   // EP_FORCE_GL2
-    VAR_BOOL,   // EP_FRAME_LIMITER
-    VAR_BOOL,   // EP_FULL_SCREEN
-    VAR_BOOL,   // EP_HEADLESS
-    VAR_BOOL,   // EP_HIGH_DPI
-    VAR_INT,    // EP_LOG_LEVEL
-    VAR_STRING, // EP_LOG_NAME
-    VAR_BOOL,   // EP_LOG_QUIET
-    VAR_BOOL,   // EP_LOW_QUALITY_SHADOWS
-    VAR_INT,    // EP_MATERIAL_QUALITY
-    VAR_INT,    // EP_MONITOR
-    VAR_INT,    // EP_MULTI_SAMPLE
-    VAR_STRING, // EP_ORGANIZATION_NAME
-    VAR_STRING, // EP_APPLICATION_NAME
-    VAR_STRING, // EP_ORIENTATIONS
-    VAR_STRING, // EP_PACKAGE_CACHE_DIR
-    VAR_STRING, // EP_RENDER_PATH
-    VAR_INT,    // EP_REFRESH_RATE
-    VAR_STRING, // EP_RESOURCE_PACKAGES
-    VAR_STRING, // EP_RESOURCE_PATHS
-    VAR_STRING, // EP_RESOURCE_PREFIX_PATHS
-    VAR_STRING, // EP_SHADER_CACHE_DIR
-    VAR_BOOL,   // EP_SHADOWS
-    VAR_BOOL,   // EP_SOUND
-    VAR_INT,    // EP_SOUND_BUFFER
-    VAR_BOOL,   // EP_SOUND_INTERPOLATION
-    VAR_INT,    // EP_SOUND_MIX_RATE
-    VAR_BOOL,   // EP_SOUND_STEREO
-    VAR_INT,    // EP_TEXTURE_ANISOTROPY
-    VAR_INT,    // EP_TEXTURE_FILTER_MODE
-    VAR_INT,    // EP_TEXTURE_QUALITY
-    VAR_BOOL,   // EP_TOUCH_EMULATION
-    VAR_BOOL,   // EP_TRIPLE_BUFFER
-    VAR_BOOL,   // EP_VSYNC
-    VAR_INT,    // EP_WINDOW_HEIGHT
-    VAR_STRING, // EP_WINDOW_ICON
-    VAR_INT,    // EP_WINDOW_POSITION_X
-    VAR_INT,    // EP_WINDOW_POSITION_Y
-    VAR_BOOL,   // EP_WINDOW_RESIZABLE
-    VAR_BOOL,   // EP_WINDOW_MAXIMIZE
-    VAR_STRING, // EP_WINDOW_TITLE
-    VAR_INT,    // EP_WINDOW_WIDTH
-    VAR_INT,    // EP_WORKER_THREADS
-    VAR_BOOL,   // EP_ENGINE_CLI_PARAMETERS
-    VAR_BOOL,   // EP_ENGINE_AUTO_LOAD_SCRIPTS
+    VariantType::None,   // Select Option Name
+    VariantType::None,   // Enter Custom
+    VariantType::String, // EP_AUTOLOAD_PATHS
+    VariantType::Bool,   // EP_BORDERLESS
+    VariantType::Bool,   // EP_DUMP_SHADERS
+    VariantType::Bool,   // EP_FLUSH_GPU
+    VariantType::Bool,   // EP_FORCE_GL2
+    VariantType::Bool,   // EP_FRAME_LIMITER
+    VariantType::Bool,   // EP_FULL_SCREEN
+    VariantType::Bool,   // EP_HEADLESS
+    VariantType::Bool,   // EP_HIGH_DPI
+    VariantType::Int,    // EP_LOG_LEVEL
+    VariantType::String, // EP_LOG_NAME
+    VariantType::Bool,   // EP_LOG_QUIET
+    VariantType::Bool,   // EP_LOW_QUALITY_SHADOWS
+    VariantType::Int,    // EP_MATERIAL_QUALITY
+    VariantType::Int,    // EP_MONITOR
+    VariantType::Int,    // EP_MULTI_SAMPLE
+    VariantType::String, // EP_ORGANIZATION_NAME
+    VariantType::String, // EP_APPLICATION_NAME
+    VariantType::String, // EP_ORIENTATIONS
+    VariantType::String, // EP_PACKAGE_CACHE_DIR
+    VariantType::String, // EP_RENDER_PATH
+    VariantType::Int,    // EP_REFRESH_RATE
+    VariantType::String, // EP_RESOURCE_PACKAGES
+    VariantType::String, // EP_RESOURCE_PATHS
+    VariantType::String, // EP_RESOURCE_PREFIX_PATHS
+    VariantType::String, // EP_SHADER_CACHE_DIR
+    VariantType::Bool,   // EP_SHADOWS
+    VariantType::Bool,   // EP_SOUND
+    VariantType::Int,    // EP_SOUND_BUFFER
+    VariantType::Bool,   // EP_SOUND_INTERPOLATION
+    VariantType::Int,    // EP_SOUND_MIX_RATE
+    VariantType::Bool,   // EP_SOUND_STEREO
+    VariantType::Int,    // EP_TEXTURE_ANISOTROPY
+    VariantType::Int,    // EP_TEXTURE_FILTER_MODE
+    VariantType::Int,    // EP_TEXTURE_QUALITY
+    VariantType::Bool,   // EP_TOUCH_EMULATION
+    VariantType::Bool,   // EP_TRIPLE_BUFFER
+    VariantType::Bool,   // EP_VSYNC
+    VariantType::Int,    // EP_WINDOW_HEIGHT
+    VariantType::String, // EP_WINDOW_ICON
+    VariantType::Int,    // EP_WINDOW_POSITION_X
+    VariantType::Int,    // EP_WINDOW_POSITION_Y
+    VariantType::Bool,   // EP_WINDOW_RESIZABLE
+    VariantType::Bool,   // EP_WINDOW_MAXIMIZE
+    VariantType::String, // EP_WINDOW_TITLE
+    VariantType::Int,    // EP_WINDOW_WIDTH
+    VariantType::Int,    // EP_WORKER_THREADS
+    VariantType::Bool,   // EP_ENGINE_CLI_PARAMETERS
+    VariantType::Bool,   // EP_ENGINE_AUTO_LOAD_SCRIPTS
 };
 
 static_assert(URHO3D_ARRAYSIZE(predefinedNames) == URHO3D_ARRAYSIZE(predefinedNames), "Sizes must match.");

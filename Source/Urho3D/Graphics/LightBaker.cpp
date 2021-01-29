@@ -103,23 +103,23 @@ void LightBaker::RegisterObject(Context* context)
 
     auto getBake = [](const ClassName& self, Urho3D::Variant& value) { value = self.state_ != InternalState::NotStarted; };
     auto setBake = [](ClassName& self, const Urho3D::Variant& value) { if (value.GetBool()) self.BakeAsync(); };
-    URHO3D_CUSTOM_ACCESSOR_ATTRIBUTE("Bake!", getBake, setBake, bool, false, AM_EDIT);
+    URHO3D_CUSTOM_ACCESSOR_ATTRIBUTE("Bake!", getBake, setBake, bool, false, AttributeMode::Edit);
 
-    URHO3D_ATTRIBUTE("Output Directory", ea::string, settings_.incremental_.outputDirectory_, "", AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Lightmap Size", unsigned, settings_.charting_.lightmapSize_, defaultSettings.charting_.lightmapSize_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Texel Density", float, settings_.charting_.texelDensity_, defaultSettings.charting_.texelDensity_, AM_DEFAULT);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Quality", GetQuality, SetQuality, LightBakingQuality, qualityNames, LightBakingQuality::Custom, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Direct Samples (Lightmap)", unsigned, settings_.directChartTracing_.maxSamples_, defaultSettings.directChartTracing_.maxSamples_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Direct Samples (Light Probes)", unsigned, settings_.directProbesTracing_.maxSamples_, defaultSettings.directProbesTracing_.maxSamples_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Indirect Bounces", unsigned, settings_.indirectChartTracing_.maxBounces_, defaultSettings.indirectChartTracing_.maxBounces_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Indirect Samples (Texture)", unsigned, settings_.indirectChartTracing_.maxSamples_, defaultSettings.indirectChartTracing_.maxSamples_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Indirect Samples (Light Probes)", unsigned, settings_.indirectProbesTracing_.maxSamples_, defaultSettings.indirectProbesTracing_.maxSamples_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Filter Radius (Direct)", unsigned, settings_.directFilter_.kernelRadius_, defaultSettings.directFilter_.kernelRadius_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Filter Radius (Indirect)", unsigned, settings_.indirectFilter_.kernelRadius_, defaultSettings.indirectFilter_.kernelRadius_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Chunk Size", Vector3, settings_.incremental_.chunkSize_, defaultSettings.incremental_.chunkSize_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Chunk Indirect Padding", float, settings_.incremental_.indirectPadding_, defaultSettings.incremental_.indirectPadding_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Chunk Shadow Distance", float, settings_.incremental_.directionalLightShadowDistance_, defaultSettings.incremental_.directionalLightShadowDistance_, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Stitch Iterations", unsigned, settings_.stitching_.numIterations_, defaultSettings.stitching_.numIterations_, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Output Directory", ea::string, settings_.incremental_.outputDirectory_, "", AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Lightmap Size", unsigned, settings_.charting_.lightmapSize_, defaultSettings.charting_.lightmapSize_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Texel Density", float, settings_.charting_.texelDensity_, defaultSettings.charting_.texelDensity_, AttributeMode::Default);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Quality", GetQuality, SetQuality, LightBakingQuality, qualityNames, LightBakingQuality::Custom, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Direct Samples (Lightmap)", unsigned, settings_.directChartTracing_.maxSamples_, defaultSettings.directChartTracing_.maxSamples_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Direct Samples (Light Probes)", unsigned, settings_.directProbesTracing_.maxSamples_, defaultSettings.directProbesTracing_.maxSamples_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Indirect Bounces", unsigned, settings_.indirectChartTracing_.maxBounces_, defaultSettings.indirectChartTracing_.maxBounces_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Indirect Samples (Texture)", unsigned, settings_.indirectChartTracing_.maxSamples_, defaultSettings.indirectChartTracing_.maxSamples_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Indirect Samples (Light Probes)", unsigned, settings_.indirectProbesTracing_.maxSamples_, defaultSettings.indirectProbesTracing_.maxSamples_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Filter Radius (Direct)", unsigned, settings_.directFilter_.kernelRadius_, defaultSettings.directFilter_.kernelRadius_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Filter Radius (Indirect)", unsigned, settings_.indirectFilter_.kernelRadius_, defaultSettings.indirectFilter_.kernelRadius_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Chunk Size", Vector3, settings_.incremental_.chunkSize_, defaultSettings.incremental_.chunkSize_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Chunk Indirect Padding", float, settings_.incremental_.indirectPadding_, defaultSettings.incremental_.indirectPadding_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Chunk Shadow Distance", float, settings_.incremental_.directionalLightShadowDistance_, defaultSettings.incremental_.directionalLightShadowDistance_, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Stitch Iterations", unsigned, settings_.stitching_.numIterations_, defaultSettings.stitching_.numIterations_, AttributeMode::Default);
 }
 
 void LightBaker::SetQuality(LightBakingQuality quality)

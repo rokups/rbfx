@@ -205,14 +205,14 @@ void PhysicsWorld::RegisterObject(Context* context)
 {
     context->RegisterFactory<PhysicsWorld>(SUBSYSTEM_CATEGORY);
 
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Gravity", GetGravity, SetGravity, Vector3, DEFAULT_GRAVITY, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Physics FPS", int, fps_, DEFAULT_FPS, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Max Substeps", int, maxSubSteps_, 0, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Solver Iterations", GetNumIterations, SetNumIterations, int, 10, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Net Max Angular Vel.", float, maxNetworkAngularVelocity_, DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Interpolation", bool, interpolation_, true, AM_FILE);
-    URHO3D_ATTRIBUTE("Internal Edge Utility", bool, internalEdge_, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Split Impulse", GetSplitImpulse, SetSplitImpulse, bool, false, AM_DEFAULT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Gravity", GetGravity, SetGravity, Vector3, DEFAULT_GRAVITY, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Physics FPS", int, fps_, DEFAULT_FPS, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Max Substeps", int, maxSubSteps_, 0, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Solver Iterations", GetNumIterations, SetNumIterations, int, 10, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Net Max Angular Vel.", float, maxNetworkAngularVelocity_, DEFAULT_MAX_NETWORK_ANGULAR_VELOCITY, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Interpolation", bool, interpolation_, true, AttributeMode::File);
+    URHO3D_ATTRIBUTE("Internal Edge Utility", bool, internalEdge_, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Split Impulse", GetSplitImpulse, SetSplitImpulse, bool, false, AttributeMode::Default);
 }
 
 bool PhysicsWorld::isVisible(const btVector3& aabbMin, const btVector3& aabbMax)

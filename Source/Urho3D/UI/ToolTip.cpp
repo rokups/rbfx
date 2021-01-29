@@ -46,7 +46,7 @@ void ToolTip::RegisterObject(Context* context)
     context->RegisterFactory<ToolTip>(UI_CATEGORY);
 
     URHO3D_COPY_BASE_ATTRIBUTES(UIElement);
-    URHO3D_ACCESSOR_ATTRIBUTE("Delay", GetDelay, SetDelay, float, 0.0f, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Delay", GetDelay, SetDelay, float, 0.0f, AttributeMode::File);
 }
 
 void ToolTip::Update(float timeStep)

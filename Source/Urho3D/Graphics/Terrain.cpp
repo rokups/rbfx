@@ -122,35 +122,35 @@ void Terrain::RegisterObject(Context* context)
 {
     context->RegisterFactory<Terrain>(GEOMETRY_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Height Map", GetHeightMapAttr, SetHeightMapAttr, ResourceRef, ResourceRef(Image::GetTypeStatic()),
-        AM_DEFAULT);
+        AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Material", GetMaterialAttr, SetMaterialAttr, ResourceRef, ResourceRef(Material::GetTypeStatic()),
-        AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("North Neighbor NodeID", unsigned, northID_, MarkNeighborsDirty, 0, AM_DEFAULT | AM_NODEID);
-    URHO3D_ATTRIBUTE_EX("South Neighbor NodeID", unsigned, southID_, MarkNeighborsDirty, 0, AM_DEFAULT | AM_NODEID);
-    URHO3D_ATTRIBUTE_EX("West Neighbor NodeID", unsigned, westID_, MarkNeighborsDirty, 0, AM_DEFAULT | AM_NODEID);
-    URHO3D_ATTRIBUTE_EX("East Neighbor NodeID", unsigned, eastID_, MarkNeighborsDirty, 0, AM_DEFAULT | AM_NODEID);
-    URHO3D_ATTRIBUTE_EX("Vertex Spacing", Vector3, spacing_, MarkTerrainDirty, DEFAULT_SPACING, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Patch Size", GetPatchSize, SetPatchSizeAttr, int, DEFAULT_PATCH_SIZE, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max LOD Levels", GetMaxLodLevels, SetMaxLodLevelsAttr, unsigned, MAX_LOD_LEVELS, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Smooth Height Map", bool, smoothing_, MarkTerrainDirty, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Occluder", IsOccluder, SetOccluder, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Cast Shadows", GetCastShadows, SetCastShadows, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Lights", GetMaxLights, SetMaxLights, unsigned, 0, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("View Mask", GetViewMask, SetViewMask, unsigned, DEFAULT_VIEWMASK, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Light Mask", GetLightMask, SetLightMask, unsigned, DEFAULT_LIGHTMASK, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Mask", GetShadowMask, SetShadowMask, unsigned, DEFAULT_SHADOWMASK, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Zone Mask", GetZoneMask, SetZoneMask, unsigned, DEFAULT_ZONEMASK, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Occlusion LOD level", GetOcclusionLodLevel, SetOcclusionLodLevelAttr, unsigned, M_MAX_UNSIGNED, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Bake Lightmap", bool, bakeLightmap_, MarkTerrainDirty, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Scale in Lightmap", float, scaleInLightmap_, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Lightmap Index", unsigned, lightmapIndex_, UpdatePatchesLightmaps, 0, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE_EX("Lightmap Scale & Offset", Vector4, lightmapScaleOffset_, UpdatePatchesLightmaps, Vector4(1.0f, 1.0f, 0.0f, 0.0f), AM_FILE | AM_NOEDIT);
+        AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("North Neighbor NodeID", unsigned, northID_, MarkNeighborsDirty, 0, AttributeMode::Default | AttributeMode::NodeID);
+    URHO3D_ATTRIBUTE_EX("South Neighbor NodeID", unsigned, southID_, MarkNeighborsDirty, 0, AttributeMode::Default | AttributeMode::NodeID);
+    URHO3D_ATTRIBUTE_EX("West Neighbor NodeID", unsigned, westID_, MarkNeighborsDirty, 0, AttributeMode::Default | AttributeMode::NodeID);
+    URHO3D_ATTRIBUTE_EX("East Neighbor NodeID", unsigned, eastID_, MarkNeighborsDirty, 0, AttributeMode::Default | AttributeMode::NodeID);
+    URHO3D_ATTRIBUTE_EX("Vertex Spacing", Vector3, spacing_, MarkTerrainDirty, DEFAULT_SPACING, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Patch Size", GetPatchSize, SetPatchSizeAttr, int, DEFAULT_PATCH_SIZE, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max LOD Levels", GetMaxLodLevels, SetMaxLodLevelsAttr, unsigned, MAX_LOD_LEVELS, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Smooth Height Map", bool, smoothing_, MarkTerrainDirty, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Occluder", IsOccluder, SetOccluder, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Cast Shadows", GetCastShadows, SetCastShadows, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Lights", GetMaxLights, SetMaxLights, unsigned, 0, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("View Mask", GetViewMask, SetViewMask, unsigned, DEFAULT_VIEWMASK, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Light Mask", GetLightMask, SetLightMask, unsigned, DEFAULT_LIGHTMASK, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Mask", GetShadowMask, SetShadowMask, unsigned, DEFAULT_SHADOWMASK, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Zone Mask", GetZoneMask, SetZoneMask, unsigned, DEFAULT_ZONEMASK, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Occlusion LOD level", GetOcclusionLodLevel, SetOcclusionLodLevelAttr, unsigned, M_MAX_UNSIGNED, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Bake Lightmap", bool, bakeLightmap_, MarkTerrainDirty, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Scale in Lightmap", float, scaleInLightmap_, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Lightmap Index", unsigned, lightmapIndex_, UpdatePatchesLightmaps, 0, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE_EX("Lightmap Scale & Offset", Vector4, lightmapScaleOffset_, UpdatePatchesLightmaps, Vector4(1.0f, 1.0f, 0.0f, 0.0f), AttributeMode::File | AttributeMode::NoEdit);
 }
 
 void Terrain::ApplyAttributes()

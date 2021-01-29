@@ -54,12 +54,12 @@ void RmlUIComponent::RegisterObject(Context* context)
 {
     context->RegisterFactory<RmlUIComponent>(RML_UI_CATEGORY);
     URHO3D_COPY_BASE_ATTRIBUTES(BaseClassName);
-    URHO3D_ACCESSOR_ATTRIBUTE("Resource", GetResource, SetResource, ResourceRef, ResourceRef{BinaryFile::GetTypeStatic()}, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Use Normalized Coordinates", bool, useNormalized_, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector2, Vector2::ZERO, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Size", GetSize, SetSize, Vector2, Vector2::ZERO, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Auto Size", bool, autoSize_, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Open", IsOpen, SetOpen, bool, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Resource", GetResource, SetResource, ResourceRef, ResourceRef{BinaryFile::GetTypeStatic()}, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Use Normalized Coordinates", bool, useNormalized_, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Position", GetPosition, SetPosition, Vector2, Vector2::ZERO, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Size", GetSize, SetSize, Vector2, Vector2::ZERO, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Auto Size", bool, autoSize_, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Open", IsOpen, SetOpen, bool, false, AttributeMode::Default);
 }
 
 void RmlUIComponent::OnNodeSet(Node* node)

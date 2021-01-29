@@ -76,7 +76,7 @@ void SceneResolver::Resolve()
         for (unsigned j = 0; j < attributes->size(); ++j)
         {
             const AttributeInfo& info = attributes->at(j);
-            if (info.mode_ & AM_NODEID)
+            if (info.mode_ & AttributeMode::NodeID)
             {
                 hasIDAttributes = true;
                 unsigned oldNodeID = component->GetAttribute(j).GetUInt();
@@ -94,7 +94,7 @@ void SceneResolver::Resolve()
                         URHO3D_LOGWARNING("Could not resolve node ID " + ea::to_string(oldNodeID));
                 }
             }
-            else if (info.mode_ & AM_COMPONENTID)
+            else if (info.mode_ & AttributeMode::ComponentID)
             {
                 hasIDAttributes = true;
                 unsigned oldComponentID = component->GetAttribute(j).GetUInt();
@@ -113,7 +113,7 @@ void SceneResolver::Resolve()
                         URHO3D_LOGWARNING("Could not resolve component ID " + ea::to_string(oldComponentID));
                 }
             }
-            else if (info.mode_ & AM_NODEIDVECTOR)
+            else if (info.mode_ & AttributeMode::NodeIDVector)
             {
                 hasIDAttributes = true;
                 Variant attrValue = component->GetAttribute(j);

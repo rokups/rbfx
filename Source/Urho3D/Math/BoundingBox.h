@@ -286,9 +286,9 @@ public:
     {
         if (point.x_ < min_.x_ || point.x_ > max_.x_ || point.y_ < min_.y_ || point.y_ > max_.y_ ||
             point.z_ < min_.z_ || point.z_ > max_.z_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if another bounding box is inside, outside or intersects.
@@ -296,12 +296,12 @@ public:
     {
         if (box.max_.x_ < min_.x_ || box.min_.x_ > max_.x_ || box.max_.y_ < min_.y_ || box.min_.y_ > max_.y_ ||
             box.max_.z_ < min_.z_ || box.min_.z_ > max_.z_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else if (box.min_.x_ < min_.x_ || box.max_.x_ > max_.x_ || box.min_.y_ < min_.y_ || box.max_.y_ > max_.y_ ||
                  box.min_.z_ < min_.z_ || box.max_.z_ > max_.z_)
-            return INTERSECTS;
+            return Intersection::Intersects;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if another bounding box is (partially) inside or outside.
@@ -309,9 +309,9 @@ public:
     {
         if (box.max_.x_ < min_.x_ || box.min_.x_ > max_.x_ || box.max_.y_ < min_.y_ || box.min_.y_ > max_.y_ ||
             box.max_.z_ < min_.z_ || box.min_.z_ > max_.z_)
-            return OUTSIDE;
+            return Intersection::Outside;
         else
-            return INSIDE;
+            return Intersection::Inside;
     }
 
     /// Test if a sphere is inside, outside or intersects.

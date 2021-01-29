@@ -67,7 +67,7 @@ void View3D::RegisterObject(Context* context)
 
     URHO3D_COPY_BASE_ATTRIBUTES(Window);
     // The texture format is API specific, so do not register it as a serializable attribute
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Update", GetAutoUpdate, SetAutoUpdate, bool, true, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Update", GetAutoUpdate, SetAutoUpdate, bool, true, AttributeMode::File);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Clip Children", true);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Is Enabled", true);
 }

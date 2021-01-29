@@ -30,15 +30,21 @@ namespace Urho3D
 class PluginApplication;
 
 /// Enumeration describing plugin file path status.
-enum ModuleType
+enum class ModuleType
 {
     /// Not a valid plugin.
-    MODULE_INVALID,
+    Invalid,
     /// A native plugin.
-    MODULE_NATIVE,
+    Native,
     /// A managed plugin.
-    MODULE_MANAGED,
+    Managed,
 };
+
+#ifdef URHO3D_LEGACY_ENUMS
+static const ModuleType MODULE_INVALID = ModuleType::Invalid;
+static const ModuleType MODULE_NATIVE = ModuleType::Native;
+static const ModuleType MODULE_MANAGED = ModuleType::Managed;
+#endif
 
 /// A class managing lifetime of dynamic library module.
 class URHO3D_API PluginModule : public Object
@@ -71,7 +77,7 @@ protected:
     /// A platform-specific handle to current loaded module.
     uintptr_t handle_ = 0;
     /// A type of current loaded module.
-    ModuleType moduleType_ = MODULE_INVALID;
+    ModuleType moduleType_ = ModuleType::Invalid;
 };
 
 }

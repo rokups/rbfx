@@ -38,7 +38,7 @@ const char* interpolationModeNames[] =
 };
 
 Spline::Spline() :
-    interpolationMode_(BEZIER_CURVE)
+    interpolationMode_(InterpolationMode::BezierCurve)
 {
 }
 
@@ -65,13 +65,13 @@ Variant Spline::GetPoint(float f) const
 
     switch (interpolationMode_)
     {
-    case BEZIER_CURVE:
+    case InterpolationMode::BezierCurve:
         return BezierInterpolation(knots_, f);
-    case CATMULL_ROM_CURVE:
+    case InterpolationMode::CatmullRomCurve:
         return CatmullRomInterpolation(knots_, f);
-    case LINEAR_CURVE:
+    case InterpolationMode::LinearCurve:
         return LinearInterpolation(knots_, f);
-    case CATMULL_ROM_FULL_CURVE:
+    case InterpolationMode::CatmullRomFullCurve:
         {
             /// \todo Do not allocate a new vector each time
             ea::vector<Variant> fullKnots;
@@ -146,12 +146,12 @@ Variant Spline::BezierInterpolation(const ea::vector<Variant>& knots, float t) c
     {
         switch (knots[0].GetType())
         {
-        case VAR_FLOAT:
-        case VAR_VECTOR2:
-        case VAR_VECTOR3:
-        case VAR_VECTOR4:
-        case VAR_COLOR:
-        case VAR_DOUBLE:
+        case VariantType::Float:
+        case VariantType::Vector2:
+        case VariantType::Vector3:
+        case VariantType::Vector4:
+        case VariantType::Color:
+        case VariantType::Double:
             return LinearInterpolation(knots[0], knots[1], t);
         default:
             return Variant::EMPTY;
@@ -165,12 +165,12 @@ Variant Spline::BezierInterpolation(const ea::vector<Variant>& knots, float t) c
         {
             switch (knots[0].GetType())
             {
-            case VAR_FLOAT:
-            case VAR_VECTOR2:
-            case VAR_VECTOR3:
-            case VAR_VECTOR4:
-            case VAR_COLOR:
-            case VAR_DOUBLE:
+            case VariantType::Float:
+            case VariantType::Vector2:
+            case VariantType::Vector3:
+            case VariantType::Vector4:
+            case VariantType::Color:
+            case VariantType::Double:
                 interpolatedKnots.push_back(LinearInterpolation(knots[i - 1], knots[i], t));
                 break;
             default:
@@ -204,22 +204,22 @@ Variant Spline::CatmullRomInterpolation(const ea::vector<Variant>& knots, float 
 
         switch (knots[originIndex].GetType())
         {
-        case VAR_FLOAT:
+        case VariantType::Float:
             return CalculateCatmullRom(knots[originIndex].GetFloat(), knots[originIndex + 1].GetFloat(),
                 knots[originIndex + 2].GetFloat(), knots[originIndex + 3].GetFloat(), t, t2, t3);
-        case VAR_VECTOR2:
+        case VariantType::Vector2:
             return CalculateCatmullRom(knots[originIndex].GetVector2(), knots[originIndex + 1].GetVector2(),
                 knots[originIndex + 2].GetVector2(), knots[originIndex + 3].GetVector2(), t, t2, t3);
-        case VAR_VECTOR3:
+        case VariantType::Vector3:
             return CalculateCatmullRom(knots[originIndex].GetVector3(), knots[originIndex + 1].GetVector3(),
                 knots[originIndex + 2].GetVector3(), knots[originIndex + 3].GetVector3(), t, t2, t3);
-        case VAR_VECTOR4:
+        case VariantType::Vector4:
             return CalculateCatmullRom(knots[originIndex].GetVector4(), knots[originIndex + 1].GetVector4(),
                 knots[originIndex + 2].GetVector4(), knots[originIndex + 3].GetVector4(), t, t2, t3);
-        case VAR_COLOR:
+        case VariantType::Color:
             return CalculateCatmullRom(knots[originIndex].GetColor(), knots[originIndex + 1].GetColor(),
                 knots[originIndex + 2].GetColor(), knots[originIndex + 3].GetColor(), t, t2, t3);
-        case VAR_DOUBLE:
+        case VariantType::Double:
             return CalculateCatmullRom(knots[originIndex].GetDouble(), knots[originIndex + 1].GetDouble(),
                 knots[originIndex + 2].GetDouble(), knots[originIndex + 3].GetDouble(), t, t2, t3);
         default:
@@ -247,17 +247,17 @@ Variant Spline::LinearInterpolation(const Variant& lhs, const Variant& rhs, floa
 {
     switch (lhs.GetType())
     {
-    case VAR_FLOAT:
+    case VariantType::Float:
         return Lerp(lhs.GetFloat(), rhs.GetFloat(), t);
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return lhs.GetVector2().Lerp(rhs.GetVector2(), t);
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return lhs.GetVector3().Lerp(rhs.GetVector3(), t);
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return lhs.GetVector4().Lerp(rhs.GetVector4(), t);
-    case VAR_COLOR:
+    case VariantType::Color:
         return lhs.GetColor().Lerp(rhs.GetColor(), t);
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return Lerp(lhs.GetDouble(), rhs.GetDouble(), t);
     default:
         return Variant::EMPTY;

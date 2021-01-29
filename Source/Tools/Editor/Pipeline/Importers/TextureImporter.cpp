@@ -98,28 +98,28 @@ void TextureImporter::RegisterObject(Context* context)
 {
     context->RegisterFactory<TextureImporter>();
     URHO3D_COPY_BASE_ATTRIBUTES(AssetImporter);
-    URHO3D_ATTRIBUTE("Y-flip", bool, yFlip_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Un-flip", bool, unflip_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Quality", int, quality_, ApplyQualityLimits, 255u, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Bitrate", int, bitrate_, 0, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Mip Mode", mipMode_, mipModeNames, MipMode::Generate, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Mip Filter", mipFilter_, mipFilterNames, MipFilter::Kaiser, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Max Mips", int, maxMips_, ApplyMipsLimits, 16u, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Min Mip Size", int, minMipSize_, ApplyMipsLimits, 1u, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Gamma", float, gamma_, 2.2f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Blur", float, blur_, ApplyBlurLimit, 0.9f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Wrap", bool, wrap_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Renormalize", bool, renormalize_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Alpha Threshold", int, alphaThreshold_, ApplyAlphaThresholdLimits, 128u, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Uniform Metircs", bool, uniformMetrics_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Adaptive Blocks", bool, adaptiveBlocks_, true, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Compressor", compressor_, compressorNames, Compressor::CRN, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("DXT Quality", dxtQuality_, dxtQualityNames, DxtQuality::Uber, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("No Endpoint Caching", bool, noEndpointCaching_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Greyscale Sampling", bool, grayscaleSampling_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Force Primary Encoding", bool, forcePrimaryEncoding_, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Use Transparent Indices For Black", bool, useTransparentIndicesForBlack_, false, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Pixel Format", pixelFormat_, pixelFormatNames, PixelFormat::None, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Y-flip", bool, yFlip_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Un-flip", bool, unflip_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Quality", int, quality_, ApplyQualityLimits, 255u, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Bitrate", int, bitrate_, 0, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Mip Mode", mipMode_, mipModeNames, MipMode::Generate, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Mip Filter", mipFilter_, mipFilterNames, MipFilter::Kaiser, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Max Mips", int, maxMips_, ApplyMipsLimits, 16u, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Min Mip Size", int, minMipSize_, ApplyMipsLimits, 1u, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Gamma", float, gamma_, 2.2f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Blur", float, blur_, ApplyBlurLimit, 0.9f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Wrap", bool, wrap_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Renormalize", bool, renormalize_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Alpha Threshold", int, alphaThreshold_, ApplyAlphaThresholdLimits, 128u, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Uniform Metircs", bool, uniformMetrics_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Adaptive Blocks", bool, adaptiveBlocks_, true, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Compressor", compressor_, compressorNames, Compressor::CRN, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("DXT Quality", dxtQuality_, dxtQualityNames, DxtQuality::Uber, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("No Endpoint Caching", bool, noEndpointCaching_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Greyscale Sampling", bool, grayscaleSampling_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Force Primary Encoding", bool, forcePrimaryEncoding_, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Use Transparent Indices For Black", bool, useTransparentIndicesForBlack_, false, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Pixel Format", pixelFormat_, pixelFormatNames, PixelFormat::None, AttributeMode::Default);
 }
 
 bool TextureImporter::Accepts(const ea::string& path) const

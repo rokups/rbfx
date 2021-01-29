@@ -62,14 +62,14 @@ void ParticleEmitter2D::RegisterObject(Context* context)
 {
     context->RegisterFactory<ParticleEmitter2D>(URHO2D_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
     URHO3D_COPY_BASE_ATTRIBUTES(Drawable2D);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Particle Effect", GetParticleEffectAttr, SetParticleEffectAttr, ResourceRef,
-        ResourceRef(ParticleEffect2D::GetTypeStatic()), AM_DEFAULT);
+        ResourceRef(ParticleEffect2D::GetTypeStatic()), AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Sprite ", GetSpriteAttr, SetSpriteAttr, ResourceRef, ResourceRef(Sprite2D::GetTypeStatic()),
-        AM_DEFAULT);
-    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Blend Mode", GetBlendMode, SetBlendMode, BlendMode, blendModeNames, BLEND_ALPHA, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Emitting", IsEmitting, SetEmitting, bool, true, AM_DEFAULT);
+        AttributeMode::Default);
+    URHO3D_ENUM_ACCESSOR_ATTRIBUTE("Blend Mode", GetBlendMode, SetBlendMode, BlendMode, blendModeNames, BLEND_ALPHA, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Emitting", IsEmitting, SetEmitting, bool, true, AttributeMode::Default);
 }
 
 void ParticleEmitter2D::OnSetEnabled()

@@ -256,7 +256,7 @@ void Context::RemoveSubsystem(StringHash objectType)
 AttributeHandle Context::RegisterAttribute(StringHash objectType, const AttributeInfo& attr)
 {
     // None or pointer types can not be supported
-    if (attr.type_ == VAR_NONE || attr.type_ == VAR_VOIDPTR || attr.type_ == VAR_PTR)
+    if (attr.type_ == VariantType::None || attr.type_ == VariantType::VoidPtr || attr.type_ == VariantType::Ptr)
     {
         URHO3D_LOGWARNING("Attempt to register unsupported attribute type {} to class {}", Variant::GetTypeName(attr.type_),
             GetTypeName(objectType));
@@ -264,7 +264,7 @@ AttributeHandle Context::RegisterAttribute(StringHash objectType, const Attribut
     }
 
     // Only SharedPtr<> of Serializable or it's subclasses are supported in attributes
-    if (attr.type_ == VAR_CUSTOM && !attr.defaultValue_.IsCustomType<SharedPtr<Serializable>>())
+    if (attr.type_ == VariantType::Custom && !attr.defaultValue_.IsCustomType<SharedPtr<Serializable>>())
     {
         URHO3D_LOGWARNING("Attempt to register unsupported attribute of custom type to class {}", GetTypeName(objectType));
         return AttributeHandle();
@@ -276,7 +276,7 @@ AttributeHandle Context::RegisterAttribute(StringHash objectType, const Attribut
     objectAttributes.push_back(attr);
     handle.attributeInfo_ = &objectAttributes.back();
 
-    if (attr.mode_ & AM_NET)
+    if (attr.mode_ & AttributeMode::Net)
     {
         ea::vector<AttributeInfo>& objectNetworkAttributes = networkAttributes_[objectType];
         objectNetworkAttributes.push_back(attr);
@@ -411,7 +411,7 @@ void Context::CopyBaseAttributes(StringHash baseType, StringHash derivedType)
         {
             const AttributeInfo& attr = baseAttributes->at(i);
             attributes_[derivedType].push_back(attr);
-            if (attr.mode_ & AM_NET)
+            if (attr.mode_ & AttributeMode::Net)
                 networkAttributes_[derivedType].push_back(attr);
         }
     }

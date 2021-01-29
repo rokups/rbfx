@@ -437,31 +437,31 @@ Variant ToVectorVariant(const char* source)
     switch (elements)
     {
     case 1:
-        ret.FromString(VAR_FLOAT, source);
+        ret.FromString(VariantType::Float, source);
         break;
 
     case 2:
-        ret.FromString(VAR_VECTOR2, source);
+        ret.FromString(VariantType::Vector2, source);
         break;
 
     case 3:
-        ret.FromString(VAR_VECTOR3, source);
+        ret.FromString(VariantType::Vector3, source);
         break;
 
     case 4:
-        ret.FromString(VAR_VECTOR4, source);
+        ret.FromString(VariantType::Vector4, source);
         break;
 
     case 9:
-        ret.FromString(VAR_MATRIX3, source);
+        ret.FromString(VariantType::Matrix3, source);
         break;
 
     case 12:
-        ret.FromString(VAR_MATRIX3X4, source);
+        ret.FromString(VariantType::Matrix3X4, source);
         break;
 
     case 16:
-        ret.FromString(VAR_MATRIX4, source);
+        ret.FromString(VariantType::Matrix4, source);
         break;
 
     default:

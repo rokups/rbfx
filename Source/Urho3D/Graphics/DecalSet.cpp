@@ -181,17 +181,17 @@ void DecalSet::RegisterObject(Context* context)
 {
     context->RegisterFactory<DecalSet>(GEOMETRY_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Material", GetMaterialAttr, SetMaterialAttr, ResourceRef, ResourceRef(Material::GetTypeStatic()),
-        AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Vertices", GetMaxVertices, SetMaxVertices, unsigned, DEFAULT_MAX_VERTICES, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Indices", GetMaxIndices, SetMaxIndices, unsigned, DEFAULT_MAX_INDICES, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Optimize Buffer Size", GetOptimizeBufferSize, SetOptimizeBufferSize, bool, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AM_DEFAULT);
+        AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Vertices", GetMaxVertices, SetMaxVertices, unsigned, DEFAULT_MAX_VERTICES, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Indices", GetMaxIndices, SetMaxIndices, unsigned, DEFAULT_MAX_INDICES, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Optimize Buffer Size", GetOptimizeBufferSize, SetOptimizeBufferSize, bool, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AttributeMode::Default);
     URHO3D_COPY_BASE_ATTRIBUTES(Drawable);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Decals", GetDecalsAttr, SetDecalsAttr, ea::vector<unsigned char>, Variant::emptyBuffer,
-        AM_FILE | AM_NOEDIT);
+        AttributeMode::File | AttributeMode::NoEdit);
 }
 
 void DecalSet::ApplyAttributes()
@@ -350,7 +350,7 @@ bool DecalSet::AddDecal(Drawable* target, const Vector3& worldPosition, const Qu
             if (bone->collisionMask_ & BONECOLLISION_BOX)
             {
                 float size = bone->boundingBox_.HalfSize().Length();
-                if (bone->boundingBox_.IsInside(decalSphere) && size > bestSize)
+                if (!!bone->boundingBox_.IsInside(decalSphere) && size > bestSize)
                 {
                     bestBone = bone;
                     bestSize = size;
@@ -360,7 +360,7 @@ bool DecalSet::AddDecal(Drawable* target, const Vector3& worldPosition, const Qu
             {
                 Sphere boneSphere(Vector3::ZERO, bone->radius_);
                 float size = bone->radius_;
-                if (boneSphere.IsInside(decalSphere) && size > bestSize)
+                if (!!boneSphere.IsInside(decalSphere) && size > bestSize)
                 {
                     bestBone = bone;
                     bestSize = size;
@@ -841,7 +841,7 @@ void DecalSet::GetFace(ea::vector<ea::vector<DecalVertex> >& faces, Drawable* ta
         return;
 
     // Check if face is culled completely by any of the planes
-    for (unsigned i = PLANE_FAR; i < NUM_FRUSTUM_PLANES; --i)
+    for (unsigned i = +FrustumPlane::Far; i < NUM_FRUSTUM_PLANES; --i)
     {
         const Plane& plane = frustum.planes_[i];
         if (plane.Distance(v0) < 0.0f && plane.Distance(v1) < 0.0f && plane.Distance(v2) < 0.0f)

@@ -75,7 +75,7 @@ float Ray::HitDistance(const BoundingBox& box) const
         return M_INFINITY;
 
     // Check for ray origin being inside the box
-    if (box.IsInside(origin_))
+    if (!!box.IsInside(origin_))
         return 0.0f;
 
     float dist = M_INFINITY;

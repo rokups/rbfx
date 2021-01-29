@@ -64,13 +64,13 @@ void AnimationController::RegisterObject(Context* context)
 {
     context->RegisterFactory<AnimationController>(LOGIC_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Animations", GetAnimationsAttr, SetAnimationsAttr, VariantVector, Variant::emptyVariantVector,
-        AM_FILE | AM_NOEDIT);
+        AttributeMode::File | AttributeMode::NoEdit);
     URHO3D_ACCESSOR_ATTRIBUTE("Network Animations", GetNetAnimationsAttr, SetNetAnimationsAttr, ea::vector<unsigned char>,
-        Variant::emptyBuffer, AM_NET | AM_LATESTDATA | AM_NOEDIT);
+        Variant::emptyBuffer, AttributeMode::Net | AttributeMode::LatestData | AttributeMode::NoEdit);
     URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Node Animation States", GetNodeAnimationStatesAttr, SetNodeAnimationStatesAttr, VariantVector,
-        Variant::emptyVariantVector, AM_FILE | AM_NOEDIT);
+        Variant::emptyVariantVector, AttributeMode::File | AttributeMode::NoEdit);
 }
 
 void AnimationController::OnSetEnabled()

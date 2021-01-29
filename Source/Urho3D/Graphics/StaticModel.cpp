@@ -57,22 +57,22 @@ void StaticModel::RegisterObject(Context* context)
 {
     context->RegisterFactory<StaticModel>(GEOMETRY_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Model", GetModelAttr, SetModelAttr, ResourceRef, ResourceRef(Model::GetTypeStatic()), AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Model", GetModelAttr, SetModelAttr, ResourceRef, ResourceRef(Model::GetTypeStatic()), AttributeMode::Default);
     URHO3D_ACCESSOR_ATTRIBUTE("Material", GetMaterialsAttr, SetMaterialsAttr, ResourceRefList, ResourceRefList(Material::GetTypeStatic()),
-        AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Is Occluder", bool, occluder_, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Cast Shadows", bool, castShadows_, false, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AM_DEFAULT);
+        AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Is Occluder", bool, occluder_, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Can Be Occluded", IsOccludee, SetOccludee, bool, true, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Cast Shadows", bool, castShadows_, false, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Distance", GetDrawDistance, SetDrawDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Shadow Distance", GetShadowDistance, SetShadowDistance, float, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("LOD Bias", GetLodBias, SetLodBias, float, 1.0f, AttributeMode::Default);
     URHO3D_COPY_BASE_ATTRIBUTES(Drawable);
-    URHO3D_ATTRIBUTE("Occlusion LOD Level", int, occlusionLodLevel_, M_MAX_UNSIGNED, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Bake Lightmap", bool, bakeLightmap_, UpdateBatchesLightmaps, false, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Scale in Lightmap", float, scaleInLightmap_, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Lightmap Index", unsigned, lightmapIndex_, UpdateBatchesLightmaps, 0, AM_FILE | AM_NOEDIT);
-    URHO3D_ATTRIBUTE_EX("Lightmap Scale & Offset", Vector4, lightmapScaleOffset_, UpdateBatchesLightmaps, Vector4(1.0f, 1.0f, 0.0f, 0.0f), AM_FILE | AM_NOEDIT);
+    URHO3D_ATTRIBUTE("Occlusion LOD Level", int, occlusionLodLevel_, M_MAX_UNSIGNED, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Bake Lightmap", bool, bakeLightmap_, UpdateBatchesLightmaps, false, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Scale in Lightmap", float, scaleInLightmap_, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Lightmap Index", unsigned, lightmapIndex_, UpdateBatchesLightmaps, 0, AttributeMode::File | AttributeMode::NoEdit);
+    URHO3D_ATTRIBUTE_EX("Lightmap Scale & Offset", Vector4, lightmapScaleOffset_, UpdateBatchesLightmaps, Vector4(1.0f, 1.0f, 0.0f, 0.0f), AttributeMode::File | AttributeMode::NoEdit);
 }
 
 void StaticModel::ProcessRayQuery(const RayOctreeQuery& query, ea::vector<RayQueryResult>& results)
@@ -343,7 +343,7 @@ bool StaticModel::IsInside(const Vector3& point) const
 bool StaticModel::IsInsideLocal(const Vector3& point) const
 {
     // Early-out if point is not inside bounding box
-    if (boundingBox_.IsInside(point) == OUTSIDE)
+    if (boundingBox_.IsInside(point) == Intersection::Outside)
         return false;
 
     Ray localRay(point, Vector3(1.0f, -1.0f, 1.0f));

@@ -54,11 +54,11 @@ void CharacterIsometric::RegisterObject(Context* context)
 
     // These macros register the class attributes to the Context for automatic load / save handling.
     // We specify the 'Default' attribute mode which means it will be used both for saving into file, and network replication.
-    URHO3D_ATTRIBUTE("Move Speed Scale", float, moveSpeedScale_, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Camera Zoom", float, zoom_, 0.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Coins In Level", int, maxCoins_, 0, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Remaining Coins", int, remainingCoins_, 0, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Remaining Lifes", int, remainingLifes_, 3, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Move Speed Scale", float, moveSpeedScale_, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Camera Zoom", float, zoom_, 0.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Coins In Level", int, maxCoins_, 0, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Remaining Coins", int, remainingCoins_, 0, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Remaining Lifes", int, remainingLifes_, 3, AttributeMode::Default);
 }
 
 void CharacterIsometric::Update(float timeStep)

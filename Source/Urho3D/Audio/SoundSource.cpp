@@ -132,16 +132,16 @@ void SoundSource::RegisterObject(Context* context)
 {
     context->RegisterFactory<SoundSource>(AUDIO_CATEGORY);
 
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Sound", GetSoundAttr, SetSoundAttr, ResourceRef, ResourceRef(Sound::GetTypeStatic()), AM_DEFAULT);
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Type", GetSoundType, SetSoundType, ea::string, SOUND_EFFECT, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Frequency", float, frequency_, 0.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Gain", float, gain_, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Attenuation", float, attenuation_, 1.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Panning", float, panning_, 0.0f, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Is Playing", IsPlaying, SetPlayingAttr, bool, false, AM_DEFAULT);
-    URHO3D_ENUM_ATTRIBUTE("Autoremove Mode", autoRemove_, autoRemoveModeNames, REMOVE_DISABLED, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Play Position", GetPositionAttr, SetPositionAttr, int, 0, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Enabled", IsEnabled, SetEnabled, bool, true, AttributeMode::Default);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Sound", GetSoundAttr, SetSoundAttr, ResourceRef, ResourceRef(Sound::GetTypeStatic()), AttributeMode::Default);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Type", GetSoundType, SetSoundType, ea::string, SOUND_EFFECT, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Frequency", float, frequency_, 0.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Gain", float, gain_, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Attenuation", float, attenuation_, 1.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Panning", float, panning_, 0.0f, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Is Playing", IsPlaying, SetPlayingAttr, bool, false, AttributeMode::Default);
+    URHO3D_ENUM_ATTRIBUTE("Autoremove Mode", autoRemove_, autoRemoveModeNames, REMOVE_DISABLED, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Play Position", GetPositionAttr, SetPositionAttr, int, 0, AttributeMode::File);
 }
 
 void SoundSource::Seek(float seekTime)
@@ -195,7 +195,7 @@ void SoundSource::Play(Sound* sound)
             // The indexing is different for SoundSource & SoundSource3D, as SoundSource3D removes two attributes,
             // so go by attribute types
             VariantType type = networkState_->attributes_->at(i).type_;
-            if (type == VAR_RESOURCEREF || type == VAR_BOOL)
+            if (type == VariantType::ResourceRef || type == VariantType::Bool)
                 networkState_->previousValues_[i] = Variant::EMPTY;
         }
     }

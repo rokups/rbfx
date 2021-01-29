@@ -76,7 +76,7 @@ ValueAnimation::ValueAnimation(Context* context) :
     owner_(nullptr),
     interpolationMethod_(IM_LINEAR),
     splineTension_(0.5f),
-    valueType_(VAR_NONE),
+    valueType_(VariantType::None),
     interpolatable_(false),
     beginTime_(M_INFINITY),
     endTime_(-M_INFINITY),
@@ -104,7 +104,7 @@ bool ValueAnimation::Serialize(Archive& archive, ArchiveBlock& /*block*/)
 
     if (loading)
     {
-        valueType_ = VAR_NONE;
+        valueType_ = VariantType::None;
         eventFrames_.clear();
     }
 
@@ -153,7 +153,7 @@ bool ValueAnimation::Save(Serializer& dest) const
 
 bool ValueAnimation::LoadXML(const XMLElement& source)
 {
-    valueType_ = VAR_NONE;
+    valueType_ = VariantType::None;
     eventFrames_.clear();
 
     ea::string interpMethodString = source.GetAttribute("interpolationmethod");
@@ -215,7 +215,7 @@ bool ValueAnimation::SaveXML(XMLElement& dest) const
 
 bool ValueAnimation::LoadJSON(const JSONValue& source)
 {
-    valueType_ = VAR_NONE;
+    valueType_ = VariantType::None;
     eventFrames_.clear();
 
     ea::string interpMethodString = source.Get("interpolationmethod").GetString();
@@ -295,10 +295,10 @@ void ValueAnimation::SetValueType(VariantType valueType)
 
     valueType_ = valueType;
     interpolatable_ =
-        (valueType_ == VAR_FLOAT) || (valueType_ == VAR_VECTOR2) || (valueType_ == VAR_VECTOR3) || (valueType_ == VAR_VECTOR4) ||
-        (valueType_ == VAR_QUATERNION) || (valueType_ == VAR_COLOR);
+        (valueType_ == VariantType::Float) || (valueType_ == VariantType::Vector2) || (valueType_ == VariantType::Vector3) || (valueType_ == VariantType::Vector4) ||
+        (valueType_ == VariantType::Quaternion) || (valueType_ == VariantType::Color);
 
-    if ((valueType_ == VAR_INTRECT) || (valueType_ == VAR_INTVECTOR2) || (valueType_ == VAR_INTVECTOR3))
+    if ((valueType_ == VariantType::IntRect) || (valueType_ == VariantType::IntVector2) || (valueType_ == VariantType::IntVector3))
     {
         interpolatable_ = true;
         // Force linear interpolation for IntRect, IntVector2 and IntVector3
@@ -323,7 +323,7 @@ void ValueAnimation::SetInterpolationMethod(InterpMethod method)
         return;
 
     // Force linear interpolation for IntRect, IntVector2 and IntVector3
-    if (method == IM_SPLINE && (valueType_ == VAR_INTRECT || valueType_ == VAR_INTVECTOR2 || valueType_ == VAR_INTVECTOR3))
+    if (method == IM_SPLINE && (valueType_ == VariantType::IntRect || valueType_ == VariantType::IntVector2 || valueType_ == VariantType::IntVector3))
         method = IM_LINEAR;
 
     interpolationMethod_ = method;
@@ -338,7 +338,7 @@ void ValueAnimation::SetSplineTension(float tension)
 
 bool ValueAnimation::SetKeyFrame(float time, const Variant& value)
 {
-    if (valueType_ == VAR_NONE)
+    if (valueType_ == VariantType::None)
         SetValueType(value.GetType());
     else if (value.GetType() != valueType_)
         return false;
@@ -447,25 +447,25 @@ Variant ValueAnimation::LinearInterpolation(unsigned index1, unsigned index2, fl
 
     switch (valueType_)
     {
-    case VAR_FLOAT:
+    case VariantType::Float:
         return Lerp(value1.GetFloat(), value2.GetFloat(), t);
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return value1.GetVector2().Lerp(value2.GetVector2(), t);
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return value1.GetVector3().Lerp(value2.GetVector3(), t);
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return value1.GetVector4().Lerp(value2.GetVector4(), t);
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return value1.GetQuaternion().Slerp(value2.GetQuaternion(), t);
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return value1.GetColor().Lerp(value2.GetColor(), t);
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         {
             float s = 1.0f - t;
             const IntRect& r1 = value1.GetIntRect();
@@ -474,7 +474,7 @@ Variant ValueAnimation::LinearInterpolation(unsigned index1, unsigned index2, fl
                 (int)(r1.bottom_ * s + r2.bottom_ * t));
         }
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         {
             float s = 1.0f - t;
             const IntVector2& v1 = value1.GetIntVector2();
@@ -482,7 +482,7 @@ Variant ValueAnimation::LinearInterpolation(unsigned index1, unsigned index2, fl
             return IntVector2((int)(v1.x_ * s + v2.x_ * t), (int)(v1.y_ * s + v2.y_ * t));
         }
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         {
             float s = 1.0f - t;
             const IntVector3& v1 = value1.GetIntVector3();
@@ -490,7 +490,7 @@ Variant ValueAnimation::LinearInterpolation(unsigned index1, unsigned index2, fl
             return IntVector3((int)(v1.x_ * s + v2.x_ * t), (int)(v1.y_ * s + v2.y_ * t), (int)(v1.z_ * s + v2.z_ * t));
         }
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return value1.GetDouble() * (1.0f - t) + value2.GetDouble() * t;
 
     default:
@@ -524,25 +524,25 @@ Variant ValueAnimation::SplineInterpolation(unsigned index1, unsigned index2, fl
 
     switch (valueType_)
     {
-    case VAR_FLOAT:
+    case VariantType::Float:
         return v1.GetFloat() * h1 + v2.GetFloat() * h2 + t1.GetFloat() * h3 + t2.GetFloat() * h4;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return v1.GetVector2() * h1 + v2.GetVector2() * h2 + t1.GetVector2() * h3 + t2.GetVector2() * h4;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return v1.GetVector3() * h1 + v2.GetVector3() * h2 + t1.GetVector3() * h3 + t2.GetVector3() * h4;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return v1.GetVector4() * h1 + v2.GetVector4() * h2 + t1.GetVector4() * h3 + t2.GetVector4() * h4;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return v1.GetQuaternion() * h1 + v2.GetQuaternion() * h2 + t1.GetQuaternion() * h3 + t2.GetQuaternion() * h4;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return v1.GetColor() * h1 + v2.GetColor() * h2 + t1.GetColor() * h3 + t2.GetColor() * h4;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return v1.GetDouble() * h1 + v2.GetDouble() * h2 + t1.GetDouble() * h3 + t2.GetDouble() * h4;
 
     default:
@@ -579,25 +579,25 @@ Variant ValueAnimation::SubstractAndMultiply(const Variant& value1, const Varian
 {
     switch (valueType_)
     {
-    case VAR_FLOAT:
+    case VariantType::Float:
         return (value1.GetFloat() - value2.GetFloat()) * t;
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return (value1.GetVector2() - value2.GetVector2()) * t;
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return (value1.GetVector3() - value2.GetVector3()) * t;
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return (value1.GetVector4() - value2.GetVector4()) * t;
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return (value1.GetQuaternion() - value2.GetQuaternion()) * t;
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return (value1.GetColor() - value2.GetColor()) * t;
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return (value1.GetDouble() - value2.GetDouble()) * t;
 
     default:

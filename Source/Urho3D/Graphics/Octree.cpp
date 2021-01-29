@@ -66,7 +66,7 @@ public:
     Intersection TestOctant(const BoundingBox& box, bool inside) override
     {
         if (inside)
-            return INSIDE;
+            return Intersection::Inside;
         else
             return box.IsInside(Vector3::ZERO);
     }
@@ -109,7 +109,7 @@ public:
     Intersection TestOctant(const BoundingBox& box, bool inside) override
     {
         if (inside)
-            return INSIDE;
+            return Intersection::Inside;
         else
             return box.IsInside(Vector3::ZERO);
     }
@@ -242,7 +242,7 @@ void Octant::InsertDrawable(Drawable* drawable)
     // Also if drawable is outside the root octant bounds, insert to root
     bool insertHere;
     if (this == root_)
-        insertHere = !drawable->IsOccludee() || cullingBox_.IsInside(box) != INSIDE || CheckDrawableFit(box);
+        insertHere = !drawable->IsOccludee() || cullingBox_.IsInside(box) != Intersection::Inside || CheckDrawableFit(box);
     else
         insertHere = CheckDrawableFit(box);
 
@@ -334,9 +334,9 @@ void Octant::GetDrawablesInternal(OctreeQuery& query, bool inside) const
     if (this != root_)
     {
         Intersection res = query.TestOctant(cullingBox_, inside);
-        if (res == INSIDE)
+        if (res == Intersection::Inside)
             inside = true;
-        else if (res == OUTSIDE)
+        else if (res == Intersection::Outside)
         {
             // Fully outside, so cull this octant, its children & drawables
             return;
@@ -436,9 +436,9 @@ void Octree::RegisterObject(Context* context)
     Vector3 defaultBoundsMin = -Vector3::ONE * DEFAULT_OCTREE_SIZE;
     Vector3 defaultBoundsMax = Vector3::ONE * DEFAULT_OCTREE_SIZE;
 
-    URHO3D_ATTRIBUTE_EX("Bounding Box Min", Vector3, worldBoundingBox_.min_, UpdateOctreeSize, defaultBoundsMin, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Bounding Box Max", Vector3, worldBoundingBox_.max_, UpdateOctreeSize, defaultBoundsMax, AM_DEFAULT);
-    URHO3D_ATTRIBUTE_EX("Number of Levels", int, numLevels_, UpdateOctreeSize, DEFAULT_OCTREE_LEVELS, AM_DEFAULT);
+    URHO3D_ATTRIBUTE_EX("Bounding Box Min", Vector3, worldBoundingBox_.min_, UpdateOctreeSize, defaultBoundsMin, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Bounding Box Max", Vector3, worldBoundingBox_.max_, UpdateOctreeSize, defaultBoundsMax, AttributeMode::Default);
+    URHO3D_ATTRIBUTE_EX("Number of Levels", int, numLevels_, UpdateOctreeSize, DEFAULT_OCTREE_LEVELS, AttributeMode::Default);
 }
 
 void Octree::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
@@ -558,7 +558,7 @@ void Octree::Update(const FrameInfo& frame)
             if (!octant || octant->GetRoot() != this)
                 continue;
             // Skip if still fits the current octant
-            if (drawable->IsOccludee() && octant->GetCullingBox().IsInside(box) == INSIDE && octant->CheckDrawableFit(box))
+            if (drawable->IsOccludee() && octant->GetCullingBox().IsInside(box) == Intersection::Inside && octant->CheckDrawableFit(box))
                 continue;
 
             InsertDrawable(drawable);
@@ -566,7 +566,7 @@ void Octree::Update(const FrameInfo& frame)
 #ifdef _DEBUG
             // Verify that the drawable will be culled correctly
             octant = drawable->GetOctant();
-            if (octant != this && octant->GetCullingBox().IsInside(box) != INSIDE)
+            if (octant != this && octant->GetCullingBox().IsInside(box) != Intersection::Inside)
             {
                 URHO3D_LOGERROR("Drawable is not fully inside its octant's culling bounds: drawable box " + box.ToString() +
                          " octant box " + octant->GetCullingBox().ToString());

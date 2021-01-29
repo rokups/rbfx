@@ -69,9 +69,9 @@ bool UnknownComponent::LoadXML(const XMLElement& source)
     while (attrElem)
     {
         AttributeInfo attr;
-        attr.mode_ = AM_FILE;
+        attr.mode_ = AttributeMode::File;
         attr.name_ = attrElem.GetAttribute("name");
-        attr.type_ = VAR_STRING;
+        attr.type_ = VariantType::String;
 
         if (!attr.name_.empty())
         {
@@ -105,9 +105,9 @@ bool UnknownComponent::LoadJSON(const JSONValue& source)
         const JSONValue& attrVal = attributesArray.at(i);
 
         AttributeInfo attr;
-        attr.mode_ = AM_FILE;
+        attr.mode_ = AttributeMode::File;
         attr.name_ = attrVal.Get("name").GetString();
-        attr.type_ = VAR_STRING;
+        attr.type_ = VariantType::String;
 
         if (!attr.name_.empty())
         {

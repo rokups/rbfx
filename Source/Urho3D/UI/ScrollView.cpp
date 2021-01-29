@@ -97,14 +97,14 @@ void ScrollView::RegisterObject(Context* context)
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Clip Children", true);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Is Enabled", true);
     URHO3D_UPDATE_ATTRIBUTE_DEFAULT_VALUE("Focus Mode", FM_FOCUSABLE_DEFOCUSABLE);
-    URHO3D_ACCESSOR_ATTRIBUTE("View Position", GetViewPosition, SetViewPositionAttr, IntVector2, IntVector2::ZERO, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Step", GetScrollStep, SetScrollStep, float, 0.1f, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Page Step", GetPageStep, SetPageStep, float, 1.0f, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Show/Hide Scrollbars", GetScrollBarsAutoVisible, SetScrollBarsAutoVisible, bool, true, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Deceleration", GetScrollDeceleration, SetScrollDeceleration, float, 30.0f, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Snap Epsilon", GetScrollSnapEpsilon, SetScrollSnapEpsilon, float, M_EPSILON, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Disable Children", GetAutoDisableChildren, SetAutoDisableChildren, bool, false, AM_FILE);
-    URHO3D_ACCESSOR_ATTRIBUTE("Auto Disable Threshold", GetAutoDisableThreshold, SetAutoDisableThreshold, float, 25.0f, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("View Position", GetViewPosition, SetViewPositionAttr, IntVector2, IntVector2::ZERO, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Step", GetScrollStep, SetScrollStep, float, 0.1f, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Page Step", GetPageStep, SetPageStep, float, 1.0f, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Show/Hide Scrollbars", GetScrollBarsAutoVisible, SetScrollBarsAutoVisible, bool, true, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Deceleration", GetScrollDeceleration, SetScrollDeceleration, float, 30.0f, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Scroll Snap Epsilon", GetScrollSnapEpsilon, SetScrollSnapEpsilon, float, M_EPSILON, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Disable Children", GetAutoDisableChildren, SetAutoDisableChildren, bool, false, AttributeMode::File);
+    URHO3D_ACCESSOR_ATTRIBUTE("Auto Disable Threshold", GetAutoDisableThreshold, SetAutoDisableThreshold, float, 25.0f, AttributeMode::File);
 }
 
 void ScrollView::Update(float timeStep)

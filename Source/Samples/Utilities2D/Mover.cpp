@@ -49,12 +49,12 @@ void Mover::RegisterObject(Context* context)
 
     // These macros register the class attribute to the Context for automatic load / save handling.
     // We specify the Default attribute mode which means it will be used both for saving into file, and network replication.
-    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Path", GetPathAttr, SetPathAttr, ea::vector<unsigned char>, Variant::emptyBuffer, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Speed", float, speed_, 0.8f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Current Path ID", int, currentPathID_, 1, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Emit Time", float, emitTime_, 0.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Fight Timer", float, fightTimer_, 0.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("Flip Animation", float, flip_, 0.0f, AM_DEFAULT);
+    URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Path", GetPathAttr, SetPathAttr, ea::vector<unsigned char>, Variant::emptyBuffer, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Speed", float, speed_, 0.8f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Current Path ID", int, currentPathID_, 1, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Emit Time", float, emitTime_, 0.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Fight Timer", float, fightTimer_, 0.0f, AttributeMode::Default);
+    URHO3D_ATTRIBUTE("Flip Animation", float, flip_, 0.0f, AttributeMode::Default);
 }
 
 void Mover::SetPathAttr(const ea::vector<unsigned char>& value)

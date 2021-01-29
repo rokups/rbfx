@@ -242,12 +242,12 @@ Intersection BoundingBox::IsInside(const Sphere& sphere) const
 
     float radius = sphere.radius_;
     if (distSquared > radius * radius)
-        return OUTSIDE;
+        return Intersection::Outside;
     else if (center.x_ - radius < min_.x_ || center.x_ + radius > max_.x_ || center.y_ - radius < min_.y_ ||
              center.y_ + radius > max_.y_ || center.z_ - radius < min_.z_ || center.z_ + radius > max_.z_)
-        return INTERSECTS;
+        return Intersection::Intersects;
     else
-        return INSIDE;
+        return Intersection::Inside;
 }
 
 Intersection BoundingBox::IsInsideFast(const Sphere& sphere) const
@@ -289,9 +289,9 @@ Intersection BoundingBox::IsInsideFast(const Sphere& sphere) const
 
     float radius = sphere.radius_;
     if (distSquared >= radius * radius)
-        return OUTSIDE;
+        return Intersection::Outside;
     else
-        return INSIDE;
+        return Intersection::Inside;
 }
 
 ea::string BoundingBox::ToString() const

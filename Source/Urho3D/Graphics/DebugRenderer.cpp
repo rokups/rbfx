@@ -63,7 +63,7 @@ DebugRenderer::~DebugRenderer() = default;
 void DebugRenderer::RegisterObject(Context* context)
 {
     context->RegisterFactory<DebugRenderer>(SUBSYSTEM_CATEGORY);
-    URHO3D_ACCESSOR_ATTRIBUTE("Line Antialias", GetLineAntiAlias, SetLineAntiAlias, bool, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Line Antialias", GetLineAntiAlias, SetLineAntiAlias, bool, false, AttributeMode::Default);
 }
 
 void DebugRenderer::SetLineAntiAlias(bool enable)
@@ -693,7 +693,7 @@ void DebugRenderer::Render()
 
 bool DebugRenderer::IsInside(const BoundingBox& box) const
 {
-    return frustum_.IsInsideFast(box) == INSIDE;
+    return frustum_.IsInsideFast(box) == Intersection::Inside;
 }
 
 bool DebugRenderer::HasContent() const

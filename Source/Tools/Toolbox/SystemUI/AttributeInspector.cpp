@@ -49,30 +49,30 @@ namespace Urho3D
 {
 
 VariantType supportedVariantTypes[] = {
-    VAR_INT,
-    VAR_BOOL,
-    VAR_FLOAT,
-    VAR_VECTOR2,
-    VAR_VECTOR3,
-    VAR_VECTOR4,
-    VAR_QUATERNION,
-    VAR_COLOR,
-    VAR_STRING,
-    //VAR_BUFFER,
-    //VAR_RESOURCEREF,
-    //VAR_RESOURCEREFLIST,
-    //VAR_VARIANTVECTOR,
-    //VAR_VARIANTMAP,
-    VAR_INTRECT,
-    VAR_INTVECTOR2,
-    VAR_MATRIX3,
-    VAR_MATRIX3X4,
-    VAR_MATRIX4,
-    VAR_DOUBLE,
-    //VAR_STRINGVECTOR,
-    VAR_RECT,
-    VAR_INTVECTOR3,
-    VAR_INT64,
+    VariantType::Int,
+    VariantType::Bool,
+    VariantType::Float,
+    VariantType::Vector2,
+    VariantType::Vector3,
+    VariantType::Vector4,
+    VariantType::Quaternion,
+    VariantType::Color,
+    VariantType::String,
+    //VariantType::Buffer,
+    //VariantType::ResourceRef,
+    //VariantType::ResourceRefList,
+    //VariantType::VariantVector,
+    //VariantType::VariantMap,
+    VariantType::IntRect,
+    VariantType::IntVector2,
+    VariantType::Matrix3,
+    VariantType::Matrix3X4,
+    VariantType::Matrix4,
+    VariantType::Double,
+    //VariantType::StringVector,
+    VariantType::Rect,
+    VariantType::IntVector3,
+    VariantType::Int64,
 };
 const int MAX_SUPPORTED_VAR_TYPES = SDL_arraysize(supportedVariantTypes);
 
@@ -183,9 +183,9 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
         // Render enums.
         assert(info != nullptr);
         int current = 0;
-        if (info->type_ == VAR_INT)
+        if (info->type_ == VariantType::Int)
             current = value.GetInt();
-        else if (info->type_ == VAR_STRING)
+        else if (info->type_ == VariantType::String)
             current = static_cast<int>(GetStringListIndex(value.GetString().c_str(), info->enumNames_, 0));
         else
             assert(false);
@@ -193,9 +193,9 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
         modified |= ui::Combo("###enum", &current, info->enumNames_, comboValuesNum);
         if (modified)
         {
-            if (info->type_ == VAR_INT)
+            if (info->type_ == VariantType::Int)
                 value = current;
-            else if (info->type_ == VAR_STRING)
+            else if (info->type_ == VariantType::String)
                 value = info->enumNames_[current];
         }
     }
@@ -203,10 +203,10 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
     {
         switch (info ? info->type_ : value.GetType())
         {
-        case VAR_NONE:
+        case VariantType::None:
             ui::TextUnformatted("None");
             break;
-        case VAR_INT:
+        case VariantType::Int:
         {
             if (title.ends_with(" Mask") || title.ends_with(" Bits"))
             {
@@ -224,7 +224,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             }
             break;
         }
-        case VAR_BOOL:
+        case VariantType::Bool:
         {
             auto v = value.GetBool();
             if (flags & ui::ItemLabelFlag::Right)
@@ -234,7 +234,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 value = v;
             break;
         }
-        case VAR_FLOAT:
+        case VariantType::Float:
         {
             auto v = value.GetFloat();
             modified |= ui::DragFloat("", &v, floatStep, floatMin, floatMax, "%.3f");
@@ -242,7 +242,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 value = v;
             break;
         }
-        case VAR_VECTOR2:
+        case VariantType::Vector2:
         {
             auto& v = value.GetVector2();
             const char* formats[] = {"X=%.3f", "Y=%.3f"};
@@ -252,7 +252,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_Float, const_cast<float*>(&v.x_), 2, floatStep, &floatMin, &floatMax, "%.3f");
             break;
         }
-        case VAR_VECTOR3:
+        case VariantType::Vector3:
         {
             auto& v = value.GetVector3();
             const char* formats[] = {"X=%.3f", "Y=%.3f", "Z=%.3f"};
@@ -262,7 +262,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_Float, const_cast<float*>(&v.x_), 3, floatStep, &floatMin, &floatMax, "%.3f");
             break;
         }
-        case VAR_VECTOR4:
+        case VariantType::Vector4:
         {
             auto& v = value.GetVector4();
             const char* formats[] = {"X=%.3f", "Y=%.3f", "Z=%.3f", "W=%.3f"};
@@ -272,7 +272,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_Float, const_cast<float*>(&v.x_), 4, floatStep, &floatMin, &floatMax, "%.3f");
             break;
         }
-        case VAR_QUATERNION:
+        case VariantType::Quaternion:
         {
             Vector3 currentAngles = value.GetQuaternion().EulerAngles();
             Vector3& angles = *ui::GetUIState<Vector3>(currentAngles);
@@ -297,13 +297,13 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             }
             break;
         }
-        case VAR_COLOR:
+        case VariantType::Color:
         {
             auto& v = value.GetColor();
             modified |= ui::ColorEdit4("", const_cast<float*>(&v.r_));
             break;
         }
-        case VAR_STRING:
+        case VariantType::String:
         {
             auto& v = const_cast<ea::string&>(value.GetString());
             auto* buffer = ui::GetUIState<ea::string>(v.c_str());
@@ -317,8 +317,8 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 value = *buffer;
             break;
         }
-        // case VAR_BUFFER:
-        case VAR_RESOURCEREF:
+        // case VariantType::Buffer:
+        case VariantType::ResourceRef:
         {
             ResourceRef ref = value.GetResourceRef();
             if (ref.type_ == StringHash::ZERO && info)
@@ -330,7 +330,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 value = ref;
             break;
         }
-        case VAR_RESOURCEREFLIST:
+        case VariantType::ResourceRefList:
         {
             const ResourceRefList& refList = value.GetResourceRefList();
             float posX = ui::GetCursorPosX();
@@ -358,8 +358,8 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             // TODO: Do we need list expansion?
             break;
         }
-        // case VAR_VARIANTVECTOR:
-        case VAR_VARIANTMAP:
+        // case VariantType::VariantVector:
+        case VariantType::VariantMap:
         {
             struct VariantMapState
             {
@@ -368,7 +368,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 // Index of type in supportedVariantTypes array.
                 int valueTypeIndex_ = 0;
             };
-            ui::IdScope idScope(VAR_VARIANTMAP);
+            ui::IdScope idScope(+VariantType::VariantMap);
             auto* map = value.GetVariantMapPtr();
             auto* mapState = ui::GetUIState<VariantMapState>();
 
@@ -393,8 +393,8 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             for (auto it = map->begin(); it != map->end(); it++)
             {
                 VariantType type = it->second.GetType();
-                if (type == VAR_RESOURCEREFLIST || type == VAR_VARIANTMAP || type == VAR_VARIANTVECTOR ||
-                    type == VAR_BUFFER || type == VAR_VOIDPTR || type == VAR_PTR)
+                if (type == VariantType::ResourceRefList || type == VariantType::VariantMap || type == VariantType::VariantVector ||
+                    type == VariantType::Buffer || type == VariantType::VoidPtr || type == VariantType::Ptr)
                     // TODO: Support nested collections.
                     continue;
 
@@ -422,7 +422,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
 
             break;
         }
-        case VAR_INTRECT:
+        case VariantType::IntRect:
         {
             auto& v = value.GetIntRect();
             const char* formats[] = {"L=%d", "T=%d", "B=%d", "R=%d"};
@@ -432,7 +432,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_S32, const_cast<int*>(&v.left_), 4, 1, &intMin, &intMax, "%.3f", 1.0f);
             break;
         }
-        case VAR_INTVECTOR2:
+        case VariantType::IntVector2:
         {
             auto& v = value.GetIntVector2();
             const char* formats[] = {"X=%d", "Y=%d"};
@@ -442,7 +442,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_S32, const_cast<int*>(&v.x_), 2, 1, &intMin, &intMax, "%.3f", 1.0f);
             break;
         }
-        case VAR_MATRIX3:
+        case VariantType::Matrix3:
         {
             auto& v = value.GetMatrix3();
             const char* formats[3][3] = {
@@ -466,7 +466,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             ui::EndGroup();
             break;
         }
-        case VAR_MATRIX3X4:
+        case VariantType::Matrix3X4:
         {
             auto& v = value.GetMatrix3x4();
             const char* formats[3][4] = {
@@ -490,7 +490,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             ui::EndGroup();
             break;
         }
-        case VAR_MATRIX4:
+        case VariantType::Matrix4:
         {
             auto& v = value.GetMatrix4();
             const char* formats[4][4] = {
@@ -517,7 +517,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
             ui::EndGroup();
             break;
         }
-        case VAR_DOUBLE:
+        case VariantType::Double:
         {
             auto v = value.GetDouble();
             modified |= ui::DragScalar("", ImGuiDataType_Double, &v, floatStep, &doubleMin, &doubleMax, "%.3f");
@@ -525,7 +525,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 value = v;
             break;
         }
-        case VAR_STRINGVECTOR:
+        case VariantType::StringVector:
         {
             StringVector* v = value.GetStringVectorPtr();
             // Insert new item.
@@ -584,7 +584,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 ui::Separator();
             break;
         }
-        case VAR_RECT:
+        case VariantType::Rect:
         {
             auto& v = value.GetRect();
             const char* formats[] = {"MinX=%.3f", "MinY=%.3f", "MaxX=%.3f", "MaxY=%.3f"};
@@ -594,7 +594,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_Float, const_cast<float*>(&v.min_.x_), 4, floatStep, &floatMin, &floatMax, "%.3f");
             break;
         }
-        case VAR_INTVECTOR3:
+        case VariantType::IntVector3:
         {
             auto& v = value.GetIntVector3();
             const char* formats[] = {"X=%d", "Y=%d", "Z=%d"};
@@ -604,7 +604,7 @@ bool RenderAttribute(ea::string_view title, Variant& value, const Color& color, 
                 modified |= ui::DragScalarN("", ImGuiDataType_S32, const_cast<int*>(&v.x_), 3, 1, &intMin, &intMax, "%d", 1.0f);
             break;
         }
-        case VAR_INT64:
+        case VariantType::Int64:
         {
             auto minVal = std::numeric_limits<long long int>::min();
             auto maxVal = std::numeric_limits<long long int>::max();
@@ -646,13 +646,13 @@ bool RenderAttributes(Serializable* item, ea::string_view filter, Object* eventS
     for (const AttributeInfo& info: *attributes)
     {
         // Attribute is not meant to be edited in editor.
-        if (info.mode_ & AM_NOEDIT)
+        if (info.mode_ & AttributeMode::NoEdit)
             continue;
         // Ignore attributes not matching user-provided filter.
         if (!filter.empty() && !info.name_.contains(filter, false))
             continue;
         // Ignore not supported variant types.
-        if (info.type_ == VAR_BUFFER || info.type_ == VAR_VARIANTVECTOR || info.type_ == VAR_VOIDPTR || info.type_ == VAR_PTR)
+        if (info.type_ == VariantType::Buffer || info.type_ == VariantType::VariantVector || info.type_ == VariantType::VoidPtr || info.type_ == VariantType::Ptr)
             continue;
         ui::IdScope attributeNameId(info.name_.c_str());
 
@@ -666,7 +666,7 @@ bool RenderAttributes(Serializable* item, ea::string_view filter, Object* eventS
             valueKind = AttributeValueKind::ATTRIBUTE_VALUE_INHERITED;
         else if (value == info.defaultValue_)
             valueKind = AttributeValueKind::ATTRIBUTE_VALUE_DEFAULT;
-        else if (info.type_ == VAR_RESOURCEREFLIST)
+        else if (info.type_ == VariantType::ResourceRefList)
         {
             // Model insists on keeping non-empty ResourceRefList of Materials, even when names are unset. Treat such
             // list with empty names as equal to default empty resource reflist.
@@ -759,7 +759,7 @@ bool RenderAttributes(Serializable* item, ea::string_view filter, Object* eventS
                 }
             }
 
-            if (value.GetType() == VAR_INT && info.name_.ends_with(" Mask"))
+            if (value.GetType() == VariantType::Int && info.name_.ends_with(" Mask"))
             {
                 if (ui::MenuItem("Enable All"))
                 {
@@ -791,7 +791,7 @@ bool RenderAttributes(Serializable* item, ea::string_view filter, Object* eventS
                 modifiedReason = AttributeInspectorModified::SET_BY_USER;
 
             // Discard temporary string buffer so input field clears.
-            if (value.GetType() == VAR_STRING)
+            if (value.GetType() == VariantType::String)
                 ui::RemoveUIState<ea::string>();
 
             modification.SetModified(true);

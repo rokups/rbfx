@@ -30,6 +30,7 @@
 #pragma warning(disable:4702) // unreachable code
 #endif
 
+#include "../Core/EnumIndex.h"
 #include "../Math/Random.h"
 
 #include <cstdlib>
@@ -59,12 +60,20 @@ static const float M_DEGTORAD_2 = M_PI / 360.0f;    // M_DEGTORAD / 2.f
 static const float M_RADTODEG = 1.0f / M_DEGTORAD;
 
 /// Intersection test result.
-enum Intersection
+enum class Intersection
 {
-    OUTSIDE,
-    INTERSECTS,
-    INSIDE
+    Outside,
+    Intersects,
+    Inside
 };
+
+URHO3D_ENUM_BOOL(Intersection);
+
+#ifdef URHO3D_LEGACY_ENUMS
+static const Intersection OUTSIDE = Intersection::Outside;
+static const Intersection INTERSECTS = Intersection::Intersects;
+static const Intersection INSIDE = Intersection::Inside;
+#endif
 
 /// Check whether two floating point values are equal within accuracy.
 /// @specialization{float}

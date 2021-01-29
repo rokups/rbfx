@@ -250,44 +250,44 @@ bool Serializer::WriteVariantData(const Variant& value)
 {
     switch (value.GetType())
     {
-    case VAR_NONE:
+    case VariantType::None:
         return true;
 
-    case VAR_INT:
+    case VariantType::Int:
         return WriteInt(value.GetInt());
 
-    case VAR_INT64:
+    case VariantType::Int64:
         return WriteInt64(value.GetInt64());
 
-    case VAR_BOOL:
+    case VariantType::Bool:
         return WriteBool(value.GetBool());
 
-    case VAR_FLOAT:
+    case VariantType::Float:
         return WriteFloat(value.GetFloat());
 
-    case VAR_VECTOR2:
+    case VariantType::Vector2:
         return WriteVector2(value.GetVector2());
 
-    case VAR_VECTOR3:
+    case VariantType::Vector3:
         return WriteVector3(value.GetVector3());
 
-    case VAR_VECTOR4:
+    case VariantType::Vector4:
         return WriteVector4(value.GetVector4());
 
-    case VAR_QUATERNION:
+    case VariantType::Quaternion:
         return WriteQuaternion(value.GetQuaternion());
 
-    case VAR_COLOR:
+    case VariantType::Color:
         return WriteColor(value.GetColor());
 
-    case VAR_STRING:
+    case VariantType::String:
         return WriteString(value.GetString());
 
-    case VAR_BUFFER:
+    case VariantType::Buffer:
         return WriteBuffer(value.GetBuffer());
 
         // Serializing pointers and custom values is not supported. Write null
-    case VAR_CUSTOM:
+    case VariantType::Custom:
     {
         if (const Serializable* object = value.GetCustom<SharedPtr<Serializable>>())
         {
@@ -298,47 +298,47 @@ bool Serializer::WriteVariantData(const Variant& value)
         URHO3D_FALLTHROUGH;
     }
 
-    case VAR_VOIDPTR:
-    case VAR_PTR:
+    case VariantType::VoidPtr:
+    case VariantType::Ptr:
         return WriteUInt(0);
 
-    case VAR_RESOURCEREF:
+    case VariantType::ResourceRef:
         return WriteResourceRef(value.GetResourceRef());
 
-    case VAR_RESOURCEREFLIST:
+    case VariantType::ResourceRefList:
         return WriteResourceRefList(value.GetResourceRefList());
 
-    case VAR_VARIANTVECTOR:
+    case VariantType::VariantVector:
         return WriteVariantVector(value.GetVariantVector());
 
-    case VAR_STRINGVECTOR:
+    case VariantType::StringVector:
         return WriteStringVector(value.GetStringVector());
 
-    case VAR_RECT:
+    case VariantType::Rect:
         return WriteRect(value.GetRect());
 
-    case VAR_VARIANTMAP:
+    case VariantType::VariantMap:
         return WriteVariantMap(value.GetVariantMap());
 
-    case VAR_INTRECT:
+    case VariantType::IntRect:
         return WriteIntRect(value.GetIntRect());
 
-    case VAR_INTVECTOR2:
+    case VariantType::IntVector2:
         return WriteIntVector2(value.GetIntVector2());
 
-    case VAR_INTVECTOR3:
+    case VariantType::IntVector3:
         return WriteIntVector3(value.GetIntVector3());
 
-    case VAR_MATRIX3:
+    case VariantType::Matrix3:
         return WriteMatrix3(value.GetMatrix3());
 
-    case VAR_MATRIX3X4:
+    case VariantType::Matrix3X4:
         return WriteMatrix3x4(value.GetMatrix3x4());
 
-    case VAR_MATRIX4:
+    case VariantType::Matrix4:
         return WriteMatrix4(value.GetMatrix4());
 
-    case VAR_DOUBLE:
+    case VariantType::Double:
         return WriteDouble(value.GetDouble());
 
     default:

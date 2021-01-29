@@ -232,9 +232,9 @@ void DynamicNavigationMesh::RegisterObject(Context* context)
     context->RegisterFactory<DynamicNavigationMesh>(NAVIGATION_CATEGORY);
 
     URHO3D_COPY_BASE_ATTRIBUTES(NavigationMesh);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Obstacles", GetMaxObstacles, SetMaxObstacles, unsigned, DEFAULT_MAX_OBSTACLES, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Max Layers", GetMaxLayers, SetMaxLayers, unsigned, DEFAULT_MAX_LAYERS, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("Draw Obstacles", GetDrawObstacles, SetDrawObstacles, bool, false, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Obstacles", GetMaxObstacles, SetMaxObstacles, unsigned, DEFAULT_MAX_OBSTACLES, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Layers", GetMaxLayers, SetMaxLayers, unsigned, DEFAULT_MAX_LAYERS, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Obstacles", GetDrawObstacles, SetDrawObstacles, bool, false, AttributeMode::Default);
 }
 
 bool DynamicNavigationMesh::Allocate(const BoundingBox& boundingBox, unsigned maxTiles)

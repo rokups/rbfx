@@ -157,8 +157,8 @@ void CameraViewport::RebuildAttributes()
 {
     auto* context = this;
     // Normal attributes.
-    URHO3D_ACCESSOR_ATTRIBUTE("Viewport", GetNormalizedRect, SetNormalizedRect, Rect, fullScreenViewport, AM_DEFAULT);
-    URHO3D_ACCESSOR_ATTRIBUTE("RenderPath", GetLastRenderPath, SetRenderPath, ResourceRef, defaultRenderPath, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Viewport", GetNormalizedRect, SetNormalizedRect, Rect, fullScreenViewport, AttributeMode::Default);
+    URHO3D_ACCESSOR_ATTRIBUTE("RenderPath", GetLastRenderPath, SetRenderPath, ResourceRef, defaultRenderPath, AttributeMode::Default);
 
     // PostProcess effects are special. One file may contain multiple effects that can be enabled or disabled.
     {
@@ -215,7 +215,7 @@ void CameraViewport::RebuildAttributes()
                     path->Append(context_->GetSubsystem<ResourceCache>()->GetResource<XMLFile>(effect.second));
                 path->SetEnabled(effect.first, value.GetBool());
             };
-            URHO3D_CUSTOM_ACCESSOR_ATTRIBUTE(effect.first.c_str(), getter, setter, bool, false, AM_DEFAULT);
+            URHO3D_CUSTOM_ACCESSOR_ATTRIBUTE(effect.first.c_str(), getter, setter, bool, false, AttributeMode::Default);
         }
     }
 

@@ -179,7 +179,7 @@ bool ResourceTab::RenderWindowContent()
         else if (ui::BeginDragDropTarget())
         {
             const Variant& dropped = ui::AcceptDragDropVariant("path");
-            if (dropped.GetType() == VAR_STRING)
+            if (dropped.GetType() == VariantType::String)
             {
                 ResourceCache* cache = GetSubsystem<ResourceCache>();
                 FileSystem* fs = GetSubsystem<FileSystem>();

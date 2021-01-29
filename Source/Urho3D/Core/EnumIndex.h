@@ -22,40 +22,34 @@
 
 #pragma once
 
-
-#include <Urho3D/Engine/PluginApplication.h>
-#include <Urho3D/Scene/LogicComponent.h>
-#include <Urho3D/Scene/Node.h>
+#include <type_traits>
 
 namespace Urho3D
 {
 
-/// A custom component provided by the plugin.
-class RotateObject
-    : public LogicComponent
-{
-    URHO3D_OBJECT(RotateObject, LogicComponent
-    );
-public:
-    RotateObject(Context* context)
-        : LogicComponent(context)
-    {
-        SetUpdateEventMask(USE_UPDATE);
+#ifndef URHO3D_ENUM_INDEX
+/// Helper macro that indicate that enumeration is sequentially indexed.
+/// The following expressions become well-formed:
+/// ++enum: Increments enum value
+/// +enum: Converts enum value to underlying integer
+#define URHO3D_ENUM_INDEX(Enum) \
+    inline typename std::underlying_type<Enum>::type operator + (const Enum lhs) \
+    { \
+        return static_cast<typename std::underlying_type<Enum>::type>(lhs); \
+    } \
+    inline Enum operator ++ (const Enum lhs) \
+    { \
+        return static_cast<Enum>(+lhs + 1); \
     }
+#endif
 
-    void Update(float timeStep) override
-    {
-        if (animate_)
-            GetNode()->Rotate(Quaternion(10 * timeStep, 20 * timeStep, 30 * timeStep));
-    }
-
-    static void RegisterObject(Context* context, PluginApplication* plugin)
-    {
-        plugin->RegisterFactory<RotateObject>("User Components");
-        URHO3D_ATTRIBUTE("Animate", bool, animate_, true, AttributeMode::Edit);
-    }
-
-    bool animate_ = true;
-};
+#ifndef URHO3D_ENUM_BOOL
+/// Helper macro that indicate that enumeration has zero value with "false" or "invalid" semantics.
+/// The following expression become well-formed:
+/// !enum: Check if enum is zero
+/// !!enum: Check if enum is not zero
+#define URHO3D_ENUM_BOOL(Enum) \
+    inline bool operator ! (const Enum lhs) { return lhs == static_cast<Enum>(0); }
+#endif
 
 }
