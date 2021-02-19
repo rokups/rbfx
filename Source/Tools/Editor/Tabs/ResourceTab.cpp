@@ -111,9 +111,9 @@ bool ResourceTab::RenderWindowContent()
                 selectedItem_.clear();
                 SelectCurrentItemInspector();
             }
+            RenderDirectoryTree();
             ui::TreePop();
         }
-        RenderDirectoryTree();
     }
     ui::EndChild();
     ui::SameLine();
@@ -124,25 +124,36 @@ bool ResourceTab::RenderWindowContent()
         return true;
     }
 
+    auto pathParts = RemoveTrailingSlash(currentDir_).split("/");
+    pathParts.insert_at(0, "");
+
+    // TODO: have these columns as little width as possible
+    ui::BeginColumns("breadcrumbs", pathParts.size(), ImGuiColumnsFlags_NoResize);
+
     ea::string destDirName = "";
 
-    for (auto name : RemoveTrailingSlash(currentDir_).split("/"))
+    for (auto name : pathParts)
     {
-        destDirName += name + "/";
+        auto readableName = name;
+
+        if (name == "")
+            readableName = "Root";
+        else
+            destDirName += name + "/";
 
         if (destDirName == currentDir_)
         {
-            ui::TextUnformatted(name.c_str());
+            ui::TextUnformatted(readableName.c_str());
             continue;
         }
 
-        if (ui::Selectable(name.c_str()))
+        if (ui::Selectable(readableName.c_str()))
             currentDir_ = destDirName;
 
-        ui::SameLine();
-        ui::TextUnformatted(" > ");
-        ui::SameLine();
+        ui::NextColumn();
     }
+
+    ui::EndColumns();
 
     auto previewSize = ImVec2(200.0f, 200.0f);
 
