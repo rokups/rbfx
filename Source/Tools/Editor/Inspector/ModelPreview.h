@@ -22,6 +22,7 @@
 #pragma once
 
 #include <Urho3D/Core/Object.h>
+#include <Urho3D/Graphics/RenderPath.h>
 #include <Toolbox/Graphics/SceneView.h>
 
 namespace Urho3D
@@ -53,6 +54,8 @@ public:
     void ToggleModel();
     /// Render model preview.
     void RenderPreview();
+    /// Render model preview with custom size.
+    void RenderPreview(float width, float height);
 
 protected:
     /// Initialize preview.

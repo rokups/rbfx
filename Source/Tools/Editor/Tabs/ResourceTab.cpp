@@ -40,6 +40,7 @@
 #include <SDL/SDL_clipboard.h>
 
 #include "EditorEvents.h"
+#include "Inspector/ModelPreview.h"
 #include "Tabs/Scene/SceneTab.h"
 #include "Tabs/InspectorTab.h"
 #include "Pipeline/Pipeline.h"
@@ -123,10 +124,41 @@ bool ResourceTab::RenderWindowContent()
         return true;
     }
 
+    ea::string destDirName = "";
+
+    for (auto name : RemoveTrailingSlash(currentDir_).split("/"))
+    {
+        destDirName += name + "/";
+
+        if (destDirName == currentDir_)
+        {
+            ui::TextUnformatted(name.c_str());
+            continue;
+        }
+
+        if (ui::Selectable(name.c_str()))
+            currentDir_ = destDirName;
+
+        ui::SameLine();
+        ui::TextUnformatted(" > ");
+        ui::SameLine();
+    }
+
+    auto previewSize = ImVec2(200.0f, 200.0f);
+
+    ui::BeginColumns("files", Max(1, Floor(ui::GetWindowWidth() / previewSize.x)),
+                     ImGuiColumnsFlags_NoBorder | ImGuiColumnsFlags_NoResize);
+
+    auto cache = context_->GetSubsystem<ResourceCache>();
+
     // Render folders
-    int i = 0;
     for (const ea::string& name : currentDirs_)
     {
+        if (name == "." || name == "..")
+        {
+            continue;
+        }
+
         if (scrollToCurrent_ && selectedItem_ == name)
         {
             ui::SetScrollHereY();
@@ -136,12 +168,22 @@ bool ResourceTab::RenderWindowContent()
         if (isRenamingFrame_ && selectedItem_ == name)
         {
             ui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});    // Make sure text starts rendering at the same position
-            RenderRenameWidget(ICON_FA_FOLDER);
+            RenderRenameWidget();
             ui::PopStyleVar();
             continue;
         }
+        
+        ui::PushID(name.c_str());
 
-        int clicks = ui::DoubleClickSelectable((ICON_FA_FOLDER " " + RemoveTrailingSlash(name)).c_str(), name == selectedItem_);
+        auto texture = cache->GetResource<Texture2D>("Textures/Editor/FileIcons/folder.png");
+
+        if (texture)
+        {
+            ui::ImageItem(texture, previewSize);
+        }
+        
+        int clicks = ui::DoubleClickSelectable(RemoveTrailingSlash(name).c_str(), name == selectedItem_);
+
         if (ui::IsItemHovered() && ui::IsMouseClicked(MOUSEB_RIGHT))
         {
             selectedItem_ = name;
@@ -155,12 +197,9 @@ bool ResourceTab::RenderWindowContent()
             isRenamingFrame_ = 0;
             SelectCurrentItemInspector();
         }
-        else if (clicks == 2 && name != ".")
+        else if (clicks == 2)
         {
-            if (name == "..")
-                currentDir_ = GetParentPath(currentDir_);
-            else
-                currentDir_ += AddTrailingSlash(name);
+            currentDir_ += AddTrailingSlash(name);
             selectedItem_.clear();
             rescan_ = true;
             isRenamingFrame_ = 0;
@@ -209,10 +248,13 @@ bool ResourceTab::RenderWindowContent()
             }
             ui::EndDragDropTarget();
         }
-    }
 
+        ui::PopID();
+
+        ui::NextColumn();
+    }
+    
     // Render files
-    i = 0;
     for (Asset* asset : assets_)
     {
         // Asset may get deleted.
@@ -228,15 +270,72 @@ bool ResourceTab::RenderWindowContent()
             scrollToCurrent_ = false;
         }
 
-        if (isRenamingFrame_ && selectedItem_ == name)
+        ui::PushID(asset->GetName().c_str());
+        ui::BeginChild("preview", previewSize);
+
+        if (asset->GetContentType() == CTYPE_MODEL)
         {
-            ui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});    // Make sure text starts rendering at the same position
-            RenderRenameWidget(icon);
-            ui::PopStyleVar();
-            continue;
+            auto model = cache->GetResource<Model>(asset->GetName());
+
+            if (model)
+            {
+                auto preview = ui::GetUIState<ModelPreview>(context_);
+                preview->SetModel(model);
+                preview->RenderPreview();
+            }
+        }
+        else if (asset->GetContentType() == CTYPE_MATERIAL)
+        {
+            auto material = cache->GetResource<Material>(asset->GetName());
+
+            if (material)
+            {
+                auto preview = ui::GetUIState<ModelPreview>(context_);
+                if (preview->GetMaterial(0) == nullptr)
+                    preview->SetMaterial(material, 0);
+                preview->RenderPreview();
+                ui::SetHelpTooltip("Click to switch object.");
+                if (ui::IsItemClicked(MOUSEB_LEFT))
+                    preview->ToggleModel();
+            }
+        }
+        else if (asset->GetContentType() == CTYPE_TEXTURE)
+        {
+            auto texture = cache->GetResource<Texture2D>(asset->GetName());
+
+            if (texture)
+            {
+                ui::ImageItem(texture, previewSize);
+            }
+        }
+        else
+        {
+            auto texture = cache->GetResource<Texture2D>("Textures/Editor/FileIcons/generic.png");
+
+            if (texture)
+            {
+                ui::ImageItem(texture, previewSize);
+            }
         }
 
-        int clicks = ui::DoubleClickSelectable((icon + " " + name).c_str(), name == selectedItem_);
+        ui::EndChild();
+
+        int clicks = 0;
+
+        if (isRenamingFrame_ && selectedItem_ == name)
+        {
+            ui::PushStyleVar(ImGuiStyleVar_FramePadding,
+                             {0, 0}); // Make sure text starts rendering at the same position
+            RenderRenameWidget();
+            ui::PopStyleVar();
+        }
+        else
+        {
+            clicks = ui::DoubleClickSelectable(name.c_str(), name == selectedItem_);
+        }
+
+        ui::PopID();
+
         if (ui::IsItemHovered() && ui::IsMouseClicked(MOUSEB_RIGHT))
         {
             selectedItem_ = name;
@@ -275,72 +374,9 @@ bool ResourceTab::RenderWindowContent()
             }
         }
 
-        // Render asset byproducts
-        bool indented = false;
-        for (AssetImporter* importer : asset->GetImporters(pipeline->GetDefaultFlavor()))
-        {
-            for (ea::string byproduct : importer->GetByproducts())
-            {
-                ea::string byproductWithDir = byproduct.substr(currentDir_.size());
-                if (!indented)
-                {
-                    ui::Indent();
-                    indented = true;
-                }
+        // Byproducts are now viewed by opening the folder with the same name.
 
-                // Trim byproduct name, remove prefix directory + possibly partial file name.
-                if (byproduct.starts_with(currentDir_ + name))
-                    byproduct = byproduct.substr(currentDir_.length() + name.length() + 1);
-                else
-                {
-                    ea::string basename = GetFileName(name);
-                    if (byproduct.starts_with(currentDir_ + basename))
-                        byproduct = byproduct.substr(currentDir_.length() + basename.length() + 1);
-                }
-
-                icon = GetFileIcon(byproduct);
-                clicks = ui::DoubleClickSelectable((icon + " " + byproduct).c_str(), byproductWithDir == selectedItem_);
-                if (ui::IsItemHovered() && ui::IsMouseClicked(MOUSEB_RIGHT))
-                {
-                    selectedItem_ = byproductWithDir;
-                    ui::OpenPopup("Resource Item Context Menu");
-                    isRenamingFrame_ = 0;
-                    SelectCurrentItemInspector();
-                }
-                else if (clicks == 1)
-                {
-                    selectedItem_ = byproductWithDir;
-                    isRenamingFrame_ = 0;
-                    SelectCurrentItemInspector();
-                }
-                else if (clicks == 2)
-                {
-                    OpenResource(currentDir_ + selectedItem_);
-                    isRenamingFrame_ = 0;
-                    SelectCurrentItemInspector();
-                }
-                else if (ui::IsItemActive())
-                {
-                    if (ui::BeginDragDropSource())
-                    {
-                        ea::string resourceName = currentDir_ + byproductWithDir;
-                        ResourceContentTypes contentTypes;
-                        GetContentResourceType(context_, resourceName, contentTypes);
-                        ea::string dragType = "path";
-                        for (StringHash type : contentTypes)
-                        {
-                            dragType += ",";
-                            dragType += type.ToString();
-                        }
-                        ui::SetDragDropVariant(dragType, resourceName);
-                        ui::TextUnformatted(resourceName.c_str());
-                        ui::EndDragDropSource();
-                    }
-                }
-            }
-        }
-        if (indented)
-            ui::Unindent();
+        ui::NextColumn();
     }
 
     // Context menu when clicking empty area
