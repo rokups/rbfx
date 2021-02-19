@@ -54,8 +54,6 @@ public:
     void ToggleModel();
     /// Render model preview.
     void RenderPreview();
-    /// Render model preview with custom size.
-    void RenderPreview(float width, float height);
 
 protected:
     /// Initialize preview.
