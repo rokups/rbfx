@@ -60,6 +60,10 @@ public:
     /// Show an error message (last log message if empty), terminate the main loop, and set failure exit code.
     void ErrorExit(const ea::string& message = EMPTY_STRING);
 
+    /// On mobile platforms, set a custom SDL_Main callback which will be invoked if no custom mobile defines actual entry point. This is
+    /// used for defining entry points written in non-C++ language. Function is noop on desktop platforms.
+    static void SetCustomMainFunction(void* customMain);
+
 protected:
     /// Handle log message.
     void HandleLogMessage(StringHash eventType, VariantMap& eventData);

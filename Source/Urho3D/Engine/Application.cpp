@@ -54,6 +54,24 @@ void RunFrame(void* data)
 }
 #endif
 
+static int(__cdecl*CustomMain)() = nullptr;
+
+void Application::SetCustomMainFunction(void* customMain)
+{
+    CustomMain = (decltype(CustomMain))customMain;
+}
+
+#if MOBILE && !URHO3D_STATIC
+// Android and iOS may use a custom entry point written in C#. Allow specifying a custom entry point without having to use
+// URHO3D_DEFINE_APPLICATION_MAIN() macro in native code.
+static int RunApplication()
+{
+    assert(CustomMain != nullptr);
+    return CustomMain();
+}
+URHO3D_DEFINE_APPLICATION_MAIN(RunApplication());
+#endif
+
 #if DESKTOP
 /// Command line parser.
 static CLI::App commandLine_{};
