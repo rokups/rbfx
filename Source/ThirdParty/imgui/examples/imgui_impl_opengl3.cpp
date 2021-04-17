@@ -89,7 +89,7 @@
 #if (defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV))
 #include <OpenGLES/ES2/gl.h>    // Use GL ES 2
 #else
-#include <GLES3/gl2.h>          // Use GL ES 2
+#include <GLES2/gl2.h>          // Use GL ES 2
 #endif
 #elif defined(IMGUI_IMPL_OPENGL_ES3)
 #if (defined(__APPLE__) && (TARGET_OS_IOS || TARGET_OS_TV))
@@ -148,6 +148,38 @@ static unsigned int g_VboHandle = 0, g_ElementsHandle = 0;
 // Forward Declarations
 static void ImGui_ImplOpenGL3_InitPlatformInterface();
 static void ImGui_ImplOpenGL3_ShutdownPlatformInterface();
+
+struct VertexAttribState
+{
+    GLint index;
+    GLint enabled;
+    GLint size;
+    GLint type;
+    GLint normalized;
+    GLint stride;
+    GLvoid* ptr;
+
+    VertexAttribState(GLint index_)
+    {
+        index = index_;
+        glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
+        glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_SIZE, &size);
+        glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &type);
+        glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &normalized);
+        glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &stride);
+        glGetVertexAttribPointerv(index, GL_VERTEX_ATTRIB_ARRAY_POINTER, &ptr);
+    }
+
+    ~VertexAttribState()
+    {
+        if (!enabled) {
+            glDisableVertexAttribArray(index);
+            return;
+        }
+        glEnableVertexAttribArray(index);
+        glVertexAttribPointer(index,   size, type, normalized, stride, ptr);
+    }
+};
 
 // Functions
 bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
@@ -319,6 +351,7 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     GLuint last_sampler; glGetIntegerv(GL_SAMPLER_BINDING, (GLint*)&last_sampler);
 #endif
     GLuint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&last_array_buffer);
+    GLuint last_element_buffer; glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint*)&last_element_buffer);
 #ifndef IMGUI_IMPL_OPENGL_ES2
     GLuint last_vertex_array_object; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, (GLint*)&last_vertex_array_object);
 #endif
@@ -338,6 +371,9 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
     GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
     GLboolean last_enable_stencil_test = glIsEnabled(GL_STENCIL_TEST);
+    VertexAttribState last_vtx_pos_enabled(g_AttribLocationVtxPos);
+    VertexAttribState last_vtx_uv_enabled(g_AttribLocationVtxUV);
+    VertexAttribState last_vtx_color_enabled(g_AttribLocationVtxColor);
 
     // Setup desired GL state
     // Recreate the VAO every time (this is to easily allow multiple GL contexts to be rendered to. VAO are not shared among GL contexts)
@@ -416,6 +452,7 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     glBindVertexArray(last_vertex_array_object);
 #endif
     glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_buffer);
     glBlendEquationSeparate(last_blend_equation_rgb, last_blend_equation_alpha);
     glBlendFuncSeparate(last_blend_src_rgb, last_blend_dst_rgb, last_blend_src_alpha, last_blend_dst_alpha);
     if (last_enable_blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
@@ -423,6 +460,7 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
     if (last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
     if (last_enable_scissor_test) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
     if (last_enable_stencil_test) glEnable(GL_STENCIL_TEST); else glDisable(GL_STENCIL_TEST);
+
 #ifdef GL_POLYGON_MODE
     glPolygonMode(GL_FRONT_AND_BACK, (GLenum)last_polygon_mode[0]);
 #endif
@@ -509,9 +547,10 @@ static bool CheckProgram(GLuint handle, const char* desc)
 bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
 {
     // Backup GL state
-    GLint last_texture, last_array_buffer;
+    GLint last_texture, last_array_buffer, last_element_buffer;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
+    glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &last_element_buffer);
 #ifndef IMGUI_IMPL_OPENGL_ES2
     GLint last_vertex_array;
     glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
@@ -679,6 +718,7 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
     // Restore modified GL state
     glBindTexture(GL_TEXTURE_2D, last_texture);
     glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_buffer);
 #ifndef IMGUI_IMPL_OPENGL_ES2
     glBindVertexArray(last_vertex_array);
 #endif
