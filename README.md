@@ -116,6 +116,7 @@ rbfx uses the following third-party libraries:
 - SWIG 4.0 (http://swig.org/)
 - Embree 3.11 (https://github.com/embree/embree)
 - RmlUi (https://github.com/mikke89/RmlUi)
+- TheForge 1.48 (https://github.com/ConfettiFX/The-Forge)
 
 rbfx optionally uses the following external third-party libraries:
 - Mono (http://www.mono-project.com/download/stable/)

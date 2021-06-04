@@ -194,6 +194,7 @@ set (THIRD_PARTY_DEPENDENCIES
     spirv-cross-glsl
     spirv-cross-msl
     spirv-cross-hlsl
+    TheForge
 )
 
 if (URHO3D_MERGE_STATIC_LIBS)

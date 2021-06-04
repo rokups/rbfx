@@ -158,6 +158,10 @@ if (NOT MINI_URHO)
     # Tracy's headers are included even in non-profiled builds in order to provide stub profiler macros.
     add_subdirectory (tracy)
 
+    if (NOT WEB)
+        add_subdirectory(TheForge)
+    endif ()
+
     if (URHO3D_TOOLS)
         add_subdirectory(Assimp)
     endif ()
