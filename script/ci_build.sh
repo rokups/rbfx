@@ -116,6 +116,7 @@ function action-dependencies() {
         dev_packages=(
             libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev libxss-dev
             libasound2-dev libpulse-dev libibus-1.0-dev libdbus-1-dev libreadline6-dev libudev-dev uuid-dev libtbb-dev
+            libvulkan-dev
         )
 
         if [[ "$ci_arch" != "x64" ]];
@@ -159,7 +160,7 @@ function action-dependencies() {
     elif [[ "$ci_platform" == "windows" || "$ci_platform" == "uwp" ]];
     then
         # Windows dependencies
-        choco install -y ccache
+        choco install -y ccache vulkan-sdk
         pip install clcache
     fi
 }
