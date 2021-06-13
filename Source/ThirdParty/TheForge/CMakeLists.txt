@@ -39,7 +39,7 @@ target_link_libraries(TheForge PUBLIC EASTL)
 target_include_directories(TheForge SYSTEM PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 if (WIN32)
     file (GLOB_RECURSE SOURCE_FILES_PLATFORM
-        Renderer/Direct3D11/*
+        #Renderer/Direct3D11/*
         Renderer/Direct3D12/*
         Renderer/Vulkan/*
         OS/Windows/WindowsThread.cpp
@@ -48,7 +48,14 @@ if (WIN32)
     if (MSVC AND NOT UWP)
         list (APPEND SOURCE_FILES_PLATFORM OS/Windows/WindowsStackTraceDump.cpp OS/Windows/WindowsStackTraceDump.h)
     endif ()
-    target_compile_definitions(TheForge PRIVATE -D_WINDOWS=1 -DDIRECT3D11 -DIRECT3D12 -DVULKAN)
+    target_compile_definitions(TheForge PRIVATE -D_WINDOWS=1 -DIRECT3D12 -DVULKAN) # -DDIRECT3D11 
+    if (NOT "$ENV{VK_SDK_PATH}" STREQUAL "")
+        target_include_directories(TheForge PUBLIC "$ENV{VK_SDK_PATH}/include")
+        if (NOT URHO3D_64BIT)
+            set(VK_SDK_BITS 32)
+        endif ()
+        target_link_libraries(TheForge PRIVATE "$ENV{VK_SDK_PATH}/Lib${VK_SDK_BITS}/vulkan-1.lib")
+    endif ()
 elseif (LINUX)
     file (GLOB_RECURSE SOURCE_FILES_PLATFORM
         Renderer/Vulkan/*
