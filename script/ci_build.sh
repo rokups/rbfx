@@ -162,6 +162,9 @@ function action-dependencies() {
         # Windows dependencies
         choco install -y ccache vulkan-sdk
         pip install clcache
+    elif [[ "$ci_platform" == "windows" || "$ci_compiler" == "mingw" ]];
+    then
+        pacman -S mingw-w64-x86_64-vulkan-loader
     fi
 }
 

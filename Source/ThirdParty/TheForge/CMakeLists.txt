@@ -41,34 +41,22 @@ if (WIN32)
     file (GLOB_RECURSE SOURCE_FILES_PLATFORM
         #Renderer/Direct3D11/*
         Renderer/Direct3D12/*
-        Renderer/Vulkan/*
         OS/Windows/WindowsThread.cpp
         OS/Windows/WindowsTime.cpp
     )
     if (MSVC AND NOT UWP)
         list (APPEND SOURCE_FILES_PLATFORM OS/Windows/WindowsStackTraceDump.cpp OS/Windows/WindowsStackTraceDump.h)
     endif ()
-    target_compile_definitions(TheForge PRIVATE -D_WINDOWS=1 -DIRECT3D12 -DVULKAN) # -DDIRECT3D11 
-    if (NOT "$ENV{VK_SDK_PATH}" STREQUAL "")
-        target_include_directories(TheForge PUBLIC "$ENV{VK_SDK_PATH}/include")
-        if (NOT URHO3D_64BIT)
-            set(VK_SDK_BITS 32)
-        endif ()
-        target_link_libraries(TheForge PRIVATE "$ENV{VK_SDK_PATH}/Lib${VK_SDK_BITS}/vulkan-1.lib")
-    endif ()
+    target_compile_definitions(TheForge PRIVATE -D_WINDOWS=1 -DIRECT3D12) # -DDIRECT3D11
 elseif (LINUX)
-    file (GLOB_RECURSE SOURCE_FILES_PLATFORM
-        Renderer/Vulkan/*
-        OS/Linux/*
-    )
-    target_compile_definitions(TheForge PRIVATE -DVULKAN)
+    file (GLOB_RECURSE SOURCE_FILES_PLATFORM OS/Linux/*)
+    target_compile_definitions(TheForge PRIVATE)
 elseif (ANDROID)
     file (GLOB_RECURSE SOURCE_FILES_PLATFORM
         Renderer/OpenGLES/*
-        Renderer/Vulkan/*
         OS/Android/*
     )
-    target_compile_definitions(TheForge PRIVATE -DGLES -DVULKAN)
+    target_compile_definitions(TheForge PRIVATE -DGLES)
 elseif (IOS)
     file (GLOB_RECURSE SOURCE_FILES_PLATFORM
         Renderer/Metal/*
@@ -86,13 +74,21 @@ elseif (APPLE)
 elseif (WEB)
     message(FATAL_ERROR "Not supported.")
 endif ()
-target_sources(TheForge PRIVATE ${SOURCE_FILES_PLATFORM})
+target_sources(TheForge PRIVATE ${SOURCE_FILES_PLATFORM} ${SOURCE_FILES_VULKAN})
 
 if (NOT APPLE)
     target_sources(TheForge PRIVATE
         SpirvTools/SpirvTools.h
         SpirvTools/SpirvTools.cpp
     )
+endif ()
+
+if (WIN32 OR LINUX OR ANDROID)
+    if (Vulkan_FOUND)
+        file (GLOB_RECURSE SOURCE_FILES_VULKAN Renderer/Vulkan/*)
+        target_compile_definitions(TheForge PRIVATE -DVULKAN)
+        target_link_libraries(TheForge PUBLIC Vulkan::Vulkan)
+    endif ()
 endif ()
 
 if (NOT URHO3D_MERGE_STATIC_LIBS)
