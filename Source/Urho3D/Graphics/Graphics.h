@@ -102,6 +102,8 @@ struct ScreenModeParams
     int monitor_{};
     /// Refresh rate. 0 to pick automatically.
     int refreshRate_{};
+    /// Whether to enable debug mode on GPU if possible.
+    bool gpuDebug_{};
 
     /// Compare contents except vsync flag.
     bool EqualsExceptVSync(const ScreenModeParams& rhs) const
@@ -114,7 +116,8 @@ struct ScreenModeParams
             && tripleBuffer_ == rhs.tripleBuffer_
             && multiSample_ == rhs.multiSample_
             && monitor_ == rhs.monitor_
-            && refreshRate_ == rhs.refreshRate_;
+            && refreshRate_ == rhs.refreshRate_
+            && gpuDebug_ == rhs.gpuDebug_;
     }
 
     /// Compare for equality with another parameter set.
@@ -215,7 +218,7 @@ public:
     bool SetDefaultWindowModes(int width, int height, const ScreenModeParams& params);
     /// Set default window modes. Deprecated. Return true if successful.
     bool SetMode(int width, int height, bool fullscreen, bool borderless, bool resizable,
-        bool highDPI, bool vsync, bool tripleBuffer, int multiSample, int monitor, int refreshRate);
+        bool highDPI, bool vsync, bool tripleBuffer, int multiSample, int monitor, int refreshRate, bool gpuDebug);
     /// Set screen resolution only. Deprecated. Return true if successful.
     bool SetMode(int width, int height);
     /// Set whether the main window uses sRGB conversion on write.
@@ -430,6 +433,9 @@ public:
     /// Return whether window is fullscreen.
     /// @property
     bool GetFullscreen() const { return screenParams_.fullscreen_; }
+
+    /// Return whether gpu debug is enabled.
+    bool GetGPUDebug() const { return screenParams_.gpuDebug_; }
 
     /// Return whether window is borderless.
     /// @property

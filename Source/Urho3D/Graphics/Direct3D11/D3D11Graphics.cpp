@@ -2002,9 +2002,11 @@ bool Graphics::CreateDevice(int width, int height)
     if (!impl_->device_)
     {
         UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-#ifdef _DEBUG
-        deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
+        if (screenParams_.gpuDebug_)
+        {
+            // Enable the debug layer if requested.
+            deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+        }
         ID3D11DeviceContext* deviceContext = nullptr;
         const D3D_FEATURE_LEVEL featureLevels[] =
         {

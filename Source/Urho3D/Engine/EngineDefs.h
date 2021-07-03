@@ -38,6 +38,7 @@ static const ea::string EP_FLUSH_GPU = "FlushGPU";
 static const ea::string EP_FORCE_GL2 = "ForceGL2";
 static const ea::string EP_FRAME_LIMITER = "FrameLimiter";
 static const ea::string EP_FULL_SCREEN = "FullScreen";
+static const ea::string EP_GPU_DEBUG = "GPUDebug";
 static const ea::string EP_HEADLESS = "Headless";
 static const ea::string EP_VALIDATE_SHADERS = "ValidateShaders";
 static const ea::string EP_HIGH_DPI = "HighDPI";

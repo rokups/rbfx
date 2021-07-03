@@ -279,7 +279,8 @@ bool Engine::Initialize(const VariantMap& parameters)
             GetParameter(parameters, EP_TRIPLE_BUFFER, false).GetBool(),
             GetParameter(parameters, EP_MULTI_SAMPLE, 1).GetInt(),
             GetParameter(parameters, EP_MONITOR, 0).GetInt(),
-            GetParameter(parameters, EP_REFRESH_RATE, 0).GetInt()
+            GetParameter(parameters, EP_REFRESH_RATE, 0).GetInt(),
+            GetParameter(parameters, EP_GPU_DEBUG, false).GetBool()
         ))
             return false;
 

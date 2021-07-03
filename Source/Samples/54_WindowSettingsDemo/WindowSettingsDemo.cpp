@@ -268,7 +268,7 @@ void WindowSettingsDemo::InitSettings()
         const int width = resolutions[selectedResolution].x_;
         const int height = resolutions[selectedResolution].y_;
         const int refreshRate = resolutions[selectedResolution].z_;
-        graphics->SetMode(width, height, fullscreen, borderless, resizable, highDPI, vsync, tripleBuffer, multiSample, monitor, refreshRate);
+        graphics->SetMode(width, height, fullscreen, borderless, resizable, highDPI, vsync, tripleBuffer, multiSample, monitor, refreshRate, false);
     });
 }
 

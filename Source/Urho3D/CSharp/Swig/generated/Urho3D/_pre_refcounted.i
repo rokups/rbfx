@@ -118,6 +118,7 @@ URHO3D_REFCOUNTED(Urho3D::Octree);
 URHO3D_REFCOUNTED(Urho3D::ParticleEffect);
 URHO3D_REFCOUNTED(Urho3D::ParticleEmitter);
 URHO3D_REFCOUNTED(Urho3D::RenderPath);
+URHO3D_REFCOUNTED(Urho3D::RenderPipeline);
 URHO3D_REFCOUNTED(Urho3D::RenderSurface);
 URHO3D_REFCOUNTED(Urho3D::Renderer);
 URHO3D_REFCOUNTED(Urho3D::RibbonTrail);
