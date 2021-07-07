@@ -825,7 +825,7 @@ ea::string ResourceCache::GetResourceFileName(const ea::string& name) const
     for (unsigned i = 0; i < resourceDirs_.size(); ++i)
     {
         if (fileSystem->FileExists(resourceDirs_[i] + name))
-            return resourceDirs_[i] + name;
+            return GetAbsolutePath(resourceDirs_[i] + name);
     }
 
     if (IsAbsolutePath(name) && fileSystem->FileExists(name))
