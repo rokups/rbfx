@@ -661,7 +661,7 @@ void Editor::LoadDefaultLayout()
     ImGuiID dockLog = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.30f, nullptr, &dock_main_id);
 
     ImGui::DockBuilderDockWindow(hierarchy->GetUniqueTitle().c_str(), dockHierarchy);
-    ImGui::DockBuilderDockWindow(resources->GetUniqueTitle().c_str(), dockResources);
+    ImGui::DockBuilderDockWindow(resources->GetUniqueTitle().c_str(), dockLog);
     ImGui::DockBuilderDockWindow(console->GetUniqueTitle().c_str(), dockLog);
     ImGui::DockBuilderDockWindow(profiler->GetUniqueTitle().c_str(), dockLog);
     ImGui::DockBuilderDockWindow(scene->GetUniqueTitle().c_str(), dock_main_id);

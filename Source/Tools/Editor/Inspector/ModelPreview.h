@@ -22,6 +22,7 @@
 #pragma once
 
 #include <Urho3D/Core/Object.h>
+#include <Urho3D/Graphics/RenderPath.h>
 #include <Toolbox/Graphics/SceneView.h>
 
 namespace Urho3D
