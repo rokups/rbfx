@@ -147,14 +147,6 @@ int Texture::GetLevelDepth(unsigned level) const
     return Max(depth_ >> level, 1);
 }
 
-unsigned Texture::GetDataSize(int width, int height) const
-{
-    if (IsCompressed())
-        return GetRowDataSize(width) * ((height + 3u) >> 2u);
-    else
-        return GetRowDataSize(width) * height;
-}
-
 unsigned Texture::GetDataSize(int width, int height, int depth) const
 {
     return depth * GetDataSize(width, height);

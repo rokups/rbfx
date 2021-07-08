@@ -126,6 +126,7 @@
 #if URHO3D_RMLUI
 #include "107_HelloRmlUI/HelloRmlUI.h"
 #endif
+#include "200_TextureCompression/TextureCompression.h"
 #include "Rotator.h"
 
 #include "SamplesManager.h"
@@ -218,6 +219,7 @@ void SamplesManager::Start()
 
     RegisterSample<HelloWorld>();
     RegisterSample<HelloGUI>();
+    RegisterSample<TextureCompression>();
     RegisterSample<Sprites>();
     RegisterSample<StaticScene>();
     RegisterSample<AnimatingScene>();

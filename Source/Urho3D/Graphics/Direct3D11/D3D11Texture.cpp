@@ -82,6 +82,14 @@ bool Texture::IsCompressed() const
     return format_ == DXGI_FORMAT_BC1_UNORM || format_ == DXGI_FORMAT_BC2_UNORM || format_ == DXGI_FORMAT_BC3_UNORM;
 }
 
+unsigned Texture::GetDataSize(int width, int height) const
+{
+    if (IsCompressed())
+        return GetRowDataSize(width) * ((height + 3u) >> 2u);
+    else
+        return GetRowDataSize(width) * height;
+}
+
 unsigned Texture::GetRowDataSize(int width) const
 {
     switch (format_)

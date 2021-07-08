@@ -55,6 +55,9 @@
 #define FOURCC_ETC2 (MAKEFOURCC('E','T','C','2'))
 #define FOURCC_ETC2A (MAKEFOURCC('E','T','2','A'))
 
+#define FOURCC_PTC2 (MAKEFOURCC('P','T','C','2'))
+#define FOURCC_PTC4 (MAKEFOURCC('P','T','C','4'))
+
 static const unsigned DDSCAPS_COMPLEX = 0x00000008U;
 static const unsigned DDSCAPS_TEXTURE = 0x00001000U;
 static const unsigned DDSCAPS_MIPMAP = 0x00400000U;
@@ -347,6 +350,16 @@ bool Image::BeginLoad(Deserializer& source)
             components_ = 4;
             break;
 
+        case FOURCC_PTC2:
+            compressedFormat_ = CF_PVRTC_RGBA_2BPP;
+            components_ = 4;
+            break;
+
+        case FOURCC_PTC4:
+            compressedFormat_ = CF_PVRTC_RGBA_4BPP;
+            components_ = 4;
+            break;
+
         case 0:
             if (ddsd.ddpfPixelFormat_.dwRGBBitCount_ != 32 && ddsd.ddpfPixelFormat_.dwRGBBitCount_ != 24 &&
                 ddsd.ddpfPixelFormat_.dwRGBBitCount_ != 16)
@@ -378,21 +391,44 @@ bool Image::BeginLoad(Deserializer& source)
         unsigned dataSize = 0;
         if (compressedFormat_ != CF_RGBA)
         {
-            const unsigned blockSize = (compressedFormat_ == CF_DXT1 || compressedFormat_ == CF_ETC1 || compressedFormat_ == CF_ETC2_RGB) ? 8 : 16; //DXT1/BC1, ETC1 and ETC2 are 8 bytes, DXT3/BC2, DXT5/BC3 and ETC2A are 16 bytes
-            // Add 3 to ensure valid block: ie 2x2 fits uses a whole 4x4 block
-            unsigned blocksWide = (ddsd.dwWidth_ + 3) / 4;
-            unsigned blocksHeight = (ddsd.dwHeight_ + 3) / 4;
-            dataSize = blocksWide * blocksHeight * blockSize;
-
-            // Calculate mip data size
-            unsigned x = ddsd.dwWidth_ / 2;
-            unsigned y = ddsd.dwHeight_ / 2;
-            unsigned z = ddsd.dwDepth_ / 2;
-            for (unsigned level = ddsd.dwMipMapCount_; level > 1; x /= 2, y /= 2, z /= 2, --level)
+            if (compressedFormat_ == CF_PVRTC_RGB_2BPP || compressedFormat_ == CF_PVRTC_RGBA_2BPP || compressedFormat_ == CF_PVRTC_RGB_4BPP || compressedFormat_ == CF_PVRTC_RGBA_4BPP)
             {
-                blocksWide = (Max(x, 1U) + 3) / 4;
-                blocksHeight = (Max(y, 1U) + 3) / 4;
-                dataSize += blockSize * blocksWide * blocksHeight * Max(z, 1U);
+                const unsigned xSize =  (compressedFormat_ == CF_PVRTC_RGB_2BPP || compressedFormat_ == CF_PVRTC_RGBA_2BPP) ? 8 : 4;
+                const unsigned blockSize = 8;
+                // For MBX don't allow the sizes to get too small
+                unsigned blocksWide = Max(2, ddsd.dwWidth_ / xSize);
+                unsigned blocksHeight = Max(2, ddsd.dwHeight_ / 4);
+                dataSize = blocksWide * blocksHeight * blockSize;
+
+                // Calculate mip data size
+                unsigned x = ddsd.dwWidth_ / 2;
+                unsigned y = ddsd.dwHeight_ / 2;
+                unsigned z = ddsd.dwDepth_ / 2;
+                for (unsigned level = ddsd.dwMipMapCount_; level > 1; x /= 2, y /= 2, z /= 2, --level)
+                {
+                    blocksWide = Max(2, x / xSize);
+                    blocksHeight = Max(2, y / 4);
+                    dataSize += blockSize * blocksWide * blocksHeight * Max(z, 1U);
+                }
+            }
+            else
+            {
+                unsigned blockSize = (compressedFormat_ == CF_DXT1 || compressedFormat_ == CF_ETC1 || compressedFormat_ == CF_ETC2_RGB) ? 8 : 16; 
+                // Add 3 to ensure valid block: ie 2x2 fits uses a whole 4x4 block
+                unsigned blocksWide = (ddsd.dwWidth_ + 3) / 4;
+                unsigned blocksHeight = (ddsd.dwHeight_ + 3) / 4;
+                dataSize = blocksWide * blocksHeight * blockSize;
+
+                // Calculate mip data size
+                unsigned x = ddsd.dwWidth_ / 2;
+                unsigned y = ddsd.dwHeight_ / 2;
+                unsigned z = ddsd.dwDepth_ / 2;
+                for (unsigned level = ddsd.dwMipMapCount_; level > 1; x /= 2, y /= 2, z /= 2, --level)
+                {
+                    blocksWide = (Max(x, 1U) + 3) / 4;
+                    blocksHeight = (Max(y, 1U) + 3) / 4;
+                    dataSize += blockSize * blocksWide * blocksHeight * Max(z, 1U);
+                }
             }
         }
         else

@@ -58,6 +58,14 @@ bool Texture::IsCompressed() const
     return format_ == D3DFMT_DXT1 || format_ == D3DFMT_DXT3 || format_ == D3DFMT_DXT5;
 }
 
+unsigned Texture::GetDataSize(int width, int height) const
+{
+    if (IsCompressed())
+        return GetRowDataSize(width) * ((height + 3u) >> 2u);
+    else
+        return GetRowDataSize(width) * height;
+}
+
 unsigned Texture::GetRowDataSize(int width) const
 {
     switch (format_)
